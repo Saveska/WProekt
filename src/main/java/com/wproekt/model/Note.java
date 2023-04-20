@@ -14,4 +14,9 @@ public class Note extends Card{
 
     public Note() {
     }
+
+    public Note(String title, String text) {
+        super(title);
+        this.text = text;
+    }
 }
