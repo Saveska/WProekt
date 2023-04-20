@@ -21,4 +21,9 @@ public class Label {
 
     public Label() {
     }
+
+    public Label(String name) {
+        this.name = name;
+        
+    }
 }

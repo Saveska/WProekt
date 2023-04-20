@@ -14,10 +14,14 @@ public class Color {
 
     @Id
     @GeneratedValue
-
     private Integer Id;
     private java.awt.Color color;
 
     public Color() {
+        color = java.awt.Color.darkGray;
+    }
+
+    public Color(java.awt.Color color) {
+        this.color = color;
     }
 }

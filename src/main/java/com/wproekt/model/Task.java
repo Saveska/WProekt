@@ -18,4 +18,9 @@ public class Task {
 
     public Task() {
     }
+
+    public Task(String text) {
+        this.text = text;
+        this.isCompleted = false;
+    }
 }
