@@ -13,12 +13,17 @@ public class Label {
     @Id
     @GeneratedValue
 
-    private Integer Id;
+    private Long Id;
     @ManyToOne
     private Color color;
 
     private String name;
 
     public Label() {
+    }
+
+    public Label(String name) {
+        this.name = name;
+        
     }
 }

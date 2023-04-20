@@ -11,9 +11,10 @@ import java.util.List;
 public class Card {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     private String title;
+    //TODO: da se odlucime dali vo static site sliki ce bida ili so blob vo db
     //private String imageLink;
     private LocalDateTime dateCreated;
     private LocalDateTime dateLastUpdated;
@@ -28,5 +29,12 @@ public class Card {
     public Card() {
     }
 
-
+    public Card(String title) {
+        this.title = title;
+        this.dateCreated = LocalDateTime.now();
+        this.dateLastUpdated = LocalDateTime.now();
+        this.isPinned = false;
+        this.isArchived = false;
+        this.isInBin = false;
+    }
 }
