@@ -12,10 +12,15 @@ public class Task {
     @Id
     @GeneratedValue
 
-    private Integer Id;
+    private Long Id;
     private String text;
     private Boolean isCompleted;
 
     public Task() {
+    }
+
+    public Task(String text) {
+        this.text = text;
+        this.isCompleted = false;
     }
 }
