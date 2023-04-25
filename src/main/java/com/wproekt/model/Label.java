@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.awt.*;
 
 @Entity
 @Data
@@ -14,7 +15,6 @@ public class Label {
     @GeneratedValue
 
     private Long Id;
-    @ManyToOne
     private Color color;
 
     private String name;
