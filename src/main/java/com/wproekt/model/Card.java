@@ -3,6 +3,7 @@ package com.wproekt.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Card {
     private Boolean isPinned;
     private Boolean isArchived;
     private Boolean isInBin;
-    @ManyToOne
+
     private Color color;
     @ManyToMany
     private List<Label> label;
