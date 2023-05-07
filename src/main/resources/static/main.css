@@ -1,40 +1,55 @@
-body{
+body {
     background-color: rgb(37, 42, 46);
-   
+
 }
 
-.btn-color{
+.btn-color {
     background-color: rgb(132, 47, 132);
-    border:none
+    border: none
 }
 
-.btn-color:hover{
+.btn-color:hover {
     background-color: rgb(185, 86, 185);
-}  
+}
 
-.cont-first{
-    margin-right:0.5rem;
+.cont-first {
+    margin-right: 0.5rem;
 
 }
-.cont-second{
+
+.cont-second {
     margin-left: 0.5rem;
 }
 
-.sidebar a{
+.sidebar a {
     background-color: rgb(37, 42, 46);
     border: none;
-    color:white;
+    color: white;
     font-size: larger;
 }
 
-.sidebar a:active{
+.sidebar{
+    --bs-list-group-border-radius : 0;
+}
+
+.sidebar a:active {
     background-color: rgb(185, 86, 185);
 }
 
-.sidebar a:hover{
-    background-color: rgb(154, 117, 154);
+.sidebar a:hover {
+    transition: all 0.15s ease-in-out;
+    background-color: rgb(132, 47, 132);
 }
 
-.sidebar img{
+.sidebar img {
     width: 16px;
+}
+
+.btn-outline-success {
+    --bs-btn-color: white;
+    --bs-btn-border-color: rgb(132, 47, 132);
+    --bs-btn-hover-bg: rgb(132, 47, 132);
+    --bs-btn-hover-border-color: rgb(132, 47, 132);
+    --bs-btn-active-bg: rgb(185, 86, 185)   ;
+    --bs-btn-active-border-color: rgb(185, 86, 185);
 }
