@@ -12,7 +12,7 @@ public class TaskController {
 
     @GetMapping("/")
     public String GetMainPage(){
-        return "header";
+        return "landingPage";
     }
 
 }

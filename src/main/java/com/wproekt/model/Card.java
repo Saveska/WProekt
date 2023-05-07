@@ -12,7 +12,7 @@ import java.util.List;
 public class Card {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long   id;
 
     private String title;
     //TODO: da se odlucime dali vo static site sliki ce bida ili so blob vo db
