@@ -5,12 +5,15 @@ body {
 
 .btn-color {
     background-color: rgb(132, 47, 132);
-    border: none
+    border: none;
+    --bs-btn-active-bg: rgb(217, 139, 217);
 }
 
 .btn-color:hover {
     background-color: rgb(185, 86, 185);
 }
+
+
 
 .cont-first {
     margin-right: 0.5rem;
@@ -52,4 +55,10 @@ body {
     --bs-btn-hover-border-color: rgb(132, 47, 132);
     --bs-btn-active-bg: rgb(185, 86, 185)   ;
     --bs-btn-active-border-color: rgb(185, 86, 185);
+}
+
+
+
+.loginTextInput{
+    padding: .5rem;
 }

@@ -15,4 +15,9 @@ public class TaskController {
         return "landingPage";
     }
 
+    @GetMapping("/login")
+    public String GetLoginPage(){
+        return "loginPage";
+    }
+
 }
