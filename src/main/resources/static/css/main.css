@@ -3,6 +3,12 @@ body {
 
 }
 
+.fade #registerModal{
+    transition: ease-in-out 0.15s linear;
+}
+
+
+
 .btn-color {
     background-color: rgb(132, 47, 132);
     border: none;

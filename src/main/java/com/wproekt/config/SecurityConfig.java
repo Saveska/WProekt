@@ -7,17 +7,37 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
-public class SecurityConfig  {
+public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .antMatcher("**")
-                .anonymous();
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/login", "/register", "/css/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/")
+                .failureUrl("/alo")
+                .permitAll();
 
         return http.build();
     }
+
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf()
+//                .disable()
+//                .antMatcher("**")
+//                .anonymous();
+//
+//        return http.build();
+//    }
+
 }
