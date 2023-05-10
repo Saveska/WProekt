@@ -20,18 +20,9 @@ body {
 }
 
 
-
-.cont-first {
-    margin-right: 0.5rem;
-
-}
-
-.cont-second {
-    margin-left: 0.5rem;
-}
-
 .sidebar a {
-    background-color: rgb(37, 42, 46);
+
+    background-color: rgb(28, 31, 34);
     border: none;
     color: white;
     font-size: larger;
@@ -48,6 +39,8 @@ body {
 .sidebar a:hover {
     transition: all 0.15s ease-in-out;
     background-color: rgb(132, 47, 132);
+    border-top-right-radius: 10px ;
+    border-bottom-right-radius: 10px;
 }
 
 .sidebar img {
@@ -67,4 +60,22 @@ body {
 
 .loginTextInput{
     padding: .5rem;
+}
+
+.note{
+    border-top-right-radius: 0% ;
+    border-bottom-right-radius: 0%;
+}
+
+.tasks{
+    border-top-left-radius: 0% ;
+    border-bottom-left-radius: 0%;
+}
+
+.cont-side{
+
+
+    background-color: rgb(28, 31, 34);
+    border-radius: 5px;
+
 }
