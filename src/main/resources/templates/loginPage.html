@@ -10,7 +10,7 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <link rel="stylesheet" href="../static/css/main.css">
+    <!--<link rel="stylesheet" href="../static/css/main.css">-->
 
 </head>
 
@@ -21,14 +21,17 @@
     <div class="card m-auto w-75">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="...">
+                <img src="" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
 
                 <div class="card-body">
                     <h5 class="card-title">Sign into your account</h5>
+                    <div th:if="${err!=null}" th:text="${err}" class="alert alert-danger" role="alert">
+
+                    </div>
                     <div class="container mt-5">
-                        <form name='f' action="login" method='POST'>
+                        <form name='f' action="/login" method='POST'>
                             <div class="form-floating mb-3">
                                 <input required type="text" class="form-control " id="floatingInput"
                                        placeholder="name@example.com" name="username">
@@ -112,7 +115,7 @@
                     </div>
                     <div class="modal-footer">
 
-                        <input type="submit" value="Submit" class="btn btn-lg btn-color w-75 m-auto btn-primary">Register Now!</input>
+                        <input type="submit" value="Register Now!" class="btn btn-lg btn-color w-75 m-auto btn-primary"></input>
                     </div>
                 </form>
             </div>
