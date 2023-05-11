@@ -1,11 +1,11 @@
 package com.wproekt.service.impl;
 
 import com.wproekt.model.User;
-import com.wproekt.model.exceptions.EmptyUserInformationException;
-import com.wproekt.model.exceptions.InvalidRepeatPassword;
-import com.wproekt.model.exceptions.UserAlreadyExistsException;
+import com.wproekt.model.exceptions.*;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +25,23 @@ public class UserServiceImplementation implements UserService {
         if (username == null || password == null || repeatPassword == null || email == null) {
             throw new EmptyUserInformationException();
         }
-        if (userRepository.existsUserByEmail(email) || userRepository.existsUserByUsername(username)) {
-            throw new UserAlreadyExistsException();
+        if (userRepository.existsUserByEmail(email)) {
+
+            throw new EmailAlreadyExists();
         }
-        if(!password.equals(repeatPassword) ){
+        if (userRepository.existsUserByUsername(username)) {
+            throw new UsernameAlreadyExists();
+        }
+        if (!password.equals(repeatPassword)) {
             throw new InvalidRepeatPassword();
         }
         User user = new User(username, email, passwordEncoder.encode(password), name, surname);
         return userRepository.save(user);
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsernameOrEmail(username, username).orElseThrow(UserDoesntExistException::new);
     }
 }

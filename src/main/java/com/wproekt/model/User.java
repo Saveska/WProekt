@@ -1,13 +1,18 @@
 package com.wproekt.model;
 
+import com.wproekt.model.enums.Role;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity(name = "taskUser")
 @Data
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -20,8 +25,13 @@ public class User {
     private String password;
     private String name;
     private String surname;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Card> cards;
+
+
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
+
 
     public User() {
     }
@@ -32,5 +42,31 @@ public class User {
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.role = Role.ROLE_USER;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(role);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

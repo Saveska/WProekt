@@ -11,7 +11,7 @@ public class TaskController {
 
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", "/home"})
     public String GetMainPage() {
         return "landingPage";
     }
