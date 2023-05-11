@@ -10,15 +10,15 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
      <link rel="stylesheet" th:href="@{/css/main.css}">
-    <!--<link rel="stylesheet" href="../static/css/main.css">-->
+    <link rel="stylesheet" href="../static/css/main.css">
 
 </head>
 
-<body style="overflow: hidden;">
+<body style="overflow-x: hidden;">
 
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid d-flex align-items-center col-md-9">
+        <div class="container-fluid d-flex align-items-center col-md-10">
             <a class="navbar-brand" href="#">Logo</a>
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,10 +27,21 @@
                         <a class="navbar-brand" aria-current="page" href="#">MindMappr</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex w-75" role="search">
+                    <input class="form-control me-2 flex-grow-1" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success " type="submit">Search</button>
                 </form>
+                <li class="nav-item dropdown">
+                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" th:text="${#authentication.name}">
+                        User
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+
+                    </ul>
+                </li>
+
+
             </div>
         </div>
     </nav>
