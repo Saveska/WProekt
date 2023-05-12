@@ -22,7 +22,7 @@ body {
 
 .sidebar a {
 
-    background-color: rgb(28, 31, 34);
+    background-color: rgb(37, 42, 46);
     border: none;
     color: white;
     font-size: larger;
@@ -75,8 +75,9 @@ body {
 .cont-side{
 
 
-    background-color: rgb(28, 31, 34);
-    border-radius: 5px;
+    /* background-color: rgb(28, 31, 34); */
+    background-color:rgb(37, 42, 46);
+    margin-top: 1em;
 
 }
 
@@ -86,12 +87,12 @@ textarea {
     overflow: hidden;
     min-height: 50px;
     max-height: 50%;
-    /* border:none !important; */
+
 }
 
 .textarea-container {
     overflow-y: auto;
-    max-height: 20rem; /* optional: set a maximum height to limit the scrolling */
+    max-height: 20rem; 
   }
 
   .note_input:focus{
@@ -104,12 +105,17 @@ textarea {
     background-color: rgb(132, 47, 132);
     --bs-btn-hover-bg: rgb(114, 40, 114);
     --bs-btn-hover-color: white;
+    --bs-btn-active-bg: rgb(114, 40, 114);
+    --bs-btn-active-color: white;
   }
 
 
   .tasks-input:focus {
     outline: none !important;
-    /* border:1px  rgb(132, 47, 132); */
     border:none;
     box-shadow: 0 0 10px rgba(132, 47, 132,0.7);
+  }
+
+  .search{
+    width: 50%;
   }
