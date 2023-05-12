@@ -1,14 +1,20 @@
 package com.wproekt.web;
 
 import com.wproekt.model.Card;
+import com.wproekt.model.Note;
 import com.wproekt.model.User;
 import com.wproekt.service.UserService;
+import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 @Controller
@@ -33,5 +39,29 @@ public class TaskController {
         return "landingPage";
     }
 
+    @PostMapping("/giveNote")
+    @ResponseBody
+    public List<Note> notePostAjax(Authentication authentication, @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            String title = (String) jo.get("title");
+            String text = (String) jo.get("text");
+
+            userService.addNoteCard(currentUser.getUsername(), title, text);
+
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+        //userService.addNoteCard(currentUser.getUsername(), )
+        return new ArrayList<>();
+
+    }
 
 }
