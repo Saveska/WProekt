@@ -9,14 +9,13 @@ import java.util.List;
 
 @Entity
 @Data
-public class Card {
+abstract public class Card {
     @Id
     @GeneratedValue
-    private Long   id;
+    private Long id;
 
     private String title;
-    //TODO: da se odlucime dali vo static site sliki ce bida ili so blob vo db
-    //private String imageLink;
+    private String imageLink;
     private LocalDateTime dateCreated;
     private LocalDateTime dateLastUpdated;
     private Boolean isPinned;
@@ -27,8 +26,11 @@ public class Card {
     @ManyToMany
     private List<Label> label;
 
+
     public Card() {
     }
+
+
 
     public Card(String title) {
         this.title = title;

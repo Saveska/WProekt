@@ -19,4 +19,5 @@ public class Note extends Card{
         super(title);
         this.text = text;
     }
+
 }
