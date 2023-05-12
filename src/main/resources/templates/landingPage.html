@@ -135,7 +135,7 @@
                             <div class="modal-header">
                                 <input class="form-control border-0 note_input" type="text" placeholder="Note"
                                        aria-label="Note"
-                                id="titleNoteInput">
+                                       id="titleNoteInput">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
@@ -162,6 +162,7 @@
 
             <div class="container d-flex col-md-10 ">
                 <div class="row gap-3">
+
                     <div class="col" th:each="card : ${cards}">
                         <div class="card" style="width: 14rem;">
                             <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
@@ -175,6 +176,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col">
                         <div class="card" style="width: 14rem;">
                             <img src="..." class="card-img-top" alt="...">
@@ -204,46 +206,9 @@
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="card" style="width: 14rem;">
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk
-                                    of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
 
 
-                    <div class="col">
-                        <div class="card" style="width: 14rem;">
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk
-                                    of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
 
-
-                    <div class="col">
-                        <div class="card" style="width: 14rem;">
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk
-                                    of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="modal fade" id="TasksModal" tabindex="-1" role="dialog"
                          aria-labelledby="tasksModalLabel"
