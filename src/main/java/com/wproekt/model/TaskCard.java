@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -15,5 +16,11 @@ public class TaskCard extends Card{
     private List<Task> tasks;
 
     public TaskCard() {
+    }
+
+
+    public TaskCard(String title) {
+        super(title);
+        this.tasks = new ArrayList<>();
     }
 }

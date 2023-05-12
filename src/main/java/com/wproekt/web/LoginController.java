@@ -31,6 +31,7 @@ public class LoginController {
                                @RequestParam String username,
                                @RequestParam String password,
                                @RequestParam String email
+
     ) {
         try {
             userService.register(username, password, password, name, surname, email);
