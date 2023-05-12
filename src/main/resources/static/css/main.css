@@ -79,3 +79,37 @@ body {
     border-radius: 5px;
 
 }
+
+
+textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 50px;
+    max-height: 50%;
+    /* border:none !important; */
+}
+
+.textarea-container {
+    overflow-y: auto;
+    max-height: 20rem; /* optional: set a maximum height to limit the scrolling */
+  }
+
+  .note_input:focus{
+    border: none;
+    box-shadow: none;
+  }
+
+  .btn-save-changes{
+    color: white;
+    background-color: rgb(132, 47, 132);
+    --bs-btn-hover-bg: rgb(114, 40, 114);
+    --bs-btn-hover-color: white;
+  }
+
+
+  .tasks-input:focus {
+    outline: none !important;
+    /* border:1px  rgb(132, 47, 132); */
+    border:none;
+    box-shadow: 0 0 10px rgba(132, 47, 132,0.7);
+  }
