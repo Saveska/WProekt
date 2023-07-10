@@ -12,7 +12,7 @@ $('#addTaskButton').click(function () {
     let taskName = $('#newTaskInput').val();
     if (taskName) {
         let taskId = 'task' + ($('#tasksForm input[type="checkbox"]').length + 1);
-        $('#tasksForm').append('<div class="form-check"><input class="form-check-input" type="checkbox" value="' + taskName + '" id="' + taskId + '" name="tasks[]"><label class="form-check-label" for="' + taskId + '">' + taskName + '</label></div>');
+        $('#tasksForm > .modal-body').append('<div class="form-check"><input class="form-check-input" type="checkbox" value="' + taskName + '" id="' + taskId + '" name="tasks[]"><label class="form-check-label" for="' + taskId + '">' + taskName + '</label></div>');
         $('#newTaskInput').val('');
     }
 
