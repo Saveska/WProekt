@@ -4,6 +4,7 @@ import com.wproekt.model.Card;
 import com.wproekt.model.Note;
 import com.wproekt.model.User;
 import com.wproekt.service.UserService;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -56,6 +59,37 @@ public class TaskController {
 
             userService.addNoteCard(currentUser.getUsername(), title, text);
 
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+        //userService.addNoteCard(currentUser.getUsername(), )
+        return new ArrayList<>();
+
+    }
+
+    @PostMapping("/giveTask")
+    @ResponseBody
+    public List<Note> taskPostAjax(Authentication authentication, @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        Map<String, Object> tasks;
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
+            String title = jo.getString("title");
+
+
+//            System.out.println(jo.get("allTasks"));
+            JSONObject jsonArray =  jo.getJSONObject("allTasks");
+            tasks = jsonArray.toMap();
+            System.out.println(tasks);
+
+            //TODO:dodavanje vo bazata
 
         } catch (Exception e) {
             // Handle any potential exceptions
