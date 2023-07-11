@@ -1,5 +1,7 @@
 let titleInputBox = $('#titleNoteInput');
 let textNoteInputBox = $('#noteTextInput');
+let taskForm = document.getElementById("tasksForm");
+let taskTitle = document.getElementById("TaskTitle");
 
 function auto_grow(element) {
     element.style.height = "auto";
@@ -12,7 +14,7 @@ $('#addTaskButton').click(function () {
     let taskName = $('#newTaskInput').val();
     if (taskName) {
         let taskId = 'task' + ($('#tasksForm input[type="checkbox"]').length + 1);
-        $('#tasksForm > .modal-body').append('<div class="form-check"><input class="form-check-input" type="checkbox" value="' + taskName + '" id="' + taskId + '" name="tasks[]"><label class="form-check-label" for="' + taskId + '">' + taskName + '</label></div>');
+        $('#tasksForm > .modal-body').append('<div class="form-check mt-2"><input class="form-check-input" type="checkbox" value="' + taskName + '" id="' + taskId + '" name="tasks[]"><label class="form-check-label" for="' + taskId + '">' + taskName + '</label></div>');
         $('#newTaskInput').val('');
     }
 
@@ -20,20 +22,50 @@ $('#addTaskButton').click(function () {
 
 // Save selected tasks when the user clicks the save button
 $('#saveTasksButton').click(function () {
-    let selectedTasks = $('#tasksForm input[type="checkbox"]:checked').map(function () {
-        return $(this).val();
-    }).get();
-    console.log(selectedTasks);
-    // do something with the selected tasks
-    // ...
+    // let allTasks = $('#tasksForm input[type="checkbox"]').map(function () {
+    //     return $(this).val();
+    // }).get();
+    let allTasks = {}
+    $('#tasksForm input[type="checkbox"]').each((i, x) => {
+
+        allTasks[$(x).val()] = (($(x).prop('checked')));
+    });
+
+
+    console.log(allTasks);
+
+    // let fd = new FormData(taskForm);
+
+    let data = {};
+    // data['form'] = fd.entries();
+    data['title'] = taskTitle.value;
+    data['allTasks'] = allTasks;
+
+
+    $.ajax({
+        url: 'giveTask',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(data),
+
+        success: (dataP) => {
+            console.log(dataP)
+        },
+        error: (jqXhr) => {
+            console.log(jqXhr);
+        }
+
+    })
+
+
 });
 
 
 $('#saveNoteButton').click(() => {
-    let podatok = {};
+    let data = {};
 
-    podatok['title'] = titleInputBox.val();
-    podatok['text'] = textNoteInputBox.val();
+    data['title'] = titleInputBox.val();
+    data['text'] = textNoteInputBox.val();
 
 
     console.log(titleInputBox.val());
@@ -41,7 +73,7 @@ $('#saveNoteButton').click(() => {
         url: 'giveNote',
         type: 'POST',
         dataType: 'json',
-        data: JSON.stringify(podatok),
+        data: JSON.stringify(data),
         success: (dataP) => {
             console.log(dataP)
         },
