@@ -23,4 +23,8 @@ public class Task {
         this.text = text;
         this.isCompleted = false;
     }
+    public Task(String text, Boolean isCompleted) {
+        this.text = text;
+        this.isCompleted = isCompleted;
+    }
 }

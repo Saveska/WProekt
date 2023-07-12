@@ -1,9 +1,6 @@
 package com.wproekt.service.impl;
 
-import com.wproekt.model.Card;
-import com.wproekt.model.Note;
-import com.wproekt.model.TaskCard;
-import com.wproekt.model.User;
+import com.wproekt.model.*;
 import com.wproekt.model.exceptions.*;
 import com.wproekt.repository.CardRepository;
 import com.wproekt.repository.UserRepository;
@@ -94,6 +91,8 @@ public class UserServiceImplementation implements UserService {
             throw new UserDoesntExistException();
         }
     }
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
