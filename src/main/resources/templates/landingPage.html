@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -171,14 +171,35 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
                                 <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
-                                   th:text="${card.getText()}"></p>
+                                   th:text="${card.getText()}">
+
+                                </p>
+
+                                <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
+                                    <p class="card-text">
+
+                                    <form>
+                                        <ul class="list-group list-group-flush">
+
+
+                                            <li class="list-group-item" th:each="task:${card.getTasks()}">
+                                                <input type="checkbox" th:checked="${task.isCompleted}"
+                                                       class="form-check-input">
+                                                <label class="form-check-label" th:text="${task.text}">
+
+                                                </label>
+                                            </li>
+
+
+                                        </ul>
+                                    </form>
+                                    </p>
+                                </th:block>
 
                                 <a href="#" class="btn btn-primary">Go somewhere</a>
                             </div>
                         </div>
                     </div>
-
-
 
 
                     <div class="modal fade" id="TasksModal" tabindex="-1" role="dialog"
@@ -192,7 +213,7 @@
                                         <input class="form-control border-0 note_input" type="text" placeholder="Tasks"
                                                aria-label="Tasks"
                                                id="TaskTitle"
-                                        name="taskTitle">
+                                               name="taskTitle">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                     </div>
@@ -218,7 +239,9 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                                     </button>
-                                    <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save changes</button>
+                                    <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save
+                                        changes
+                                    </button>
                                 </div>
                             </div>
                         </div>

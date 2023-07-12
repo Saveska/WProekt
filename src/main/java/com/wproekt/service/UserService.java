@@ -1,9 +1,6 @@
 package com.wproekt.service;
 
-import com.wproekt.model.Card;
-import com.wproekt.model.Note;
-import com.wproekt.model.TaskCard;
-import com.wproekt.model.User;
+import com.wproekt.model.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -16,4 +13,5 @@ public interface UserService extends UserDetailsService {
     Note addNoteCard(String username, String title, String Text);
 
     TaskCard addTaskCard(String username, String title);
+
 }

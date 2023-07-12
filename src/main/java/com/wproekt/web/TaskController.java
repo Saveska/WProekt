@@ -1,8 +1,7 @@
 package com.wproekt.web;
 
-import com.wproekt.model.Card;
-import com.wproekt.model.Note;
-import com.wproekt.model.User;
+import com.wproekt.model.*;
+import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,9 +26,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class TaskController {
 
     UserService userService;
+    TaskService taskService;
 
-    public TaskController(UserService userService) {
+    public TaskController(UserService userService, TaskService taskService) {
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     @GetMapping({"/", "/home"})
@@ -38,6 +39,7 @@ public class TaskController {
         User currentUser = (User) authentication.getPrincipal();
 
         List<Card> userCards = userService.getCards(currentUser.getUsername());
+        System.out.println(userCards);
 
         model.addAttribute("cards", userCards);
 
@@ -85,11 +87,18 @@ public class TaskController {
 
 
 //            System.out.println(jo.get("allTasks"));
-            JSONObject jsonArray =  jo.getJSONObject("allTasks");
+            JSONObject jsonArray = jo.getJSONObject("allTasks");
             tasks = jsonArray.toMap();
             System.out.println(tasks);
 
-            //TODO:dodavanje vo bazata
+
+            TaskCard card = userService.addTaskCard(currentUser.getUsername(),title);
+
+            List<Task> taskList = taskService.createList(tasks);
+
+            taskService.addTasksToTaskCard(card,taskList);
+
+
 
         } catch (Exception e) {
             // Handle any potential exceptions
