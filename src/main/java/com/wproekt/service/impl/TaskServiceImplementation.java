@@ -39,4 +39,11 @@ public class TaskServiceImplementation implements TaskService {
         cardRepository.save(taskCard);
         return taskCard;
     }
+
+    @Override
+    public void setTaskBoolean(Long id, Boolean isCompleted) {
+        Task task = taskRepository.getReferenceById(id);
+        task.setIsCompleted(isCompleted);
+        taskRepository.save(task);
+    }
 }

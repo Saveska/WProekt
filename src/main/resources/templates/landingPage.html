@@ -184,7 +184,9 @@
 
                                             <li class="list-group-item" th:each="task:${card.getTasks()}">
                                                 <input type="checkbox" th:checked="${task.isCompleted}"
-                                                       class="form-check-input">
+                                                       class="form-check-input taskCheckmark"
+                                                       th:name="${task.id}"
+                                                       >
                                                 <label class="form-check-label" th:text="${task.text}">
 
                                                 </label>
