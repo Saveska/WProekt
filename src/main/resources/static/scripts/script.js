@@ -60,7 +60,6 @@ $('#saveTasksButton').click(function () {
 
 });
 
-
 $('#saveNoteButton').click(() => {
     let data = {};
 
@@ -84,3 +83,28 @@ $('#saveNoteButton').click(() => {
     })
 })
 
+document.querySelectorAll(".taskCheckmark").forEach(elem => {
+    elem.addEventListener("change", () => {
+        console.log(elem.name);
+        console.log(elem.checked)
+        let data = {}
+
+        data['id'] = elem.name;
+        data['checked'] = elem.checked;
+
+        $.ajax({
+            url: 'changeStatus',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                console.log(dataP)
+            },
+            error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        })
+
+    })
+})

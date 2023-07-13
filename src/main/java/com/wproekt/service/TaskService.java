@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaskService {
-    public List<Task> createList(Map<String,Object> map);
+    List<Task> createList(Map<String, Object> map);
+
     TaskCard addTasksToTaskCard(TaskCard taskCard, List<Task> tasks);
+
+    void setTaskBoolean(Long id, Boolean isCompleted);
 
 }

@@ -110,4 +110,32 @@ public class TaskController {
 
     }
 
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public List<Note> taskChangeAjax(Authentication authentication, @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
+            Long id = jo.getLong("id");
+            Boolean checked = jo.getBoolean("checked");
+
+            System.out.println(id);
+            System.out.println(checked);
+
+            taskService.setTaskBoolean(id,checked);
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+        //userService.addNoteCard(currentUser.getUsername(), )
+        return new ArrayList<>();
+
+    }
 }
