@@ -3,10 +3,9 @@ body {
 
 }
 
-.fade #registerModal{
+.fade #registerModal {
     transition: ease-in-out 0.15s linear;
 }
-
 
 
 .btn-color {
@@ -28,8 +27,8 @@ body {
     font-size: larger;
 }
 
-.sidebar{
-    --bs-list-group-border-radius : 0;
+.sidebar {
+    --bs-list-group-border-radius: 0;
 }
 
 .sidebar a:active {
@@ -39,7 +38,7 @@ body {
 .sidebar a:hover {
     transition: all 0.15s ease-in-out;
     background-color: rgb(132, 47, 132);
-    border-top-right-radius: 10px ;
+    border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
 
@@ -52,31 +51,30 @@ body {
     --bs-btn-border-color: rgb(132, 47, 132);
     --bs-btn-hover-bg: rgb(132, 47, 132);
     --bs-btn-hover-border-color: rgb(132, 47, 132);
-    --bs-btn-active-bg: rgb(185, 86, 185)   ;
+    --bs-btn-active-bg: rgb(185, 86, 185);
     --bs-btn-active-border-color: rgb(185, 86, 185);
 }
 
 
-
-.loginTextInput{
+.loginTextInput {
     padding: .5rem;
 }
 
-.note{
-    border-top-right-radius: 0% ;
+.note {
+    border-top-right-radius: 0%;
     border-bottom-right-radius: 0%;
 }
 
-.tasks{
-    border-top-left-radius: 0% ;
+.tasks {
+    border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
 }
 
-.cont-side{
+.cont-side {
 
 
     /* background-color: rgb(28, 31, 34); */
-    background-color:rgb(37, 42, 46);
+    background-color: rgb(37, 42, 46);
     margin-top: 1em;
 
 }
@@ -92,30 +90,132 @@ textarea {
 
 .textarea-container {
     overflow-y: auto;
-    max-height: 20rem; 
-  }
+    max-height: 20rem;
+}
 
-  .note_input:focus{
+.note_input:focus {
     border: none;
     box-shadow: none;
-  }
+}
 
-  .btn-save-changes{
+.btn-save-changes {
     color: white;
     background-color: rgb(132, 47, 132);
     --bs-btn-hover-bg: rgb(114, 40, 114);
     --bs-btn-hover-color: white;
     --bs-btn-active-bg: rgb(114, 40, 114);
     --bs-btn-active-color: white;
-  }
+}
 
 
-  .tasks-input:focus {
+.tasks-input:focus {
     outline: none !important;
-    border:none;
-    box-shadow: 0 0 10px rgba(132, 47, 132,0.7);
-  }
+    border: none;
+    box-shadow: 0 0 10px rgba(132, 47, 132, 0.7);
+}
 
-  .search{
+.search {
     width: 50%;
-  }
+}
+
+/*.appCard {*/
+/*    color: white;*/
+/*    background: transparent;*/
+/*    border: 3px solid gray;*/
+/*    border-radius: 0;*/
+/*    transition: all 0.2s ease-in-out;*/
+/*}*/
+
+/*.appCard:hover {*/
+
+/*    border-color: rgb(185, 86, 185);*/
+/*    transform: translate(5%,-5%);*/
+/*}*/
+
+.appCard {
+    --c: rgb(185, 86, 185); /* the color */
+    --b: .1em; /* border length*/
+    --d: 10px; /* the cube depth */
+    border-radius: 0;
+    --_s: calc(var(--d) + var(--b));
+
+    color: white;
+    border: solid #0000;
+    border-width: var(--b) var(--b) var(--_s) var(--_s);
+    background: conic-gradient(at left var(--d) bottom var(--d),
+    #0000 90deg, rgb(255 255 255 /0.3) 0 225deg, rgb(255 255 255 /0.6) 0) border-box,
+    conic-gradient(at left var(--_s) bottom var(--_s),
+            #0000 90deg, var(--c) 0) 0 100%/calc(100% - var(--b)) calc(100% - var(--b)) border-box;
+    transform: translate(calc(var(--d) / -1), var(--d));
+    clip-path: polygon(
+            var(--d) 0%,
+            var(--d) 0%,
+            100% 0%,
+            100% calc(100% - var(--d)),
+            100% calc(100% - var(--d)),
+            var(--d) calc(100% - var(--d))
+    );
+    transition: 0.2s;
+}
+
+.appCard:hover {
+    transform: translate(0, 0);
+    clip-path: polygon(
+            0% var(--d),
+            var(--d) 0%,
+            100% 0%,
+            100% calc(100% - var(--d)),
+            calc(100% - var(--d)) 100%,
+            0% 100%
+    );
+}
+
+
+.add-color-button{
+    border-radius: 0;
+    color:white;
+    background: lightblue;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+}
+
+.add-image-button{
+    border-radius: 0;
+    color:white;
+    background: lightblue;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+
+}
+.pin{
+    --bs-btn-color: white;
+    --bs-btn-hover-color: rgba(255, 255, 255, 0.75);
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+    font-size: 2rem;
+}
+
+.delete-note-button{
+    color:white;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+
+}
+
+.appCard:hover > div > .add-color-button{
+
+    opacity: 1;
+}
+.appCard:hover > div > .add-image-button{
+
+    opacity: 1;
+}
+.appCard:hover > div > .delete-note-button{
+
+    opacity: 1;
+}
+
+.appCard:hover > div > .pin{
+
+    opacity: 1;
+}
