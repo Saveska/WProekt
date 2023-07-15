@@ -45,11 +45,13 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public List<Card> getCards(String username) {
+    public List<Card> getHomePageCards(String username) {
         if (userRepository.findByUsername(username).isPresent()) {
             User user = userRepository.findByUsername(username).get();
+            List<Card> cards = user.getCards();
+            cards = cards.stream().filter(card-> !card.getIsArchived() && !card.getIsInBin()).toList();
+            return cards;
 
-            return user.getCards();
         } else {
             throw new UserDoesntExistException();
         }
@@ -91,7 +93,6 @@ public class UserServiceImplementation implements UserService {
             throw new UserDoesntExistException();
         }
     }
-
 
 
     @Override

@@ -175,7 +175,9 @@
                                    th:text="${card.getText()}">
 
                                 </p>
+                                <p th:text="${card.getIsInBin()}">
 
+                                </p>
                                 <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
                                     <p class="card-text">
 
@@ -210,7 +212,7 @@
                                 <button class="flex-grow-1 btn  p-3 text-center add-image-button">
                                     <i class="fa-solid fa-image"></i>
                                 </button>
-                                <button class="flex-grow-1 btn btn-danger rounded-0 p-3 text-white text-center delete-note-button">
+                                <button class="flex-grow-1 btn btn-danger rounded-0 p-3 text-white text-center delete-note-button" th:value="${card.id}">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
 

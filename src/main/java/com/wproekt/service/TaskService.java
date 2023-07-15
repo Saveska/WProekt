@@ -12,5 +12,4 @@ public interface TaskService {
     TaskCard addTasksToTaskCard(TaskCard taskCard, List<Task> tasks);
 
     void setTaskBoolean(Long id, Boolean isCompleted);
-
 }

@@ -8,10 +8,12 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     User register(String username, String password, String repeatPassword, String name, String surname, String email);
 
-    List<Card> getCards(String username);
+    List<Card> getHomePageCards(String username);
 
     Note addNoteCard(String username, String title, String Text);
 
     TaskCard addTaskCard(String username, String title);
+
+
 
 }
