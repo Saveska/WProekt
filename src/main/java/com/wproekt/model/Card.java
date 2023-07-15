@@ -27,6 +27,7 @@ abstract public class Card {
     private List<Label> label;
 
 
+
     public Card() {
     }
 

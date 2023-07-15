@@ -1,6 +1,7 @@
 package com.wproekt.web;
 
 import com.wproekt.model.*;
+import com.wproekt.service.CardService;
 import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
 import org.json.JSONArray;
@@ -27,10 +28,12 @@ public class TaskController {
 
     UserService userService;
     TaskService taskService;
+    CardService cardService;
 
-    public TaskController(UserService userService, TaskService taskService) {
+    public TaskController(UserService userService, TaskService taskService, CardService cardService) {
         this.userService = userService;
         this.taskService = taskService;
+        this.cardService = cardService;
     }
 
     @GetMapping({"/", "/home"})
@@ -38,7 +41,7 @@ public class TaskController {
                               Model model) {
         User currentUser = (User) authentication.getPrincipal();
 
-        List<Card> userCards = userService.getCards(currentUser.getUsername());
+        List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
         System.out.println(userCards);
 
         model.addAttribute("cards", userCards);
@@ -114,7 +117,7 @@ public class TaskController {
     @ResponseBody
     public List<Note> taskChangeAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
-
+    //TODO: mislam deka mozi anon user da smeni tujdz task, FIX
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
@@ -128,6 +131,31 @@ public class TaskController {
             System.out.println(checked);
 
             taskService.setTaskBoolean(id,checked);
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+        //userService.addNoteCard(currentUser.getUsername(), )
+        return new ArrayList<>();
+
+    }
+
+    @PostMapping("/binCard")
+    @ResponseBody
+    public List<Note> binCardAjax(Authentication authentication, @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            Long id = jo.getLong("id");
+
+            cardService.putCardInBin(currentUser,id);
+
 
         } catch (Exception e) {
             // Handle any potential exceptions

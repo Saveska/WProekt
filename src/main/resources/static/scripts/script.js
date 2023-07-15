@@ -85,8 +85,6 @@ $('#saveNoteButton').click(() => {
 
 document.querySelectorAll(".taskCheckmark").forEach(elem => {
     elem.addEventListener("change", () => {
-        console.log(elem.name);
-        console.log(elem.checked)
         let data = {}
 
         data['id'] = elem.name;
@@ -106,5 +104,32 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
 
         })
 
+    })
+})
+
+document.querySelectorAll(".delete-note-button").forEach(elem => {
+    elem.addEventListener("click", () => {
+        let data = {};
+
+        data['id'] = elem.value;
+
+        $.ajax({
+            url: 'binCard',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                console.log(dataP);
+
+                $(elem.parentElement.parentElement.parentElement).fadeOut(() => {
+                    $(elem).remove();
+                })
+
+            },
+            error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        })
     })
 })
