@@ -42,14 +42,32 @@ public class TaskController {
         User currentUser = (User) authentication.getPrincipal();
 
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
-        System.out.println(userCards);
 
         model.addAttribute("cards", userCards);
-
+        model.addAttribute("page", "home");
 
         return "landingPage";
     }
 
+
+    @GetMapping({"/trash"})
+    public String GetTrashPage(Authentication authentication,
+                              Model model) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        List<Card> userCards = userService.getTrashPageCards(currentUser.getUsername());
+        System.out.println(userCards);
+
+        model.addAttribute("cards", userCards);
+        model.addAttribute("page", "trash");
+
+        return "landingPage";
+    }
+
+
+
+
+    //AJAX CALLS
     @PostMapping("/giveNote")
     @ResponseBody
     public List<Note> notePostAjax(Authentication authentication, @RequestBody String requestData) {
@@ -95,12 +113,11 @@ public class TaskController {
             System.out.println(tasks);
 
 
-            TaskCard card = userService.addTaskCard(currentUser.getUsername(),title);
+            TaskCard card = userService.addTaskCard(currentUser.getUsername(), title);
 
             List<Task> taskList = taskService.createList(tasks);
 
-            taskService.addTasksToTaskCard(card,taskList);
-
+            taskService.addTasksToTaskCard(card, taskList);
 
 
         } catch (Exception e) {
@@ -117,7 +134,7 @@ public class TaskController {
     @ResponseBody
     public List<Note> taskChangeAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
-    //TODO: mislam deka mozi anon user da smeni tujdz task, FIX
+        //TODO: mislam deka mozi anon user da smeni tujdz task, FIX
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
@@ -130,7 +147,7 @@ public class TaskController {
             System.out.println(id);
             System.out.println(checked);
 
-            taskService.setTaskBoolean(id,checked);
+            taskService.setTaskBoolean(id, checked);
 
         } catch (Exception e) {
             // Handle any potential exceptions
@@ -154,7 +171,7 @@ public class TaskController {
             JSONObject jo = new JSONObject(decodedData);
             Long id = jo.getLong("id");
 
-            cardService.putCardInBin(currentUser,id);
+            cardService.putCardInBin(currentUser, id);
 
 
         } catch (Exception e) {

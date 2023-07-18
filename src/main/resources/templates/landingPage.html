@@ -54,7 +54,8 @@
         <div class="col-md-2 p-0 cont-side">
             <div class="list-group sidebar">
 
-                <a href="./landingPage.html" class="list-group-item ">
+                <a href="/home" class="list-group-item "
+                   th:classappend='${page.equals("home") ? "currentSidebar" : "" }'>
                     <div class="container text-center">
 
                         <div class="row">
@@ -68,7 +69,7 @@
                     </div>
                 </a>
 
-                <a href="./landingPage.html" class="list-group-item ">
+                <a href="/labels" class="list-group-item ">
                     <div class="container text-center">
                         <div class="row">
                             <div class="col col-5">
@@ -81,7 +82,7 @@
                     </div>
                 </a>
 
-                <a href="./landingPage.html" class="list-group-item ">
+                <a href="/archive" class="list-group-item ">
                     <div class="container text-center">
                         <div class="row">
                             <div class="col col-5">
@@ -94,7 +95,8 @@
                     </div>
                 </a>
 
-                <a href="./landingPage.html" class="list-group-item ">
+                <a href="/trash" class="list-group-item "
+                   th:classappend='${page.equals("trash") ? "currentSidebar" : "" }'>
                     <div class="container text-center">
                         <div class="row">
                             <div class="col col-5">
@@ -182,15 +184,16 @@
                                     <p class="card-text">
 
                                     <form>
-                                        <ul class="list-group list-group-flush">
+                                        <ul class="list-group list-group-flush taskListView">
 
 
-                                            <li class="list-group-item" th:each="task:${card.getTasks()}">
+                                            <li class="list-group-item " th:each="task:${card.getTasks()}">
                                                 <input type="checkbox" th:checked="${task.isCompleted}"
                                                        class="form-check-input taskCheckmark"
                                                        th:name="${task.id}"
                                                 >
-                                                <label class="form-check-label" th:text="${task.text}">
+
+                                                <label class="form-check-label" th:classappend="${task.isCompleted ? 'strike' : ''}" th:text="${task.text}">
 
                                                 </label>
                                             </li>
@@ -212,7 +215,8 @@
                                 <button class="flex-grow-1 btn  p-3 text-center add-image-button">
                                     <i class="fa-solid fa-image"></i>
                                 </button>
-                                <button class="flex-grow-1 btn btn-danger rounded-0 p-3 text-white text-center delete-note-button" th:value="${card.id}">
+                                <button class="flex-grow-1 btn btn-danger rounded-0 p-3 text-white text-center delete-note-button"
+                                        th:value="${card.id}">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
 
@@ -221,7 +225,7 @@
                             <div class="position-absolute top-0 end-0 me-1  ">
                                 <button class="btn pin mt-0 me-0">
                                     <i class="fa-solid fa-map-pin"></i>
-<!--                                    <i class="fa-light fa-map-pin"></i>-->
+                                    <!--                                    <i class="fa-light fa-map-pin"></i>-->
                                 </button>
                             </div>
                         </div>
@@ -243,11 +247,11 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body p-4">
 
                                         <div class="form-group mb-2">
                                             <label for="newTaskInput">Add New Task:</label>
-                                            <div class="input-group">
+                                            <div class="input-group mt-2">
                                                 <input type="text" class="form-control tasks-input" id="newTaskInput"
 
                                                        placeholder="Enter task name">
@@ -273,34 +277,7 @@
                         </div>
                     </div>
                     <!-- ---------------------------------------------- -->
-                    <div class="col">
-                        <div class="card" style="width: 14rem;">
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">
-                                <form>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            <input type="checkbox" class="form-check-input">
-                                            <label class="form-check-label">
-                                                test
-                                            </label>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <input type="checkbox" class="form-check-input">
-                                            <label class="form-check-label">
-                                                test
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </form>
 
-                                </p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
