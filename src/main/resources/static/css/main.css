@@ -42,6 +42,21 @@ body {
     border-bottom-right-radius: 10px;
 }
 
+.sidebar a:focus {
+    background-color: rgb(132, 47, 132);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.currentSidebar {
+    background-color: rgb(185, 86, 185) !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    transform: translate(15px, 0px);
+}
+
 .sidebar img {
     width: 16px;
 }
@@ -171,51 +186,112 @@ textarea {
 }
 
 
-.add-color-button{
+.add-color-button {
     border-radius: 0;
-    color:white;
-    background: lightblue;
+    color: white;
+    background: rgb(185, 86, 185);
     opacity: 0;
     transition: 0.2s ease-in-out;
+    --bs-btn-hover-bg: rgb(211, 156, 211);
+
 }
 
-.add-image-button{
+.add-image-button {
     border-radius: 0;
-    color:white;
-    background: lightblue;
+    color: white;
+    background: rgb(185, 86, 185);
     opacity: 0;
     transition: 0.2s ease-in-out;
-
+    --bs-btn-hover-bg: rgb(211, 156, 211);
 }
-.pin{
+
+
+.pin {
     --bs-btn-color: white;
     --bs-btn-hover-color: rgba(255, 255, 255, 0.75);
     opacity: 0;
     transition: 0.2s ease-in-out;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
-.delete-note-button{
-    color:white;
+.delete-note-button {
+    color: white;
     opacity: 0;
     transition: 0.2s ease-in-out;
 
 }
 
-.appCard:hover > div > .add-color-button{
-
-    opacity: 1;
-}
-.appCard:hover > div > .add-image-button{
-
-    opacity: 1;
-}
-.appCard:hover > div > .delete-note-button{
+.appCard:hover > div > .add-color-button {
 
     opacity: 1;
 }
 
-.appCard:hover > div > .pin{
+.appCard:hover > div > .add-image-button {
 
     opacity: 1;
 }
+
+.appCard:hover > div > .delete-note-button {
+
+    opacity: 1;
+}
+
+.appCard:hover > div > .pin {
+
+    opacity: 0.8;
+}
+
+.taskListView {
+    --bs-list-group-color: white;
+    --bs-list-group-bg: transparent;
+
+}
+
+.taskListView > li {
+    border-width: 0 !important;
+}
+
+
+.taskCheckmark {
+    background: transparent;
+    border: solid 2px gray !important;
+    border-radius: 0.1em !important;
+    --bs-form-check-bg-image: none !important;
+    cursor: pointer;
+
+}
+
+@keyframes strike {
+    0% {
+        text-decoration-color: transparent;
+        color:white;
+    }
+    100% {
+        text-decoration-color: rgb(229, 131, 229);
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+.strike {
+    position: relative;
+
+    text-decoration: line-through;
+
+    animation-name: strike;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+
+
+.taskCheckmark:checked {
+    background-color: rgb(185, 86, 185);
+    border: none !important;
+
+}
+
+
+
+

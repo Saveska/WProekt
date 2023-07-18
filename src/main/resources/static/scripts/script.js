@@ -60,6 +60,7 @@ $('#saveTasksButton').click(function () {
 
 });
 
+//TODO: da se pojavuva odma posle dodavanje
 $('#saveNoteButton').click(() => {
     let data = {};
 
@@ -90,6 +91,13 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
         data['id'] = elem.name;
         data['checked'] = elem.checked;
 
+        if(elem.checked)
+            elem.nextElementSibling.classList.add("strike");
+        else
+            elem.nextElementSibling.classList.remove("strike");
+
+
+
         $.ajax({
             url: 'changeStatus',
             type: 'POST',
@@ -112,24 +120,25 @@ document.querySelectorAll(".delete-note-button").forEach(elem => {
         let data = {};
 
         data['id'] = elem.value;
+        $(elem.parentElement.parentElement.parentElement).fadeOut(200, () => {
 
-        $.ajax({
-            url: 'binCard',
-            type: 'POST',
-            dataType: 'json',
-            data: JSON.stringify(data),
-            success: (dataP) => {
-                console.log(dataP);
+            $.ajax({
+                url: 'binCard',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify(data),
+                success: (dataP) => {
+                    console.log(dataP);
 
-                $(elem.parentElement.parentElement.parentElement).fadeOut(() => {
                     $(elem).remove();
-                })
 
-            },
-            error: (jqXhr) => {
-                console.log(jqXhr);
-            }
+                },
+                error: (jqXhr) => {
+                    console.log(jqXhr);
+                }
 
+            })
         })
+
     })
 })
