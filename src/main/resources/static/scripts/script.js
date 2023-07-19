@@ -2,6 +2,7 @@ let titleInputBox = $('#titleNoteInput');
 let textNoteInputBox = $('#noteTextInput');
 let taskForm = document.getElementById("tasksForm");
 let taskTitle = document.getElementById("TaskTitle");
+let notesContainer = document.getElementById("notesContainer");
 
 function auto_grow(element) {
     element.style.height = "auto";
@@ -43,15 +44,11 @@ $('#saveTasksButton').click(function () {
 
 
     $.ajax({
-        url: 'giveTask',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify(data),
+        url: 'giveTask', type: 'POST', dataType: 'json', data: JSON.stringify(data),
 
         success: (dataP) => {
             console.log(dataP)
-        },
-        error: (jqXhr) => {
+        }, error: (jqXhr) => {
             console.log(jqXhr);
         }
 
@@ -69,15 +66,28 @@ $('#saveNoteButton').click(() => {
 
 
     console.log(titleInputBox.val());
+
+    $('#saveNoteButton').html(`<div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>`).prop("disabled",true);
+
+
     $.ajax({
-        url: 'giveNote',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify(data),
-        success: (dataP) => {
+        url: 'giveNote', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
             console.log(dataP)
-        },
-        error: (jqXhr) => {
+            let noteData = dataP[0];
+
+            let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
+
+            notesContainer.insertAdjacentHTML('afterbegin', template);
+
+            $('#saveNoteButton').html('Save changes').prop("disabled",false);
+
+            titleInputBox.val("");
+            textNoteInputBox.val("") ;
+
+
+        }, error: (jqXhr) => {
             console.log(jqXhr);
         }
 
@@ -91,22 +101,13 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
         data['id'] = elem.name;
         data['checked'] = elem.checked;
 
-        if(elem.checked)
-            elem.nextElementSibling.classList.add("strike");
-        else
-            elem.nextElementSibling.classList.remove("strike");
-
+        if (elem.checked) elem.nextElementSibling.classList.add("strike"); else elem.nextElementSibling.classList.remove("strike");
 
 
         $.ajax({
-            url: 'changeStatus',
-            type: 'POST',
-            dataType: 'json',
-            data: JSON.stringify(data),
-            success: (dataP) => {
+            url: 'changeStatus', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
                 console.log(dataP)
-            },
-            error: (jqXhr) => {
+            }, error: (jqXhr) => {
                 console.log(jqXhr);
             }
 
@@ -123,17 +124,12 @@ document.querySelectorAll(".delete-note-button").forEach(elem => {
         $(elem.parentElement.parentElement.parentElement).fadeOut(200, () => {
 
             $.ajax({
-                url: 'binCard',
-                type: 'POST',
-                dataType: 'json',
-                data: JSON.stringify(data),
-                success: (dataP) => {
+                url: 'binCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
                     console.log(dataP);
 
                     $(elem).remove();
 
-                },
-                error: (jqXhr) => {
+                }, error: (jqXhr) => {
                     console.log(jqXhr);
                 }
 
@@ -142,3 +138,45 @@ document.querySelectorAll(".delete-note-button").forEach(elem => {
 
     })
 })
+
+function makeNote(title, text, id) {
+    let template = `<div class="col ">
+        <div class="card appCard position-relative " style="width: 14rem;">
+
+                <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <p class="card-text" 
+                       >
+                    ${text}
+                    </p>
+                    
+                  
+                </div>
+
+
+                <div class="d-flex flex-row ">
+                    <button class="flex-grow-1 btn p-3 text-center add-color-button">
+                        <i class="fa-solid fa-brush"></i>
+                    </button>
+                    <button class="flex-grow-1 btn  p-3 text-center add-image-button">
+                        <i class="fa-solid fa-image"></i>
+                    </button>
+                    <button
+                        class="flex-grow-1 btn btn-danger rounded-0 p-3 text-white text-center delete-note-button"
+                        value="${id}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                </div>
+
+                <div class="position-absolute top-0 end-0 me-1  ">
+                    <button class="btn pin mt-0 me-0">
+                        <i class="fa-solid fa-map-pin"></i>
+                    </button>
+                </div>
+        </div>
+    </div>`;
+
+    return template;
+
+}
