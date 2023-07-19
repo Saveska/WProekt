@@ -78,8 +78,12 @@ $('#saveNoteButton').click(() => {
             let noteData = dataP[0];
 
             let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
+            let element = $($.parseHTML(template));
+            element.hide();
 
-            notesContainer.insertAdjacentHTML('afterbegin', template);
+           toBinButton(element.find('.delete-note-button')[0]);
+            notesContainer.prepend( element[0]);
+            element.show('slow');
 
             $('#saveNoteButton').html('Save changes').prop("disabled",false);
 
@@ -117,6 +121,10 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
 })
 
 document.querySelectorAll(".delete-note-button").forEach(elem => {
+    toBinButton(elem);
+})
+
+function toBinButton(elem){
     elem.addEventListener("click", () => {
         let data = {};
 
@@ -137,8 +145,7 @@ document.querySelectorAll(".delete-note-button").forEach(elem => {
         })
 
     })
-})
-
+}
 function makeNote(title, text, id) {
     let template = `<div class="col ">
         <div class="card appCard position-relative " style="width: 14rem;">
