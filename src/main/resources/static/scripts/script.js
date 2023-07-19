@@ -3,6 +3,8 @@ let textNoteInputBox = $('#noteTextInput');
 let taskForm = document.getElementById("tasksForm");
 let taskTitle = document.getElementById("TaskTitle");
 let notesContainer = document.getElementById("notesContainer");
+let savingStatus = document.getElementById("status-spinner");
+
 
 function auto_grow(element) {
     element.style.height = "auto";
@@ -26,6 +28,8 @@ $('#saveTasksButton').click(function () {
     // let allTasks = $('#tasksForm input[type="checkbox"]').map(function () {
     //     return $(this).val();
     // }).get();
+    savingStatus.hidden = false;
+
     let allTasks = {}
     $('#tasksForm input[type="checkbox"]').each((i, x) => {
 
@@ -48,6 +52,9 @@ $('#saveTasksButton').click(function () {
 
         success: (dataP) => {
             console.log(dataP)
+            savingStatus.hidden = true;
+
+
         }, error: (jqXhr) => {
             console.log(jqXhr);
         }
@@ -57,8 +64,11 @@ $('#saveTasksButton').click(function () {
 
 });
 
-//TODO: da se pojavuva odma posle dodavanje
+
 $('#saveNoteButton').click(() => {
+
+    savingStatus.hidden = false;
+
     let data = {};
 
     data['title'] = titleInputBox.val();
@@ -90,6 +100,10 @@ $('#saveNoteButton').click(() => {
             titleInputBox.val("");
             textNoteInputBox.val("") ;
 
+            savingStatus.hidden = true;
+
+
+
 
         }, error: (jqXhr) => {
             console.log(jqXhr);
@@ -97,9 +111,11 @@ $('#saveNoteButton').click(() => {
 
     })
 })
-
+//todo:istoto za task
 document.querySelectorAll(".taskCheckmark").forEach(elem => {
     elem.addEventListener("change", () => {
+        savingStatus.hidden = false;
+
         let data = {}
 
         data['id'] = elem.name;
@@ -111,6 +127,8 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
         $.ajax({
             url: 'changeStatus', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
                 console.log(dataP)
+                savingStatus.hidden = true;
+
             }, error: (jqXhr) => {
                 console.log(jqXhr);
             }
@@ -126,6 +144,8 @@ document.querySelectorAll(".delete-note-button").forEach(elem => {
 
 function toBinButton(elem){
     elem.addEventListener("click", () => {
+        savingStatus.hidden = false;
+
         let data = {};
 
         data['id'] = elem.value;
@@ -136,6 +156,7 @@ function toBinButton(elem){
                     console.log(dataP);
 
                     $(elem).remove();
+                    savingStatus.hidden = true;
 
                 }, error: (jqXhr) => {
                     console.log(jqXhr);
