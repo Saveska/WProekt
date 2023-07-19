@@ -52,7 +52,7 @@ public class TaskController {
 
     @GetMapping({"/trash"})
     public String GetTrashPage(Authentication authentication,
-                              Model model) {
+                               Model model) {
         User currentUser = (User) authentication.getPrincipal();
 
         List<Card> userCards = userService.getTrashPageCards(currentUser.getUsername());
@@ -63,8 +63,6 @@ public class TaskController {
 
         return "landingPage";
     }
-
-
 
 
     //AJAX CALLS
@@ -80,8 +78,11 @@ public class TaskController {
             String title = (String) jo.get("title");
             String text = (String) jo.get("text");
 
-            userService.addNoteCard(currentUser.getUsername(), title, text);
+            Note note = userService.addNoteCard(currentUser.getUsername(), title, text);
+            List<Note> notes = new ArrayList<>();
 
+            notes.add(note);
+            return notes;
 
         } catch (Exception e) {
             // Handle any potential exceptions
