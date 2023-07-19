@@ -17,16 +17,17 @@
 <body style="overflow-x: hidden;">
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
     <div class="container-fluid d-flex align-items-center col-md-10">
         <a class="navbar-brand" href="#"><img src="/img/logo.svg" width="48" height="48" alt="Logo Mindmappr"></a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="navbar-brand" aria-current="page" href="#">MindMappr</a>
                 </li>
             </ul>
+
             <form class="d-flex search" role="search">
                 <input class="form-control me-2 flex-grow-1 tasks-input" type="search" placeholder="Search"
                        aria-label="Search">
@@ -44,7 +45,14 @@
             </li>
 
 
+
         </div>
+    </div>
+    <div id="status-spinner" class="text-white position-absolute end-0 me-4" hidden>
+        <div class="spinner-grow text-white " role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <span class="fw-bold fs-3">Saving..</span>
     </div>
 </nav>
 
@@ -193,7 +201,9 @@
                                                        th:name="${task.id}"
                                                 >
 
-                                                <label class="form-check-label" th:classappend="${task.isCompleted ? 'strike' : ''}" th:text="${task.text}">
+                                                <label class="form-check-label"
+                                                       th:classappend="${task.isCompleted ? 'strike' : ''}"
+                                                       th:text="${task.text}">
 
                                                 </label>
                                             </li>
