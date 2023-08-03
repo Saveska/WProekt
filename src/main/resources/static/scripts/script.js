@@ -1,9 +1,10 @@
-let titleInputBox = $('#titleNoteInput');
-let textNoteInputBox = $('#noteTextInput');
-let taskForm = document.getElementById("tasksForm");
-let taskTitle = document.getElementById("TaskTitle");
-let notesContainer = document.getElementById("notesContainer");
-let savingStatus = document.getElementById("status-spinner");
+const titleInputBox = $('#titleNoteInput');
+const textNoteInputBox = $('#noteTextInput');
+const taskForm = document.getElementById("tasksForm");
+const taskTitle = document.getElementById("TaskTitle");
+const notesContainer = document.getElementById("notesContainer");
+const savingStatus = document.getElementById("status-spinner");
+const addImageModal = document.getElementById('addImageModal')
 
 
 function auto_grow(element) {
@@ -64,6 +65,8 @@ $('#saveTasksButton').click(function () {
 
 });
 
+//TODO: dodavanje na taskoj
+//TODO: editiranje na taskoj
 
 $('#saveNoteButton').click(() => {
 
@@ -79,7 +82,7 @@ $('#saveNoteButton').click(() => {
 
     $('#saveNoteButton').html(`<div class="spinner-border spinner-border-sm" role="status">
                             <span class="visually-hidden">Loading...</span>
-                        </div>`).prop("disabled",true);
+                        </div>`).prop("disabled", true);
 
 
     $.ajax({
@@ -91,18 +94,16 @@ $('#saveNoteButton').click(() => {
             let element = $($.parseHTML(template));
             element.hide();
 
-           toBinButton(element.find('.delete-note-button')[0]);
-            notesContainer.prepend( element[0]);
+            toBinButton(element.find('.delete-note-button')[0]);
+            notesContainer.prepend(element[0]);
             element.show('slow');
 
-            $('#saveNoteButton').html('Save changes').prop("disabled",false);
+            $('#saveNoteButton').html('Save changes').prop("disabled", false);
 
             titleInputBox.val("");
-            textNoteInputBox.val("") ;
+            textNoteInputBox.val("");
 
             savingStatus.hidden = true;
-
-
 
 
         }, error: (jqXhr) => {
@@ -138,11 +139,13 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
     })
 })
 
+
 document.querySelectorAll(".delete-note-button").forEach(elem => {
     toBinButton(elem);
 })
 
-function toBinButton(elem){
+
+function toBinButton(elem) {
     elem.addEventListener("click", () => {
         savingStatus.hidden = false;
 
@@ -167,6 +170,7 @@ function toBinButton(elem){
 
     })
 }
+
 function makeNote(title, text, id) {
     let template = `<div class="col ">
         <div class="card appCard position-relative " style="width: 14rem;">
@@ -207,4 +211,20 @@ function makeNote(title, text, id) {
 
     return template;
 
+}
+
+if (addImageModal) {
+    addImageModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        const value = button.getAttribute('value')
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+        console.log(value);
+        // Update the modal's content.
+        const inputId = addImageModal.querySelector('#addImageModalId')
+
+        inputId.value = value;
+    })
 }

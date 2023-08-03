@@ -9,12 +9,17 @@ import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +30,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Controller
 public class TaskController {
-
+    public static String STATIC_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static";
+    public static String UPLOAD_DIRECTORY = STATIC_DIRECTORY + "/uploads";
     UserService userService;
     TaskService taskService;
     CardService cardService;
@@ -64,6 +70,27 @@ public class TaskController {
         return "landingPage";
     }
 
+    @PostMapping("/uploadimage")
+    public String PostUploadImage(Authentication authentication,
+                                  @RequestParam("cardId") Long cardId,
+                                  @RequestParam("image") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da ne mozi drug user da klaj slika za tret korisnik
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.update(currentUser.getUsername().getBytes());
+        String usernameHash = DatatypeConverter.printHexBinary(messageDigest.digest());
+
+        System.out.println(Files.createDirectories(Paths.get(UPLOAD_DIRECTORY,usernameHash)));
+        Path fileNameAndPath = Paths.get(Paths.get(UPLOAD_DIRECTORY,usernameHash).toString(),file.getOriginalFilename());
+
+        String imgPath = String.valueOf(Path.of(STATIC_DIRECTORY).relativize(fileNameAndPath));
+        cardService.editImageCard(cardId,imgPath);
+
+
+        Files.write(fileNameAndPath, file.getBytes());
+
+        return "redirect:/";
+    }
 
     //AJAX CALLS
     @PostMapping("/giveNote")
