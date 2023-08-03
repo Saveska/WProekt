@@ -264,7 +264,7 @@ textarea {
 @keyframes strike {
     0% {
         text-decoration-color: transparent;
-        color:white;
+        color: white;
     }
     100% {
         text-decoration-color: rgb(229, 131, 229);
@@ -285,13 +285,46 @@ textarea {
 }
 
 
-
 .taskCheckmark:checked {
     background-color: rgb(185, 86, 185);
     border: none !important;
 
 }
+#addImageModal .modal-dialog{
+    max-width: 700px;
+}
+#addImageModal .modal-body{
+    height:300px;
+}
+#addImageModal form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -250px;
+    width: 500px;
+    height: 200px;
+    border: 4px dashed #000000;
+}
 
+#addImageModal form p {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 170px;
+    color: #000000;
+    font-family: Arial;
+}
+
+#addImageModal form input {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+}
 
 
 

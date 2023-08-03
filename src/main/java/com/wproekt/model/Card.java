@@ -26,6 +26,8 @@ abstract public class Card {
     @ManyToMany
     private List<Label> label;
 
+    @ManyToOne
+    private User user;
 
 
     public Card() {

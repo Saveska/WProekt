@@ -33,4 +33,17 @@ public class CardServiceImplementation implements CardService {
         }
         return false;
     }
+
+    @Override
+    public Card getCardById(Long id) {
+        return cardRepository.getReferenceById(id);
+    }
+
+    @Override
+    public void editImageCard(Long id, String path) {
+        Card card = cardRepository.getReferenceById(id);
+        card.setImageLink(path);
+        cardRepository.save(card);
+
+    }
 }
