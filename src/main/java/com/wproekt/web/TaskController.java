@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.bind.DatatypeConverter;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -32,6 +33,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class TaskController {
     public static String STATIC_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static";
     public static String UPLOAD_DIRECTORY = STATIC_DIRECTORY + "/uploads";
+
+    public static List<Color> colors = List.of(new Color(185, 86, 185),
+            new Color(2, 230, 195),
+            new Color(230, 186, 25),
+            new Color(121, 186, 86),
+            new Color(76, 86, 186)
+    );
     UserService userService;
     TaskService taskService;
     CardService cardService;
@@ -49,7 +57,10 @@ public class TaskController {
 
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
 
+
         model.addAttribute("cards", userCards);
+        System.out.println(colors);
+        model.addAttribute("colors", colors);
         model.addAttribute("page", "home");
 
         return "landingPage";
@@ -80,11 +91,11 @@ public class TaskController {
         messageDigest.update(currentUser.getUsername().getBytes());
         String usernameHash = DatatypeConverter.printHexBinary(messageDigest.digest());
 
-        System.out.println(Files.createDirectories(Paths.get(UPLOAD_DIRECTORY,usernameHash)));
-        Path fileNameAndPath = Paths.get(Paths.get(UPLOAD_DIRECTORY,usernameHash).toString(),file.getOriginalFilename());
+        System.out.println(Files.createDirectories(Paths.get(UPLOAD_DIRECTORY, usernameHash)));
+        Path fileNameAndPath = Paths.get(Paths.get(UPLOAD_DIRECTORY, usernameHash).toString(), file.getOriginalFilename());
 
         String imgPath = String.valueOf(Path.of(STATIC_DIRECTORY).relativize(fileNameAndPath));
-        cardService.editImageCard(cardId,imgPath);
+        cardService.editImageCard(cardId, imgPath);
 
 
         Files.write(fileNameAndPath, file.getBytes());
@@ -210,5 +221,43 @@ public class TaskController {
         //userService.addNoteCard(currentUser.getUsername(), )
         return new ArrayList<>();
 
+    }
+
+    @PostMapping("/changeColor")
+    @ResponseBody
+    public Boolean changeColorCard(Authentication authentication,
+                                @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali kartickata e od korisniko
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long cardId = jo.getLong("id");
+
+            String colorString = jo.getString("base").replace(")","");
+            colorString = colorString.substring(4);
+
+
+            String[] split = colorString.split(",");
+
+            int red = Integer.parseInt(split[0]);
+            int green = Integer.parseInt(split[1]);
+            int blue = Integer.parseInt(split[2]);
+
+            cardService.setColor(cardId,red,green,blue);
+            return true;
+
+
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+        //userService.addNoteCard(currentUser.getUsername(), )
+        return false;
     }
 }

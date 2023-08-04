@@ -31,6 +31,9 @@ abstract public class Card {
 
 
     public Card() {
+        this.color = new Color(185,86,185);
+
+
     }
 
 
@@ -42,5 +45,20 @@ abstract public class Card {
         this.isPinned = false;
         this.isArchived = false;
         this.isInBin = false;
+        this.color = new Color(185,86,185);
+    }
+
+    public String getRGBColor(){
+        return "rgb("+color.getRed()+','+color.getGreen()+','+color.getBlue()+')';
+    }
+    public String getBrighterRGB(){
+        Color newColor = color.brighter();
+        return "rgb("+newColor.getRed()+','+newColor.getGreen()+','+newColor.getBlue()+')';
+    }
+
+    public String getBackgroundColor(){
+
+        return "rgba("+color.getRed()+','+color.getGreen()+','+color.getBlue()+",0.1)";
+
     }
 }

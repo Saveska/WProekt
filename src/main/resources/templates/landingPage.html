@@ -174,7 +174,8 @@
                 <div class="row gap-2" id="notesContainer">
 
                     <div class="col " th:each="card : ${cards}">
-                        <div class="card appCard position-relative " style="width: 14rem;">
+                        <div class="card appCard position-relative " th:attr="data-id=${card.getId()}" style="width: 14rem;"
+                             th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
                             <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
                                  class="card-img-top" alt="...">
@@ -294,7 +295,7 @@
 
                                 <div class="modal-body">
 
-                                    <form th:action="@{/uploadimage}" method="POST" enctype="multipart/form-data" >
+                                    <form th:action="@{/uploadimage}" method="POST" enctype="multipart/form-data">
                                         <input type="text" hidden name="cardId" id="addImageModalId">
                                         <input type="file" name="image" accept="image/*">
                                         <p>Drag your files here or click in this area.</p>
@@ -311,6 +312,20 @@
                         </div>
                     </div>
                     <!-- ---------------------------------------------- -->
+                    <div hidden>
+                        <div id="colorpopover-content">
+                            <div class="d-flex flex-row justify-content-around">
+                                <th:block th:each="color:${colors}">
+                                    <div class="color-circle"
+                                         th:attr="data-color='rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+')',
+                                               data-light='rgb('+${color.brighter().getRed()}+','+${color.brighter().getGreen()}+','+${color.brighter().getBlue()}+')',
+                                                data-dark='rgba('+${color.darker().getRed()}+','+${color.darker().getGreen()}+','+${color.darker().getBlue()}+',0.1)'"
+                                         th:style="'background-color:rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+');' "></div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
@@ -321,6 +336,7 @@
                 integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                 crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <script src="../static/scripts/script.js"></script>
         <script src="/scripts/script.js"></script>
 
