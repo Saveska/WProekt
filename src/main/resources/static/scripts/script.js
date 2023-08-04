@@ -12,13 +12,38 @@ function auto_grow(element) {
     element.style.height = (element.scrollHeight) + "px";
 }
 
+
+var $grid = $('#notesContainer').packery({
+    itemSelector: '.col',
+    // columnWidth helps with drop positioning
+    columnWidth: 80,
+    gutter: 3
+});
+
+$grid.imagesLoaded().progress( function() {
+    $grid.packery();
+});
+$grid.find('.col').each(function (i, gridItem) {
+    var draggie = new Draggabilly(gridItem);
+    // bind drag events to Packery
+    $grid.packery('bindDraggabillyEvents', draggie);
+});
+
+
+function orderItems() {
+    console.log($grid.packery('getItemElements'));
+
+}
+
+$grid.on('layoutComplete', orderItems);
+
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
     let colorSelector = new bootstrap.Popover(colorButton, {
         container: 'body',
         placement: 'bottom',
         fallback: 'bottom',
         html: true,
-        trigger: 'focus',
+        trigger: 'click',
         customClass: 'color-popover',
         content: document.getElementById('colorpopover-content'),
     })
@@ -29,6 +54,7 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
         colorButton.classList.remove('focused-color-button');
     })
 })
+
 
 
 // Add task to the form when the user clicks the add button
@@ -233,6 +259,8 @@ function makeNote(title, text, id) {
 
 }
 
+
+
 if (addImageModal) {
     addImageModal.addEventListener('show.bs.modal', event => {
 
@@ -293,7 +321,6 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
             url: 'changeColor', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
 
 
-
                 savingStatus.hidden = true;
 
             }, error: (jqXhr) => {
@@ -304,4 +331,7 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
     })
 
 });
+
+//TODO: zacuvuvanje na redosled
+
 

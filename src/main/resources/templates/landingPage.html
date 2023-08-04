@@ -170,10 +170,10 @@
             </div>
 
 
-            <div class="container d-flex col-md-10 ">
-                <div class="row gap-2" id="notesContainer">
+            <div class="container col-md-10 ">
+                <div class=" gap-2" id="notesContainer">
 
-                    <div class="col " th:each="card : ${cards}">
+                    <div class="col mb-3 " th:each="card : ${cards}">
                         <div class="card appCard position-relative " th:attr="data-id=${card.getId()}" style="width: 14rem;"
                              th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
@@ -336,7 +336,9 @@
                 integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                 crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+        <script src="https://unpkg.com/draggabilly@3/dist/draggabilly.pkgd.min.js"></script>
+        <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.js"></script>
         <script src="../static/scripts/script.js"></script>
         <script src="/scripts/script.js"></script>
 
