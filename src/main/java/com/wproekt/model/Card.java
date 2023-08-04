@@ -23,6 +23,7 @@ abstract public class Card {
     private Boolean isInBin;
 
     private Color color;
+    private Integer position;
     @ManyToMany
     private List<Label> label;
 

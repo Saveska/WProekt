@@ -47,6 +47,13 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
         customClass: 'color-popover',
         content: document.getElementById('colorpopover-content'),
     })
+    let popovercont = document.getElementById('colorpopover-content')
+    popovercont.addEventListener("mouseleave",()=>{
+        colorSelector.hide();
+    })
+    document.addEventListener("click",()=>{
+        colorSelector.hide();
+    })
     colorButton.addEventListener('shown.bs.popover', () => {
         colorButton.classList.add('focused-color-button');
     })
@@ -54,6 +61,7 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
         colorButton.classList.remove('focused-color-button');
     })
 })
+
 
 
 
@@ -136,11 +144,12 @@ $('#saveNoteButton').click(() => {
 
             let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
             let element = $($.parseHTML(template));
-            element.hide();
+
 
             toBinButton(element.find('.delete-note-button')[0]);
-            notesContainer.prepend(element[0]);
-            element.show('slow');
+            console.log(element);
+            $grid.prepend( element[0] ).packery('prepended',element[0]);
+
 
             $('#saveNoteButton').html('Save changes').prop("disabled", false);
 
@@ -201,7 +210,9 @@ function toBinButton(elem) {
             $.ajax({
                 url: 'binCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
                     console.log(dataP);
+                    $grid.packery( 'remove', elem )
 
+                        .packery('shiftLayout');
                     $(elem).remove();
                     savingStatus.hidden = true;
 
@@ -277,9 +288,9 @@ if (addImageModal) {
 }
 
 document.querySelectorAll(".color-circle").forEach(colordiv => {
-    let originalBase = null;
-    let originalLight = null;
-    let originalDark = null;
+    let originalBase = colordiv.getAttribute("data-color");
+    let originalLight = colordiv.getAttribute("data-light");
+    let originalDark =  colordiv.getAttribute("data-dark");
     let card = null;
 
     colordiv.addEventListener("mouseover", () => {
@@ -299,10 +310,11 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
 
 
     })
-    colordiv.addEventListener("mouseleave", () => {
+    colordiv.addEventListener("mouseout", () => {
         card.style.setProperty("--c", originalBase);
         card.style.setProperty("--brighter", originalLight);
         card.style.setProperty("--backgroundC", originalDark);
+        console.log(card);
     })
     colordiv.addEventListener("click", () => {
         savingStatus.hidden = false;
@@ -311,7 +323,9 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
         base = colordiv.getAttribute("data-color");
         light = colordiv.getAttribute("data-light");
         dark = colordiv.getAttribute("data-dark");
-
+        originalBase = base;
+        originalLight = light;
+        originalDark = dark;
         let data = {}
 
         data['id'] = id;
