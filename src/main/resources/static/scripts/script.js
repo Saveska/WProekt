@@ -35,7 +35,7 @@ function orderItems() {
 
 }
 
-$grid.on('layoutComplete', orderItems);
+$grid.on('dragItemPositioned', orderItems);
 
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
     let colorSelector = new bootstrap.Popover(colorButton, {
