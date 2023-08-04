@@ -12,6 +12,24 @@ function auto_grow(element) {
     element.style.height = (element.scrollHeight) + "px";
 }
 
+document.querySelectorAll(".add-color-button").forEach(colorButton => {
+    let colorSelector = new bootstrap.Popover(colorButton, {
+        container: 'body',
+        placement: 'bottom',
+        fallback: 'bottom',
+        html: true,
+        trigger: 'focus',
+        customClass: 'color-popover',
+        content: document.getElementById('colorpopover-content'),
+    })
+    colorButton.addEventListener('shown.bs.popover', () => {
+        colorButton.classList.add('focused-color-button');
+    })
+    colorButton.addEventListener('hidden.bs.popover', () => {
+        colorButton.classList.remove('focused-color-button');
+    })
+})
+
 
 // Add task to the form when the user clicks the add button
 $('#addTaskButton').click(function () {
@@ -190,7 +208,9 @@ function makeNote(title, text, id) {
                     <button class="flex-grow-1 btn p-3 text-center add-color-button">
                         <i class="fa-solid fa-brush"></i>
                     </button>
-                    <button class="flex-grow-1 btn  p-3 text-center add-image-button">
+                    <button class="flex-grow-1 btn  p-3 text-center add-image-button"
+                    data-bs-target="#addImageModal"
+                    value="${id}">
                         <i class="fa-solid fa-image"></i>
                     </button>
                     <button
@@ -215,16 +235,73 @@ function makeNote(title, text, id) {
 
 if (addImageModal) {
     addImageModal.addEventListener('show.bs.modal', event => {
-        // Button that triggered the modal
+
         const button = event.relatedTarget
-        // Extract info from data-bs-* attributes
+
         const value = button.getAttribute('value')
-        // If necessary, you could initiate an Ajax request here
-        // and then do the updating in a callback.
+
         console.log(value);
-        // Update the modal's content.
+
         const inputId = addImageModal.querySelector('#addImageModalId')
 
         inputId.value = value;
     })
 }
+
+document.querySelectorAll(".color-circle").forEach(colordiv => {
+    let originalBase = null;
+    let originalLight = null;
+    let originalDark = null;
+    let card = null;
+
+    colordiv.addEventListener("mouseover", () => {
+        let base = colordiv.getAttribute("data-color");
+        let light = colordiv.getAttribute("data-light");
+        let dark = colordiv.getAttribute("data-dark");
+
+        card = document.getElementsByClassName("focused-color-button").item(0).parentElement.parentElement
+
+        originalBase = card.getAttribute("--c");
+        originalLight = card.getAttribute("--brighter");
+        originalDark = card.getAttribute("--backgroundC");
+
+        card.style.setProperty("--c", base);
+        card.style.setProperty("--brighter", light);
+        card.style.setProperty("--backgroundC", dark);
+
+
+    })
+    colordiv.addEventListener("mouseleave", () => {
+        card.style.setProperty("--c", originalBase);
+        card.style.setProperty("--brighter", originalLight);
+        card.style.setProperty("--backgroundC", originalDark);
+    })
+    colordiv.addEventListener("click", () => {
+        savingStatus.hidden = false;
+        let id = card.getAttribute("data-id");
+
+        base = colordiv.getAttribute("data-color");
+        light = colordiv.getAttribute("data-light");
+        dark = colordiv.getAttribute("data-dark");
+
+        let data = {}
+
+        data['id'] = id;
+        data['base'] = base;
+
+        $.ajax({
+            url: 'changeColor', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+
+
+
+                savingStatus.hidden = true;
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    })
+
+});
+

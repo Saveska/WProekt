@@ -7,6 +7,9 @@ import com.wproekt.repository.UserRepository;
 import com.wproekt.service.CardService;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+import java.util.List;
+
 @Service
 public class CardServiceImplementation implements CardService {
 
@@ -20,9 +23,9 @@ public class CardServiceImplementation implements CardService {
 
     @Override
     public boolean putCardInBin(User user, Long id) {
-        if(cardRepository.existsById(id)){
+        if (cardRepository.existsById(id)) {
             Card card = cardRepository.getReferenceById(id);
-            if(userRepository.existsByCardsContains(card)){
+            if (userRepository.existsByCardsContains(card)) {
                 card.setIsInBin(true);
                 cardRepository.save(card);
 
@@ -45,5 +48,14 @@ public class CardServiceImplementation implements CardService {
         card.setImageLink(path);
         cardRepository.save(card);
 
+    }
+
+    @Override
+    public Card setColor(Long id, Integer red, Integer green, Integer blue) {
+        Card card = cardRepository.getReferenceById(id);
+        card.setColor(new Color(red, green, blue));
+        cardRepository.save(card);
+
+        return card;
     }
 }
