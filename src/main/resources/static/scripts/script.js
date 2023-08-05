@@ -27,7 +27,10 @@ $grid.find('.col').each(function (i, gridItem) {
     var draggie = new Draggabilly(gridItem);
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
+
 });
+
+
 
 
 function orderItems() {
@@ -48,16 +51,14 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
         content: document.getElementById('colorpopover-content'),
     })
     let popovercont = document.getElementById('colorpopover-content')
-    popovercont.addEventListener("mouseleave",()=>{
-        colorSelector.hide();
-    })
+
     document.addEventListener("click",()=>{
         colorSelector.hide();
     })
-    colorButton.addEventListener('shown.bs.popover', () => {
+    colorButton.addEventListener('show.bs.popover', () => {
         colorButton.classList.add('focused-color-button');
     })
-    colorButton.addEventListener('hidden.bs.popover', () => {
+    colorButton.addEventListener('hide.bs.popover', () => {
         colorButton.classList.remove('focused-color-button');
     })
 })
@@ -288,9 +289,9 @@ if (addImageModal) {
 }
 
 document.querySelectorAll(".color-circle").forEach(colordiv => {
-    let originalBase = colordiv.getAttribute("data-color");
-    let originalLight = colordiv.getAttribute("data-light");
-    let originalDark =  colordiv.getAttribute("data-dark");
+    let originalBase =  null;
+    let originalLight = null;
+    let originalDark =  null;
     let card = null;
 
     colordiv.addEventListener("mouseover", () => {
@@ -298,15 +299,23 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
         let light = colordiv.getAttribute("data-light");
         let dark = colordiv.getAttribute("data-dark");
 
-        card = document.getElementsByClassName("focused-color-button").item(0).parentElement.parentElement
+        try {
+            //mnogu brzo ako se stegni pak na boite posle menuvanje
+            card = document.getElementsByClassName("focused-color-button").item(0).parentElement.parentElement
+            card.style.setProperty("--c", base);
+            card.style.setProperty("--brighter", light);
+            card.style.setProperty("--backgroundC", dark);
 
-        originalBase = card.getAttribute("--c");
-        originalLight = card.getAttribute("--brighter");
-        originalDark = card.getAttribute("--backgroundC");
+            originalBase = card.getAttribute('original-c');
+            originalLight = card.getAttribute('original-brighter');
+            originalDark = card.getAttribute('original-background');
+        }
+        catch(e){
 
-        card.style.setProperty("--c", base);
-        card.style.setProperty("--brighter", light);
-        card.style.setProperty("--backgroundC", dark);
+        }
+
+
+
 
 
     })
@@ -316,6 +325,7 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
         card.style.setProperty("--backgroundC", originalDark);
         console.log(card);
     })
+
     colordiv.addEventListener("click", () => {
         savingStatus.hidden = false;
         let id = card.getAttribute("data-id");
@@ -326,6 +336,11 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
         originalBase = base;
         originalLight = light;
         originalDark = dark;
+
+        card.setAttribute('original-c', base);
+        card.setAttribute("original-brighter", light);
+        card.setAttribute("original-background", dark);
+
         let data = {}
 
         data['id'] = id;
@@ -348,4 +363,12 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
 
 //TODO: zacuvuvanje na redosled
 
+
+//Editing
+document.querySelectorAll(".appCard").forEach(card=>{
+    card.addEventListener("click",()=>{
+
+        console.log(card);
+    })
+})
 
