@@ -174,7 +174,12 @@
                 <div class=" gap-2" id="notesContainer">
 
                     <div class="col mb-3 " th:each="card : ${cards}">
-                        <div class="card appCard position-relative " th:attr="data-id=${card.getId()}" style="width: 14rem;"
+                        <div class="card appCard position-relative "
+                             th:classappend="${card instanceof T(com.wproekt.model.Note)} ? 'noteCard' : 'taskCard'"
+                             th:attr="data-id=${card.getId()},
+                                      original-c=${card.getRGBColor()},
+                                      original-brighter=${card.getBrighterRGB()},
+                                      original-background=${card.getBackgroundColor()}" style="width: 14rem;"
                              th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
                             <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
@@ -185,9 +190,7 @@
                                    th:text="${card.getText()}">
 
                                 </p>
-                                <p th:text="${card.getIsInBin()}">
 
-                                </p>
                                 <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
                                     <p class="card-text">
 
@@ -297,17 +300,16 @@
 
                                     <form th:action="@{/uploadimage}" method="POST" enctype="multipart/form-data">
                                         <input type="text" hidden name="cardId" id="addImageModalId">
-                                        <input type="file" name="image" accept="image/*">
-                                        <p>Drag your files here or click in this area.</p>
-                                        <button type="submit">Upload</button>
+                                        <input type="file" name="image" accept="image/*" onchange="this.form.submit();">
+                                        <div class="text-center my-auto">
+                                            <i class="fa-regular fa-image"></i>
+                                            <p>Drag Your Image Here!</p>
+
+                                        </div>
                                     </form>
 
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button type="button" class="btn btn-primary">Send message</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
