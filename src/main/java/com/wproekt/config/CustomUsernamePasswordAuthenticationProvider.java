@@ -1,7 +1,6 @@
 package com.wproekt.config;
 
 
-import com.wproekt.model.exceptions.AccountNotVerified;
 import com.wproekt.service.UserService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

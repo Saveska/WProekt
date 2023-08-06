@@ -31,7 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/verify/**/**", "/css/**").permitAll()
+                .antMatchers("/login", "/register", "/verify/**/**", "/img/**", "/scripts/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -51,6 +51,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
         return (request, response, exception) -> {
@@ -60,10 +61,9 @@ public class SecurityConfig {
                 // For example:
                 if (errorMessage.contains("Invalid Credentials")) {
                     response.sendRedirect("/login?err=invalid-credentials");
-                } else if(errorMessage.contains("Not Verified")){
+                } else if (errorMessage.contains("Not Verified")) {
                     response.sendRedirect("/login?err=not-verified");
-                }
-                else {
+                } else {
                     response.sendRedirect("/login?err=unknown");
                 }
             }

@@ -1,6 +1,23 @@
+@font-face {
+    font-family: 'Hobo';
+    src: url('/css/HoboStd.otf') format('truetype');
+
+}
+
 body {
     background-color: rgb(37, 42, 46);
+    font-family: 'Barlow', sans-serif;
+    /*--bs-body-font-size:1.25rem;*/
+}
+.navbar-brand{
+    font-family: 'Hobo',sans-serif;
+    font-size: 1.5rem;
 
+}
+
+
+.form-floating label{
+    --bs-body-font-size: 1rem;
 }
 
 .fade #registerModal {
@@ -199,6 +216,8 @@ textarea {
 
     border-radius: 0;
     color: white;
+    font-size: 1.5rem;
+
     background: var(--c);
     opacity: 0;
     transition: 0.2s ease-in-out;
@@ -212,6 +231,8 @@ textarea {
 .add-image-button {
     border-radius: 0;
     color: white;
+    font-size: 1.5rem;
+
     background: var(--c);
     opacity: 0;
     transition: 0.2s ease-in-out;
@@ -228,6 +249,7 @@ textarea {
 }
 
 .delete-note-button {
+    font-size: 1.5rem;
     color: white;
     opacity: 0;
     transition: 0.2s ease-in-out;
