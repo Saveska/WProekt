@@ -2,6 +2,7 @@ package com.wproekt.web;
 
 import com.wproekt.model.*;
 import com.wproekt.service.CardService;
+import com.wproekt.service.EmailService;
 import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
 import org.json.JSONArray;
@@ -43,16 +44,20 @@ public class TaskController {
     UserService userService;
     TaskService taskService;
     CardService cardService;
+    EmailService emailService;
 
-    public TaskController(UserService userService, TaskService taskService, CardService cardService) {
+    public TaskController(UserService userService, TaskService taskService, CardService cardService, EmailService emailService) {
         this.userService = userService;
         this.taskService = taskService;
         this.cardService = cardService;
+        this.emailService = emailService;
     }
 
     @GetMapping({"/", "/home"})
     public String GetMainPage(Authentication authentication,
                               Model model) {
+
+
         User currentUser = (User) authentication.getPrincipal();
 
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());

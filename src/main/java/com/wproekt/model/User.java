@@ -25,6 +25,7 @@ public class User implements UserDetails {
     private String password;
     private String name;
     private String surname;
+    private String token;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Card> cards;
 
@@ -43,6 +44,7 @@ public class User implements UserDetails {
         this.name = name;
         this.surname = surname;
         this.role = Role.ROLE_USER;
+        this.token = null;
     }
 
     @Override
@@ -67,6 +69,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return token == null;
     }
 }

@@ -1,6 +1,7 @@
 package com.wproekt.config;
 
 
+import com.wproekt.model.exceptions.AccountNotVerified;
 import com.wproekt.service.UserService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,17 +31,24 @@ public class CustomUsernamePasswordAuthenticationProvider implements Authenticat
         if ("".equals(username) || "".equals(password)) {
             throw new BadCredentialsException("Invalid Credentials");
         }
+
         UserDetails userDetails;
-        try{
+
+        try {
             userDetails = this.userService.loadUserByUsername(username);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new BadCredentialsException("Invalid Credentials");
+        }
+
+        if (!userDetails.isEnabled()) {
+            throw new AccountNotVerified();
         }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid Credentials");
         }
+
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 
     }
