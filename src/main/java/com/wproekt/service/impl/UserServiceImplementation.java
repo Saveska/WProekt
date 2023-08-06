@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.InternetAddress;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Comparator;
@@ -51,6 +52,9 @@ public class UserServiceImplementation implements UserService {
 
             throw new EmailAlreadyExists();
         }
+        if (!realMail(email)){
+            throw new EmailDoesntExist();
+        }
         if (userRepository.existsUserByUsername(username)) {
             throw new UsernameAlreadyExists();
         }
@@ -65,7 +69,9 @@ public class UserServiceImplementation implements UserService {
 
         return userRepository.save(user);
     }
-
+    private boolean realMail(String email){
+        return email.matches("[A-Z0-9._%+-][A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{3}");
+    }
     @Override
     public List<Card> getHomePageCards(String username) {
         if (userRepository.findByUsername(username).isPresent()) {
