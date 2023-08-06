@@ -39,7 +39,7 @@ public class EmailServiceImplementation implements EmailService {
             helper.setTo(to);
             helper.setSubject("MindMappr Email Validation");
             //TODO: ne mu dozvoluvaj username da e so /
-            String link = host+"/"+username+'/'+token;
+            String link = host+"/verify/"+username+'/'+token;
             String processedHTMLTemplate = this.constructHTMLTemplate(link);
 
             helper.setText(processedHTMLTemplate, true);

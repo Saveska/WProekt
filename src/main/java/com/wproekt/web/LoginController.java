@@ -29,7 +29,18 @@ public class LoginController {
     ) {
         //TODO: zacisti go malce kodov plz
         //TODO: exceptions za logino
-        model.addAttribute("err", err);
+        if (err != null) {
+            if (err.equals("invalid-credentials")) {
+                model.addAttribute("err", "Invalid username or password");
+            }
+            if (err.equals("not-verified")) {
+                model.addAttribute("err", "Your account hasn't been verified. Check your email!");
+            }
+            if (err.equals("unknown")) {
+                model.addAttribute("err", "Please try again");
+            }
+        }
+
 
         return "loginPage";
     }
@@ -52,7 +63,7 @@ public class LoginController {
             return String.format("redirect:/login?err=%s", exception.getMessage());
         }
 
-        model.addAttribute("content", "Successfull registration, please check your mail to verify your account");
+        model.addAttribute("content", "Successful registration, please check your mail to verify your account");
         return "infoPage";
     }
 

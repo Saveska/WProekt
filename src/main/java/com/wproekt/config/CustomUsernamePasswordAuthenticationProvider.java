@@ -42,7 +42,8 @@ public class CustomUsernamePasswordAuthenticationProvider implements Authenticat
         }
 
         if (!userDetails.isEnabled()) {
-            throw new AccountNotVerified();
+
+            throw new BadCredentialsException("Not Verified");
         }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {

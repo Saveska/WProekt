@@ -4,12 +4,14 @@ package com.wproekt.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 
 @EnableWebSecurity
@@ -35,8 +37,10 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
-                .failureUrl("/login?err=Invalid username or password")
+                .failureHandler(customAuthenticationFailureHandler())
                 .permitAll()
+
+
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -46,6 +50,24 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login");
 
         return http.build();
+    }
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return (request, response, exception) -> {
+            if (exception instanceof BadCredentialsException) {
+                String errorMessage = exception.getMessage();
+                // Customize the failure URL based on the exception message
+                // For example:
+                if (errorMessage.contains("Invalid Credentials")) {
+                    response.sendRedirect("/login?err=invalid-credentials");
+                } else if(errorMessage.contains("Not Verified")){
+                    response.sendRedirect("/login?err=not-verified");
+                }
+                else {
+                    response.sendRedirect("/login?err=unknown");
+                }
+            }
+        };
     }
 
     @Bean
