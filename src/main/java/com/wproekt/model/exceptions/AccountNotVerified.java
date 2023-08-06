@@ -1,6 +1,8 @@
 package com.wproekt.model.exceptions;
 
-public class AccountNotVerified extends RuntimeException {
+import org.springframework.security.core.AuthenticationException;
+
+public class AccountNotVerified extends AuthenticationException {
     public AccountNotVerified() {
         super("Account is not verified. Check your email");
     }
