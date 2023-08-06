@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/css/**").permitAll()
+                .antMatchers("/login", "/register", "/verify/**/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -53,22 +53,9 @@ public class SecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.authenticationProvider(customUsernamePasswordAuthenticationProvider);
-//        authenticationManagerBuilder.inMemoryAuthentication()
-//                .withUser("memuser")
-//                .password(passwordEncoder().encode("pass"))
-//                .roles("USER");
+
         return authenticationManagerBuilder.build();
     }
 
-
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf()
-//                .disable()
-//                .antMatcher("**")
-//                .anonymous();
-//
-//        return http.build();
-//    }
 
 }
