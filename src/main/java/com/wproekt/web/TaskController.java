@@ -289,7 +289,8 @@ public class TaskController {
             } else if (type.equals("text")) {
                 System.out.println(text);
                 Note card = cardService.editTextCard(id, text);
-                System.out.println(card.getText());
+
+                System.out.println("eve sza ova");
             }
 
             return true;

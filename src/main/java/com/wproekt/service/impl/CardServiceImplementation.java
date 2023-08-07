@@ -7,6 +7,8 @@ import com.wproekt.repository.CardRepository;
 import com.wproekt.repository.NoteRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.CardService;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -74,6 +76,15 @@ public class CardServiceImplementation implements CardService {
     @Override
     public Note editTextCard(Long id, String text) {
         Note card = noteRepository.getReferenceById(id);
+        text = text.replaceAll("\n","<br>");
+
+        System.out.println(text);
+        String sanitizedText = Jsoup.clean(text, Safelist.none());
+
+        System.out.println("a posle");
+        System.out.println(sanitizedText);
+        System.out.println("za na kraj");
+        System.out.println(text);
         card.setText(text);
         cardRepository.save(card);
 

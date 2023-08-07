@@ -377,7 +377,8 @@ document.querySelectorAll(".card-title, .card-text").forEach(content => {
 
         let lastChild = content.childNodes[content.childNodes.length - 1];
 
-        range.setStart(lastChild, lastChild.data.length)
+
+        range.setStart(lastChild, lastChild.data ? lastChild.data.length : 0)
         range.collapse(true)
 
         sel.removeAllRanges()
