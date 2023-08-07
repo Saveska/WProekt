@@ -364,14 +364,27 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
 //Editing
 
 
-document.querySelectorAll(".card-title, .card-text").forEach(content => {
+document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content => {
     content.addEventListener("dblclick", () => {
 
         content.classList.add("editing-title")
         content.contentEditable = true;
         content.focus();
 
-        let id = content.parentElement.parentElement.getAttribute("data-id");
+        let type = null;
+        if (content.classList.contains("card-title")) {
+            type = "title";
+        } else if (content.classList.contains("card-text")) {
+            type = "text";
+        } else {
+            type = "task";
+        }
+        let id = null;
+        if (type === "task") {
+            id = content.getAttribute("data-id");
+        } else {
+            id = content.parentElement.parentElement.getAttribute("data-id");
+        }
         let range = document.createRange();
         let sel = document.getSelection();
 
@@ -383,11 +396,12 @@ document.querySelectorAll(".card-title, .card-text").forEach(content => {
 
         sel.removeAllRanges()
         sel.addRange(range)
-        let type = content.classList.contains("card-title") ? "title" : "text";
 
+        if (type !== "task") {
+            let draggieInstance = allDraggies[id];
+            draggieInstance.disable();
+        }
 
-        let draggieInstance = allDraggies[id];
-        draggieInstance.disable();
 
         document.addEventListener("click", outOfInputClick);
 
@@ -396,9 +410,10 @@ document.querySelectorAll(".card-title, .card-text").forEach(content => {
             if (e.target !== content) {
 
                 let text = content.innerText;
-
                 removeFocusEdit(content);
-                draggieInstance.enable();
+
+                if (type !== "task")
+                    draggieInstance.enable();
 
                 document.removeEventListener("click", outOfInputClick);
 
@@ -409,10 +424,10 @@ document.querySelectorAll(".card-title, .card-text").forEach(content => {
         }
 
         let keys = [];
-        if (content.classList.contains("card-title")) {
+        if (type === "title" || type === "task") {
             keys = ["Enter", "Escape"];
         } else {
-            keys =["Escape"];
+            keys = ["Escape"];
         }
 
 
@@ -420,10 +435,11 @@ document.querySelectorAll(".card-title, .card-text").forEach(content => {
 
             if (keys.includes(e.key)) {
 
-                removeFocusEdit(content);
-                draggieInstance.enable();
-
                 let text = content.innerText;
+                removeFocusEdit(content);
+
+                if (type !== "task")
+                    draggieInstance.enable();
 
 
                 sendEdit(id, text, type);

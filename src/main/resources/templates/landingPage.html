@@ -209,9 +209,11 @@
                                                        th:name="${task.id}"
                                                 >
 
-                                                <label class="form-check-label"
+                                                <label class="form-check-label card-task"
+
                                                        th:classappend="${task.isCompleted ? 'strike' : ''}"
-                                                       th:text="${task.text}">
+                                                       th:text="${task.text}"
+                                                th:attr="data-id=${task.getId()}">
 
                                                 </label>
                                             </li>

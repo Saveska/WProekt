@@ -2,6 +2,7 @@ package com.wproekt.service;
 
 import com.wproekt.model.Card;
 import com.wproekt.model.Note;
+import com.wproekt.model.Task;
 import com.wproekt.model.User;
 
 import java.awt.*;
@@ -19,4 +20,5 @@ public interface CardService {
     Card editTitleCard(Long id, String text);
 
     Note editTextCard(Long id, String text);
+
 }

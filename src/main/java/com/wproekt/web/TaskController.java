@@ -287,10 +287,9 @@ public class TaskController {
             if (type.equals("title")) {
                 cardService.editTitleCard(id, text);
             } else if (type.equals("text")) {
-                System.out.println(text);
-                Note card = cardService.editTextCard(id, text);
-
-                System.out.println("eve sza ova");
+                cardService.editTextCard(id, text);
+            }else if(type.equals("task")){
+                taskService.editTask(id,text);
             }
 
             return true;
