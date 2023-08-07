@@ -46,4 +46,13 @@ public class TaskServiceImplementation implements TaskService {
         task.setIsCompleted(isCompleted);
         taskRepository.save(task);
     }
+
+    @Override
+    public Task editTask(Long id, String text) {
+        Task task = taskRepository.getReferenceById(id);
+        task.setText(text);
+
+        return taskRepository.save(task);
+
+    }
 }
