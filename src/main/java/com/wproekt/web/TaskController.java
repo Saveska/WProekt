@@ -58,15 +58,16 @@ public class TaskController {
                               Model model) {
 
 
+
         User currentUser = (User) authentication.getPrincipal();
 
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
-
+        //TODO: mozebi postoj nacin da se napraj i \n da se pojavuva vo teksto ama jas ne znam :D
 
         model.addAttribute("cards", userCards);
-        System.out.println(colors);
         model.addAttribute("colors", colors);
         model.addAttribute("page", "home");
+
 
         return "landingPage";
     }
@@ -231,7 +232,7 @@ public class TaskController {
     @PostMapping("/changeColor")
     @ResponseBody
     public Boolean changeColorCard(Authentication authentication,
-                                @RequestBody String requestData) {
+                                   @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da se proveri dali kartickata e od korisniko
         try {
@@ -242,7 +243,7 @@ public class TaskController {
 
             Long cardId = jo.getLong("id");
 
-            String colorString = jo.getString("base").replace(")","");
+            String colorString = jo.getString("base").replace(")", "");
             colorString = colorString.substring(4);
 
 
@@ -252,9 +253,8 @@ public class TaskController {
             int green = Integer.parseInt(split[1]);
             int blue = Integer.parseInt(split[2]);
 
-            cardService.setColor(cardId,red,green,blue);
+            cardService.setColor(cardId, red, green, blue);
             return true;
-
 
 
         } catch (Exception e) {
@@ -263,6 +263,44 @@ public class TaskController {
         }
 
         //userService.addNoteCard(currentUser.getUsername(), )
+        return false;
+    }
+
+    @PostMapping("/editCard")
+    @ResponseBody
+    public Boolean editCardAjax(Authentication authentication,
+                                @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long id = jo.getLong("id");
+            String text = jo.getString("text");
+            String type = jo.getString("type");
+
+            System.out.println(jo);
+
+            if (type.equals("title")) {
+                cardService.editTitleCard(id, text);
+            } else if (type.equals("text")) {
+                System.out.println(text);
+                Note card = cardService.editTextCard(id, text);
+                System.out.println(card.getText());
+            }
+
+            return true;
+
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+
         return false;
     }
 }

@@ -191,9 +191,10 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
                                 <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
-                                   th:text="${card.getText()}">
+                                   th:text="${#strings.replace(card.getText(), '\n', '&lt;br&gt;')}">
 
                                 </p>
+                                <p th:text="${#strings.replace(testtext, '\n', '&lt;br&gt;')}"></p>
 
                                 <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
                                     <p class="card-text">

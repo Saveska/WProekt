@@ -364,26 +364,26 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
 //Editing
 
 
-document.querySelectorAll(".card-title, .card-text").forEach(title => {
-    title.addEventListener("dblclick", () => {
-        console.log(title);
-        title.classList.add("editing-title")
-        title.contentEditable = true;
-        title.focus();
-        let id = title.parentElement.parentElement.getAttribute("data-id");
+document.querySelectorAll(".card-title, .card-text").forEach(content => {
+    content.addEventListener("dblclick", () => {
 
+        content.classList.add("editing-title")
+        content.contentEditable = true;
+        content.focus();
+
+        let id = content.parentElement.parentElement.getAttribute("data-id");
         let range = document.createRange();
         let sel = document.getSelection();
 
-        let lastChild = title.childNodes[title.childNodes.length - 1];
+        let lastChild = content.childNodes[content.childNodes.length - 1];
 
         range.setStart(lastChild, lastChild.data.length)
         range.collapse(true)
 
         sel.removeAllRanges()
         sel.addRange(range)
+        let type = content.classList.contains("card-title") ? "title" : "text";
 
-        console.log(allDraggies);
 
         let draggieInstance = allDraggies[id];
         draggieInstance.disable();
@@ -392,28 +392,47 @@ document.querySelectorAll(".card-title, .card-text").forEach(title => {
 
         function outOfInputClick(e) {
 
-            if (e.target !== title) {
+            if (e.target !== content) {
 
-                removeFocusEdit(title);
+                let text = content.innerText;
+
+                removeFocusEdit(content);
                 draggieInstance.enable();
 
                 document.removeEventListener("click", outOfInputClick);
+
+                sendEdit(id, text, type);
             }
 
 
         }
 
-        title.addEventListener("keydown", (e) => {
-            console.log(e)
-            if (e.key === "Enter" || e.key === "Escape") {
-                removeFocusEdit(title);
+        let keys = [];
+        if (content.classList.contains("card-title")) {
+            keys = ["Enter", "Escape"];
+        } else {
+            keys =["Escape"];
+        }
+
+
+        content.addEventListener("keydown", (e) => {
+
+            if (keys.includes(e.key)) {
+
+                removeFocusEdit(content);
                 draggieInstance.enable();
+
+                let text = content.innerText;
+
+
+                sendEdit(id, text, type);
+
 
             }
         })
     })
-    title.addEventListener("input", () => {
-        console.log("ovde")
+    content.addEventListener("input", () => {
+
         $grid
 
             .packery('shiftLayout');
@@ -426,3 +445,29 @@ function removeFocusEdit(elem) {
     elem.contentEditable = false;
     elem.blur();
 }
+
+function sendEdit(id, text, type) {
+    let data = {};
+
+    savingStatus.hidden = false;
+    data['id'] = id;
+    data['text'] = text;
+    data['type'] = type;
+
+    console.log(data);
+    $.ajax({
+        url: 'editCard',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(data),
+        success: (dataP) => {
+            savingStatus.hidden = true;
+
+
+        }, error: (jqXhr) => {
+            console.log(jqXhr);
+        }
+
+    });
+}
+
