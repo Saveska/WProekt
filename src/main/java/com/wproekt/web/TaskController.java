@@ -1,6 +1,7 @@
 package com.wproekt.web;
 
 import com.wproekt.model.*;
+import com.wproekt.model.Label;
 import com.wproekt.service.CardService;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.TaskService;
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,10 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -36,7 +36,7 @@ public class TaskController {
     public static String UPLOAD_DIRECTORY = STATIC_DIRECTORY + "/uploads";
 
     public static List<Color> colors = List.of(new Color(185, 86, 185),
-            new Color(2, 230, 195),
+            new Color(0, 109, 170),
             new Color(230, 186, 25),
             new Color(121, 186, 86),
             new Color(76, 86, 186)
@@ -54,6 +54,7 @@ public class TaskController {
     }
 
     @GetMapping({"/", "/home"})
+
     public String GetMainPage(Authentication authentication,
                               Model model) {
 
@@ -63,9 +64,12 @@ public class TaskController {
 
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
         //TODO: mozebi postoj nacin da se napraj i \n da se pojavuva vo teksto ama jas ne znam :D
-
+        Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("cards", userCards);
         model.addAttribute("colors", colors);
+        model.addAttribute("labels",labels);
+
+
         model.addAttribute("page", "home");
 
 

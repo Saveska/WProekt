@@ -2,11 +2,9 @@ package com.wproekt.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.awt.*;
+import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
 @Data
@@ -15,15 +13,19 @@ public class Label {
     @GeneratedValue
 
     private Long Id;
-    private Color color;
 
     private String name;
 
+    @ManyToMany
+    private List<Card> cards;
+    @ManyToOne
+    private User user;
     public Label() {
     }
 
-    public Label(String name) {
+    public Label(String name, User user) {
         this.name = name;
+        this.user = user;
         
     }
 }

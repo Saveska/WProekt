@@ -67,6 +67,34 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
     })
 })
 
+document.querySelectorAll(".add-label-button").forEach(addButton => {
+    let labelSelector = new bootstrap.Popover(addButton, {
+        container: 'body',
+        placement: 'bottom',
+        fallback: 'bottom',
+        html: true,
+        trigger: 'click',
+        // customClass: 'color-popover',
+        content: document.getElementById('labeladder-popover'),
+    })
+    let popovercont = document.getElementById('labeladder-popover')
+
+    document.addEventListener("click", (e) => {
+        let $target = $(e.target);
+
+        if ($target.parents("#labeladder-popover").length !== 1) {
+            labelSelector.hide();
+        }
+    })
+
+})
+
+document.querySelectorAll(".newLabelInput").forEach(input => {
+
+    input.addEventListener("keydown",(e)=>{
+        console.log(e);
+    })
+})
 
 // Add task to the form when the user clicks the add button
 $('#addTaskButton').click(function () {

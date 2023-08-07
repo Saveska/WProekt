@@ -24,7 +24,7 @@ abstract public class Card {
 
     private Color color;
     private Integer position;
-    @ManyToMany
+    @ManyToMany(mappedBy = "cards")
     private List<Label> label;
 
     @ManyToOne

@@ -174,7 +174,7 @@
             </div>
 
 
-            <div class="container col-md-10 ">
+            <div class="container col-md-12 ">
                 <div class=" gap-2" id="notesContainer">
 
                     <div class="col mb-3 " th:each="card : ${cards}">
@@ -213,7 +213,7 @@
 
                                                        th:classappend="${task.isCompleted ? 'strike' : ''}"
                                                        th:text="${task.text}"
-                                                th:attr="data-id=${task.getId()}">
+                                                       th:attr="data-id=${task.getId()}">
 
                                                 </label>
                                             </li>
@@ -223,6 +223,14 @@
                                     </form>
                                     </p>
                                 </th:block>
+                                <div class="label-container">
+
+                                    <div class="label-pill">test label</div>
+
+                                    <button class="btn add-label-button">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
 
 
                             </div>
@@ -331,6 +339,25 @@
                                                 data-dark='rgba('+${color.darker().getRed()}+','+${color.darker().getGreen()}+','+${color.darker().getBlue()}+',0.1)'"
                                          th:style="'background-color:rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+');' "></div>
                                 </th:block>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div hidden>
+                        <div id="labeladder-popover">
+                            <div class="container">
+                                <ul class="list-group list-group-flush">
+
+                                    <li class="list-group-item"><label>+<input type="text"
+
+                                                                               class="newLabelInput"
+                                                                               name="newLabel">
+                                    </label>
+                                    </li>
+
+                                    <li class="list-group-item" th:each="label : ${labels}" th:text="${label.getName()}">An item</li>
+
+                                </ul>
                             </div>
                         </div>
                     </div>
