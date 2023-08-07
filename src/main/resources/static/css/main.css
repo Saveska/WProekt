@@ -216,7 +216,7 @@ textarea {
 
     border-radius: 0;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 
     background: var(--c);
     opacity: 0;
@@ -231,7 +231,8 @@ textarea {
 .add-image-button {
     border-radius: 0;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+
 
     background: var(--c);
     opacity: 0;
@@ -249,7 +250,8 @@ textarea {
 }
 
 .delete-note-button {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+
     color: white;
     opacity: 0;
     transition: 0.2s ease-in-out;
@@ -450,11 +452,13 @@ textarea {
 
 .editing-title{
     -moz-user-select: contain;
-    color:red;
-    background-color: rgba(255, 255, 255, 0.25);
+    text-shadow:  0 0 10px var(--brighter);
+    transition: 0.1s all
 }
+
 .editing-title:read-write:focus{
     border:none;
+    background-color: rgba(255, 255, 255, 0.25);
     outline: var(--c) dashed 2px;
 }
 
