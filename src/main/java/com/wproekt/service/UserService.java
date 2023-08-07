@@ -4,6 +4,7 @@ import com.wproekt.model.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService extends UserDetailsService {
     User register(String username, String password, String repeatPassword, String name, String surname, String email, String host);
@@ -17,5 +18,7 @@ public interface UserService extends UserDetailsService {
     TaskCard addTaskCard(String username, String title);
 
     boolean verifyToken(String username, String token);
+
+    Set<Label> getUserLabels(String username);
 
 }

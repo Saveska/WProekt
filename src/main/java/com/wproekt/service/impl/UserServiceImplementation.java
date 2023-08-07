@@ -1,9 +1,6 @@
 package com.wproekt.service.impl;
 
-import com.wproekt.model.Card;
-import com.wproekt.model.Note;
-import com.wproekt.model.TaskCard;
-import com.wproekt.model.User;
+import com.wproekt.model.*;
 import com.wproekt.model.exceptions.*;
 import com.wproekt.repository.CardRepository;
 import com.wproekt.repository.UserRepository;
@@ -13,12 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.internet.InternetAddress;
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -73,6 +69,7 @@ public class UserServiceImplementation implements UserService {
         return email.matches("[A-Z0-9._%+-][A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{3}");
     }
     @Override
+    @Transactional
     public List<Card> getHomePageCards(String username) {
         if (userRepository.findByUsername(username).isPresent()) {
             User user = userRepository.findByUsername(username).get();
@@ -147,6 +144,15 @@ public class UserServiceImplementation implements UserService {
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    @Transactional
+    public Set<Label> getUserLabels(String username) {
+
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
+
+        return user.getLabels();
     }
 
     @Override

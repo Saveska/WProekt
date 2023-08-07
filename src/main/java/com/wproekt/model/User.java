@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "taskUser")
 @Data
@@ -28,6 +29,9 @@ public class User implements UserDetails {
     private String token;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Card> cards;
+
+    @OneToMany(fetch=FetchType.EAGER,mappedBy = "user")
+    private Set<Label> labels;
 
 
     @Enumerated(value = EnumType.STRING)
