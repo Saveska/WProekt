@@ -6,6 +6,7 @@ const notesContainer = document.getElementById("notesContainer");
 const savingStatus = document.getElementById("status-spinner");
 const addImageModal = document.getElementById('addImageModal')
 
+let allDraggies = {};
 
 function auto_grow(element) {
     element.style.height = "auto";
@@ -20,17 +21,20 @@ var $grid = $('#notesContainer').packery({
     gutter: 3
 });
 
-$grid.imagesLoaded().progress( function() {
+$grid.imagesLoaded().progress(function () {
     $grid.packery();
 });
 $grid.find('.col').each(function (i, gridItem) {
     var draggie = new Draggabilly(gridItem);
+
+    let id = gridItem.children[0].getAttribute("data-id");
+
+    allDraggies[id] = draggie;
+
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
 
 });
-
-
 
 
 function orderItems() {
@@ -52,7 +56,7 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
     })
     let popovercont = document.getElementById('colorpopover-content')
 
-    document.addEventListener("click",()=>{
+    document.addEventListener("click", () => {
         colorSelector.hide();
     })
     colorButton.addEventListener('show.bs.popover', () => {
@@ -62,8 +66,6 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
         colorButton.classList.remove('focused-color-button');
     })
 })
-
-
 
 
 // Add task to the form when the user clicks the add button
@@ -149,7 +151,7 @@ $('#saveNoteButton').click(() => {
 
             toBinButton(element.find('.delete-note-button')[0]);
             console.log(element);
-            $grid.prepend( element[0] ).packery('prepended',element[0]);
+            $grid.prepend(element[0]).packery('prepended', element[0]);
 
 
             $('#saveNoteButton').html('Save changes').prop("disabled", false);
@@ -211,7 +213,7 @@ function toBinButton(elem) {
             $.ajax({
                 url: 'binCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
                     console.log(dataP);
-                    $grid.packery( 'remove', elem )
+                    $grid.packery('remove', elem)
 
                         .packery('shiftLayout');
                     $(elem).remove();
@@ -272,7 +274,6 @@ function makeNote(title, text, id) {
 }
 
 
-
 if (addImageModal) {
     addImageModal.addEventListener('show.bs.modal', event => {
 
@@ -289,9 +290,9 @@ if (addImageModal) {
 }
 
 document.querySelectorAll(".color-circle").forEach(colordiv => {
-    let originalBase =  null;
+    let originalBase = null;
     let originalLight = null;
-    let originalDark =  null;
+    let originalDark = null;
     let card = null;
 
     colordiv.addEventListener("mouseover", () => {
@@ -309,13 +310,9 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
             originalBase = card.getAttribute('original-c');
             originalLight = card.getAttribute('original-brighter');
             originalDark = card.getAttribute('original-background');
-        }
-        catch(e){
+        } catch (e) {
 
         }
-
-
-
 
 
     })
@@ -365,10 +362,67 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
 
 
 //Editing
-document.querySelectorAll(".appCard").forEach(card=>{
-    card.addEventListener("click",()=>{
 
-        console.log(card);
+
+document.querySelectorAll(".card-title, .card-text").forEach(title => {
+    title.addEventListener("dblclick", () => {
+        console.log(title);
+        title.classList.add("editing-title")
+        title.contentEditable = true;
+        title.focus();
+        let id = title.parentElement.parentElement.getAttribute("data-id");
+
+        let range = document.createRange();
+        let sel = document.getSelection();
+
+        let lastChild = title.childNodes[title.childNodes.length - 1];
+
+        range.setStart(lastChild, lastChild.data.length)
+        range.collapse(true)
+
+        sel.removeAllRanges()
+        sel.addRange(range)
+
+        console.log(allDraggies);
+
+        let draggieInstance = allDraggies[id];
+        draggieInstance.disable();
+
+        document.addEventListener("click", outOfInputClick);
+
+        function outOfInputClick(e) {
+
+            if (e.target !== title) {
+
+                removeFocusEdit(title);
+                draggieInstance.enable();
+
+                document.removeEventListener("click", outOfInputClick);
+            }
+
+
+        }
+
+        title.addEventListener("keydown", (e) => {
+            console.log(e)
+            if (e.key === "Enter" || e.key === "Escape") {
+                removeFocusEdit(title);
+                draggieInstance.enable();
+
+            }
+        })
+    })
+    title.addEventListener("input", () => {
+        console.log("ovde")
+        $grid
+
+            .packery('shiftLayout');
     })
 })
 
+
+function removeFocusEdit(elem) {
+    elem.classList.remove("editing-title")
+    elem.contentEditable = false;
+    elem.blur();
+}

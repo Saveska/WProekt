@@ -448,5 +448,14 @@ textarea {
     transition: transform 0.2s;
 }
 
+.editing-title{
+    -moz-user-select: contain;
+    color:red;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+.editing-title:read-write:focus{
+    border:none;
+    outline: var(--c) dashed 2px;
+}
 
 
