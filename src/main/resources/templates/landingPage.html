@@ -227,7 +227,7 @@
 
                                     <div class="label-pill">test label</div>
 
-                                    <button class="btn add-label-button">
+                                    <button class="btn add-label-button" th:data-id="${card.id}">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
                                 </div>
@@ -354,8 +354,18 @@
                                                                                name="newLabel">
                                     </label>
                                     </li>
+                                    <th:block th:each="label : ${labels}">
 
-                                    <li class="list-group-item" th:each="label : ${labels}" th:text="${label.getName()}">An item</li>
+                                        <li class="list-group-item">
+                                            <label>
+                                                <input type="checkbox"
+                                                       class="form-check-input labelCheckmark"
+                                                       th:name="${label.getId()}"
+                                                >
+                                                <span th:text="${label.getName()}"></span>
+                                            </label>
+                                        </li>
+                                    </th:block>
 
                                 </ul>
                             </div>

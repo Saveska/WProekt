@@ -27,8 +27,7 @@ abstract public class Card {
     @ManyToMany(mappedBy = "cards")
     private List<Label> label;
 
-    @ManyToOne
-    private User user;
+
 
     public Card() {
         this.color = new Color(185, 86, 185);

@@ -78,21 +78,52 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
         content: document.getElementById('labeladder-popover'),
     })
     let popovercont = document.getElementById('labeladder-popover')
+    let popoverInput = popovercont.querySelector("input");
+    addButton.addEventListener("show.bs.popover", (e) => {
+        popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
+    })
 
     document.addEventListener("click", (e) => {
         let $target = $(e.target);
 
         if ($target.parents("#labeladder-popover").length !== 1) {
             labelSelector.hide();
+            popoverInput.value = "";
         }
     })
+
 
 })
 
 document.querySelectorAll(".newLabelInput").forEach(input => {
 
-    input.addEventListener("keydown",(e)=>{
-        console.log(e);
+    input.addEventListener("keydown", (e) => {
+
+        if (e.key === "Enter") {
+            let data = {};
+            console.log(e.target.value)
+            console.log(e.target.getAttribute("data-id"))
+
+            let name = e.target.value;
+            data['name'] = name;
+
+            $.ajax({
+                url: 'addLabel',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify(data),
+
+                success: (dataP) => {
+                    console.log(dataP)
+                    savingStatus.hidden = true;
+
+
+                }, error: (jqXhr) => {
+                    console.log(jqXhr);
+                }
+
+            })
+        }
     })
 })
 
@@ -516,3 +547,13 @@ function sendEdit(id, text, type) {
     });
 }
 
+document.querySelectorAll(".labelCheckmark").forEach(label => {
+    label.addEventListener("change", () => {
+        console.log(label);
+        let labelId = label.getAttribute("name");
+        let labelInput = label.parentElement.parentElement.parentElement.children[0].children[0].children[0];
+
+        let cardId = labelInput.getAttribute("data-id");
+
+    })
+})

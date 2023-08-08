@@ -18,14 +18,13 @@ public class Label {
 
     @ManyToMany
     private List<Card> cards;
-    @ManyToOne
-    private User user;
+
     public Label() {
     }
 
-    public Label(String name, User user) {
+    public Label(String name) {
         this.name = name;
-        this.user = user;
+
         
     }
 }

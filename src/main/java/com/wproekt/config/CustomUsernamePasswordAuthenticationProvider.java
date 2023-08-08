@@ -36,7 +36,9 @@ public class CustomUsernamePasswordAuthenticationProvider implements Authenticat
         UserDetails userDetails;
 
         try {
+
             userDetails = this.userService.loadUserByUsername(username);
+
 
         } catch (Exception e) {
             throw new BadCredentialsException("Invalid Credentials");

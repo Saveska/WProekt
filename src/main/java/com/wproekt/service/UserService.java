@@ -21,4 +21,5 @@ public interface UserService extends UserDetailsService {
 
     Set<Label> getUserLabels(String username);
 
+    Label addLabelToUser(String username, String label);
 }

@@ -27,10 +27,10 @@ public class User implements UserDetails {
     private String name;
     private String surname;
     private String token;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     private List<Card> cards;
 
-    @OneToMany(fetch=FetchType.EAGER,mappedBy = "user")
+    @OneToMany()
     private Set<Label> labels;
 
 
@@ -74,5 +74,17 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return token == null;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

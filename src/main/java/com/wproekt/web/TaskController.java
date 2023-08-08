@@ -6,6 +6,7 @@ import com.wproekt.service.CardService;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
+import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
@@ -61,14 +62,14 @@ public class TaskController {
 
 
         User currentUser = (User) authentication.getPrincipal();
-
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
-        //TODO: mozebi postoj nacin da se napraj i \n da se pojavuva vo teksto ama jas ne znam :D
+        System.out.println(userCards);
+
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("cards", userCards);
         model.addAttribute("colors", colors);
         model.addAttribute("labels",labels);
-
+        System.out.println(labels);
 
         model.addAttribute("page", "home");
 
@@ -295,6 +296,35 @@ public class TaskController {
             }else if(type.equals("task")){
                 taskService.editTask(id,text);
             }
+
+            return true;
+
+
+        } catch (Exception e) {
+            // Handle any potential exceptions
+            e.printStackTrace();
+        }
+
+
+        return false;
+    }
+
+    @PostMapping("/addLabel")
+    @ResponseBody
+    public Boolean addLabelAjax(Authentication authentication,
+                                @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            System.out.println(jo);
+            String labelName = jo.getString("name");
+
+            userService.addLabelToUser(currentUser.getUsername(), labelName);
+
 
             return true;
 
