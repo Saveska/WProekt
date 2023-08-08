@@ -3,6 +3,7 @@ package com.wproekt.service.impl;
 import com.wproekt.model.*;
 import com.wproekt.model.exceptions.*;
 import com.wproekt.repository.CardRepository;
+import com.wproekt.repository.LabelRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.UserService;
@@ -22,14 +23,16 @@ public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
     private final CardRepository cardRepository;
     private final EmailService emailService;
+    private final LabelRepository labelRepository;
     private final PasswordEncoder passwordEncoder;
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
-    public UserServiceImplementation(UserRepository userRepository, CardRepository cardRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
+    public UserServiceImplementation(UserRepository userRepository, CardRepository cardRepository, EmailService emailService, LabelRepository labelRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;
         this.emailService = emailService;
+        this.labelRepository = labelRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -153,6 +156,21 @@ public class UserServiceImplementation implements UserService {
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
         return user.getLabels();
+
+    }
+
+    @Override
+    public Label addLabelToUser(String username, String label) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
+
+        Label newLabel = new Label(label);
+
+
+        user.getLabels().add(newLabel);
+        labelRepository.save(newLabel);
+
+        userRepository.save(user);
+        return newLabel;
     }
 
     @Override
