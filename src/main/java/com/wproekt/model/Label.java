@@ -13,7 +13,6 @@ public class Label {
     @GeneratedValue
 
     private Long Id;
-
     private String name;
 
     @ManyToMany
@@ -24,7 +23,5 @@ public class Label {
 
     public Label(String name) {
         this.name = name;
-
-        
     }
 }

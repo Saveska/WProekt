@@ -30,18 +30,19 @@ public class CardServiceImplementation implements CardService {
     public boolean putCardInBin(User user, Long id) {
         if (cardRepository.existsById(id)) {
             Card card = cardRepository.getReferenceById(id);
+
             if (userRepository.existsByCardsContains(card)) {
                 card.setIsInBin(true);
                 cardRepository.save(card);
 
-
                 return true;
             }
-            return false;
+
         }
         return false;
     }
 
+    //TODO: site metodi da proveruva dali postoj kartickata
     @Override
     public Card getCardById(Long id) {
         return cardRepository.getReferenceById(id);
@@ -76,16 +77,14 @@ public class CardServiceImplementation implements CardService {
     @Override
     public Note editTextCard(Long id, String text) {
         Note card = noteRepository.getReferenceById(id);
-        text = text.replaceAll("\n","<br>");
 
+        text = text.replaceAll("\n", "<br>");
 
         String sanitizedText = Jsoup.clean(text, Safelist.none());
 
+        card.setText(sanitizedText);
 
-
-        card.setText(text);
         cardRepository.save(card);
-
         return card;
     }
 

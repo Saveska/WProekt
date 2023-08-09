@@ -46,7 +46,7 @@ public class TaskServiceImplementation implements TaskService {
         task.setIsCompleted(isCompleted);
         taskRepository.save(task);
     }
-
+    //TODO: proveri dali postoj task so takov id
     @Override
     public Task editTask(Long id, String text) {
         Task task = taskRepository.getReferenceById(id);

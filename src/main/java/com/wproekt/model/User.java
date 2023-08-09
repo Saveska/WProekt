@@ -33,10 +33,8 @@ public class User implements UserDetails {
     @OneToMany()
     private Set<Label> labels;
 
-
     @Enumerated(value = EnumType.STRING)
     private Role role;
-
 
     public User() {
     }

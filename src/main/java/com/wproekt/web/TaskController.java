@@ -6,12 +6,9 @@ import com.wproekt.service.CardService;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
-import org.hibernate.Session;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,17 +56,15 @@ public class TaskController {
     public String GetMainPage(Authentication authentication,
                               Model model) {
 
-
-
         User currentUser = (User) authentication.getPrincipal();
+
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
-        System.out.println(userCards);
+
 
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("cards", userCards);
         model.addAttribute("colors", colors);
         model.addAttribute("labels",labels);
-        System.out.println(labels);
 
         model.addAttribute("page", "home");
 
@@ -84,7 +79,6 @@ public class TaskController {
         User currentUser = (User) authentication.getPrincipal();
 
         List<Card> userCards = userService.getTrashPageCards(currentUser.getUsername());
-        System.out.println(userCards);
 
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "trash");
@@ -98,10 +92,12 @@ public class TaskController {
                                   @RequestParam("image") MultipartFile file) throws IOException, NoSuchAlgorithmException {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da ne mozi drug user da klaj slika za tret korisnik
+
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         messageDigest.update(currentUser.getUsername().getBytes());
         String usernameHash = DatatypeConverter.printHexBinary(messageDigest.digest());
 
+        //TODO: ova vo service klaj go
         System.out.println(Files.createDirectories(Paths.get(UPLOAD_DIRECTORY, usernameHash)));
         Path fileNameAndPath = Paths.get(Paths.get(UPLOAD_DIRECTORY, usernameHash).toString(), file.getOriginalFilename());
 
@@ -119,6 +115,7 @@ public class TaskController {
     @ResponseBody
     public List<Note> notePostAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
+
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
@@ -134,13 +131,10 @@ public class TaskController {
             return notes;
 
         } catch (Exception e) {
-            // Handle any potential exceptions
             e.printStackTrace();
         }
 
-        //userService.addNoteCard(currentUser.getUsername(), )
         return new ArrayList<>();
-
     }
 
     @PostMapping("/giveTask")
@@ -148,36 +142,29 @@ public class TaskController {
     public List<Note> taskPostAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         Map<String, Object> tasks;
+
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
-
 
             JSONObject jo = new JSONObject(decodedData);
             System.out.println(jo);
             String title = jo.getString("title");
 
 
-//            System.out.println(jo.get("allTasks"));
             JSONObject jsonArray = jo.getJSONObject("allTasks");
             tasks = jsonArray.toMap();
-            System.out.println(tasks);
-
 
             TaskCard card = userService.addTaskCard(currentUser.getUsername(), title);
-
             List<Task> taskList = taskService.createList(tasks);
 
             taskService.addTasksToTaskCard(card, taskList);
 
-
         } catch (Exception e) {
-            // Handle any potential exceptions
+
             e.printStackTrace();
         }
 
-        //userService.addNoteCard(currentUser.getUsername(), )
         return new ArrayList<>();
-
     }
 
     @PostMapping("/changeStatus")
@@ -188,23 +175,19 @@ public class TaskController {
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
-
             JSONObject jo = new JSONObject(decodedData);
-            System.out.println(jo);
+
             Long id = jo.getLong("id");
             Boolean checked = jo.getBoolean("checked");
-
-            System.out.println(id);
-            System.out.println(checked);
 
             taskService.setTaskBoolean(id, checked);
 
         } catch (Exception e) {
-            // Handle any potential exceptions
+
             e.printStackTrace();
         }
 
-        //userService.addNoteCard(currentUser.getUsername(), )
+
         return new ArrayList<>();
 
     }
@@ -217,21 +200,16 @@ public class TaskController {
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
-
             JSONObject jo = new JSONObject(decodedData);
             Long id = jo.getLong("id");
 
             cardService.putCardInBin(currentUser, id);
 
-
         } catch (Exception e) {
-            // Handle any potential exceptions
+
             e.printStackTrace();
         }
-
-        //userService.addNoteCard(currentUser.getUsername(), )
         return new ArrayList<>();
-
     }
 
     @PostMapping("/changeColor")
@@ -243,14 +221,12 @@ public class TaskController {
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
-
             JSONObject jo = new JSONObject(decodedData);
 
             Long cardId = jo.getLong("id");
 
             String colorString = jo.getString("base").replace(")", "");
             colorString = colorString.substring(4);
-
 
             String[] split = colorString.split(",");
 
@@ -263,11 +239,9 @@ public class TaskController {
 
 
         } catch (Exception e) {
-            // Handle any potential exceptions
+
             e.printStackTrace();
         }
-
-        //userService.addNoteCard(currentUser.getUsername(), )
         return false;
     }
 
@@ -287,25 +261,17 @@ public class TaskController {
             String text = jo.getString("text");
             String type = jo.getString("type");
 
-            System.out.println(jo);
-
-            if (type.equals("title")) {
-                cardService.editTitleCard(id, text);
-            } else if (type.equals("text")) {
-                cardService.editTextCard(id, text);
-            }else if(type.equals("task")){
-                taskService.editTask(id,text);
+            switch (type) {
+                case "title" -> cardService.editTitleCard(id, text);
+                case "text" -> cardService.editTextCard(id, text);
+                case "task" -> taskService.editTask(id, text);
             }
 
             return true;
-
-
         } catch (Exception e) {
-            // Handle any potential exceptions
+
             e.printStackTrace();
         }
-
-
         return false;
     }
 
@@ -320,20 +286,14 @@ public class TaskController {
 
             JSONObject jo = new JSONObject(decodedData);
 
-            System.out.println(jo);
             String labelName = jo.getString("name");
 
             userService.addLabelToUser(currentUser.getUsername(), labelName);
 
-
             return true;
-
-
         } catch (Exception e) {
-            // Handle any potential exceptions
             e.printStackTrace();
         }
-
 
         return false;
     }
