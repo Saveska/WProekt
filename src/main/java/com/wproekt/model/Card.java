@@ -21,23 +21,21 @@ abstract public class Card {
     private Boolean isPinned;
     private Boolean isArchived;
     private Boolean isInBin;
-
     private Color color;
     private Integer position;
+
     @ManyToMany(mappedBy = "cards")
     private List<Label> label;
-
-
 
     public Card() {
         this.color = new Color(185, 86, 185);
     }
 
-
     public Card(String title) {
         this.title = title;
         this.dateCreated = LocalDateTime.now();
         this.dateLastUpdated = LocalDateTime.now();
+        //TODO: od ajax update da se menuva
         this.isPinned = false;
         this.isArchived = false;
         this.isInBin = false;

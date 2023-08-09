@@ -13,7 +13,6 @@ function auto_grow(element) {
     element.style.height = (element.scrollHeight) + "px";
 }
 
-
 var $grid = $('#notesContainer').packery({
     itemSelector: '.col',
     // columnWidth helps with drop positioning
@@ -33,13 +32,11 @@ $grid.find('.col').each(function (i, gridItem) {
 
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
-
 });
 
 
 function orderItems() {
     console.log($grid.packery('getItemElements'));
-
 }
 
 $grid.on('dragItemPositioned', orderItems);
@@ -151,7 +148,6 @@ $('#saveTasksButton').click(function () {
         allTasks[$(x).val()] = (($(x).prop('checked')));
     });
 
-
     console.log(allTasks);
 
     // let fd = new FormData(taskForm);
@@ -206,7 +202,7 @@ $('#saveNoteButton').click(() => {
 
             let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
             let element = $($.parseHTML(template));
-
+            //TODO: fix so novite karticki
 
             toBinButton(element.find('.delete-note-button')[0]);
             console.log(element);
@@ -510,7 +506,6 @@ document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content
     content.addEventListener("input", () => {
 
         $grid
-
             .packery('shiftLayout');
     })
 })

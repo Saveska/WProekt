@@ -24,7 +24,7 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String GetLoginPage(@RequestParam(required = false) String err, Model model, HttpServletRequest request
+    public String GetLoginPage(@RequestParam(required = false) String err, Model model
 
     ) {
         //TODO: zacisti go malce kodov plz
@@ -35,13 +35,11 @@ public class LoginController {
                 case "not-verified" ->
                         model.addAttribute("err", "Your account hasn't been verified. Check your email!");
                 case "unknown" -> model.addAttribute("err", "Please try again");
-                case "Email Already Exists", "Please check your E-Mail address","Please fill out all of the fields!",
-                        "Passwords need to match", "Username Already Exists" -> model.addAttribute("err",err);
+                case "Email Already Exists", "Please check your E-Mail address", "Please fill out all of the fields!",
+                        "Passwords need to match", "Username Already Exists" -> model.addAttribute("err", err);
 
             }
         }
-
-
         return "loginPage";
     }
 
@@ -56,11 +54,10 @@ public class LoginController {
                                Model model
     ) {
         try {
-
             String host = request.getServerName() + ':' + request.getServerPort();
             userService.register(username, password, repeatPassword, name, surname, email, host);
-        } catch (Exception exception) {
 
+        } catch (Exception exception) {
             return String.format("redirect:/login?err=%s", exception.getMessage());
         }
 
@@ -70,15 +67,15 @@ public class LoginController {
 
     @GetMapping("/verify/{username}/{token}")
     public String VerifyUser(@PathVariable String username, @PathVariable String token, Model model) {
-        System.out.println(username);
-        System.out.println(token);
         try {
             userService.verifyToken(username, token);
             model.addAttribute("content", "Account succesfully activated, you can now login");
             model.addAttribute("error", false);
+
         } catch (Exception e) {
             model.addAttribute("content", e.getMessage());
             model.addAttribute("error", true);
+
         }
 
         return "infoPage";

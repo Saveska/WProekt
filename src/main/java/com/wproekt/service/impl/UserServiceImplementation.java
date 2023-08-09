@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.internet.InternetAddress;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -47,30 +46,37 @@ public class UserServiceImplementation implements UserService {
         if (username == null || password == null || repeatPassword == null || email == null) {
             throw new EmptyUserInformationException();
         }
-        if (userRepository.existsUserByEmailIgnoreCase(email)) {
 
+        if (userRepository.existsUserByEmailIgnoreCase(email)) {
             throw new EmailAlreadyExists();
         }
-        if (!realMail(email)){
+
+        if (!realMail(email)) {
             throw new EmailDoesntExist();
         }
+
         if (userRepository.existsUserByUsername(username)) {
             throw new UsernameAlreadyExists();
         }
+
         if (!password.equals(repeatPassword)) {
             throw new InvalidRepeatPassword();
         }
+
         User user = new User(username, email, passwordEncoder.encode(password), name, surname);
 
         String token = generateNewToken();
         user.setToken(token);
+
         emailService.sendTokenMail(email, token, host, username);
 
         return userRepository.save(user);
     }
-    private boolean realMail(String email){
+
+    private boolean realMail(String email) {
         return email.matches("[A-Z0-9._%+-][A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{3}");
     }
+
     @Override
     @Transactional
     public List<Card> getHomePageCards(String username) {
@@ -138,9 +144,9 @@ public class UserServiceImplementation implements UserService {
     @Override
     public boolean verifyToken(String username, String token) {
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
-        if(user.getToken().equals(token)){
+        if (user.getToken().equals(token)) {
             user.setToken(null);
-        }else{
+        } else {
             throw new WrongTokenException();
         }
 
@@ -152,7 +158,6 @@ public class UserServiceImplementation implements UserService {
     @Override
     @Transactional
     public Set<Label> getUserLabels(String username) {
-
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
         return user.getLabels();
@@ -164,7 +169,6 @@ public class UserServiceImplementation implements UserService {
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
         Label newLabel = new Label(label);
-
 
         user.getLabels().add(newLabel);
         labelRepository.save(newLabel);
