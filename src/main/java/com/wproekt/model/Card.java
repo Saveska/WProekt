@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,8 +25,8 @@ abstract public class Card {
     private Color color;
     private Integer position;
 
-    @ManyToMany(mappedBy = "cards")
-    private List<Label> label;
+    @ManyToMany
+    private Set<Label> label;
 
     public Card() {
         this.color = new Color(185, 86, 185);

@@ -21,4 +21,8 @@ public interface CardService {
 
     Note editTextCard(Long id, String text);
 
+    Card addLabel(User user,Long cardId, Long labelId);
+
+    Card removeLabel(User user, Long cardId, Long labelId);
+
 }

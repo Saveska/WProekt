@@ -76,8 +76,19 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
     })
     let popovercont = document.getElementById('labeladder-popover')
     let popoverInput = popovercont.querySelector("input");
+    let allActive = [];
+
+    addButton.parentElement.querySelectorAll(".label-pill").forEach(pill=>{
+        allActive.push(pill.textContent);
+    })
+
     addButton.addEventListener("show.bs.popover", (e) => {
         popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
+        popovercont.querySelectorAll(".labelCheckmark").forEach(labelCheckmark=>{
+            if(allActive.includes(labelCheckmark.nextElementSibling.textContent)){
+                labelCheckmark.checked = true;
+            }
+        })
     })
 
     document.addEventListener("click", (e) => {
@@ -544,11 +555,35 @@ function sendEdit(id, text, type) {
 
 document.querySelectorAll(".labelCheckmark").forEach(label => {
     label.addEventListener("change", () => {
+        savingStatus.hidden = false;
         console.log(label);
+        let data = {};
+
         let labelId = label.getAttribute("name");
         let labelInput = label.parentElement.parentElement.parentElement.children[0].children[0].children[0];
 
         let cardId = labelInput.getAttribute("data-id");
+
+
+        data["labelId"] = labelId;
+        data["cardId"] = cardId;
+        data["checked"] = label.checked;
+
+
+        $.ajax({
+            url: 'checkLabel',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
 
     })
 })

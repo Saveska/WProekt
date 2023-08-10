@@ -1,17 +1,21 @@
 package com.wproekt.service.impl;
 
 import com.wproekt.model.Card;
+import com.wproekt.model.Label;
 import com.wproekt.model.Note;
 import com.wproekt.model.User;
 import com.wproekt.repository.CardRepository;
+import com.wproekt.repository.LabelRepository;
 import com.wproekt.repository.NoteRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.CardService;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
+
 
 @Service
 public class CardServiceImplementation implements CardService {
@@ -19,11 +23,13 @@ public class CardServiceImplementation implements CardService {
     CardRepository cardRepository;
     UserRepository userRepository;
     NoteRepository noteRepository;
+    LabelRepository labelRepository;
 
-    public CardServiceImplementation(CardRepository cardRepository, UserRepository userRepository, NoteRepository noteRepository) {
+    public CardServiceImplementation(CardRepository cardRepository, UserRepository userRepository, NoteRepository noteRepository, LabelRepository labelRepository) {
         this.cardRepository = cardRepository;
         this.userRepository = userRepository;
         this.noteRepository = noteRepository;
+        this.labelRepository = labelRepository;
     }
 
     @Override
@@ -88,4 +94,30 @@ public class CardServiceImplementation implements CardService {
         return card;
     }
 
+    @Override
+    @Transactional
+    public Card addLabel(User user, Long cardId, Long labelId) {
+
+        Card card = cardRepository.getReferenceById(cardId);
+        Label label = labelRepository.getReferenceById(labelId);
+
+        if(user.getLabels().contains(label)){
+            card.getLabel().add(label);
+        }
+
+        return cardRepository.save(card);
+    }
+
+    @Override
+    public Card removeLabel(User user, Long cardId, Long labelId) {
+
+        Card card = cardRepository.getReferenceById(cardId);
+        Label label = labelRepository.getReferenceById(labelId);
+
+        if(user.getLabels().contains(label)){
+            card.getLabel().remove(label);
+        }
+
+        return cardRepository.save(card);
+    }
 }
