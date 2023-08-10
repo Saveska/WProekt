@@ -3,7 +3,6 @@ package com.wproekt.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 @Entity
@@ -15,8 +14,7 @@ public class Label {
     private Long Id;
     private String name;
 
-    @ManyToMany
-    private List<Card> cards;
+
 
     public Label() {
     }

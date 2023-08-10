@@ -64,7 +64,7 @@ public class TaskController {
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("cards", userCards);
         model.addAttribute("colors", colors);
-        model.addAttribute("labels",labels);
+        model.addAttribute("labels", labels);
 
         model.addAttribute("page", "home");
 
@@ -291,6 +291,37 @@ public class TaskController {
             userService.addLabelToUser(currentUser.getUsername(), labelName);
 
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @PostMapping("/checkLabel")
+    @ResponseBody
+    public Boolean checkLabelAjax(Authentication authentication,
+                                  @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali label pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long labelId = jo.getLong("labelId");
+            Long cardId = jo.getLong("cardId");
+            boolean checked = jo.getBoolean("checked");
+
+
+            if (checked) {
+                cardService.addLabel(currentUser, cardId, labelId);
+            } else {
+                cardService.removeLabel(currentUser, cardId, labelId);
+            }
+
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }

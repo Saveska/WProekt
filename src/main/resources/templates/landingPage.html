@@ -224,9 +224,9 @@
                                     </p>
                                 </th:block>
                                 <div class="label-container">
-
-                                    <div class="label-pill">test label</div>
-
+                                    <th:block th:each="label:${card.getLabel()}">
+                                        <div class="label-pill" th:text="${label.getName()}">test label</div>
+                                    </th:block>
                                     <button class="btn add-label-button" th:data-id="${card.id}">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
