@@ -512,8 +512,8 @@ textarea {
 
 .add-label-button {
     display: block;
-    margin-top:20px;
-    position:relative;
+    margin-top: 20px;
+    position: relative;
     border-radius: 100%;
     width: 35px;
     height: 35px;
@@ -522,30 +522,64 @@ textarea {
     border: 1px solid var(--brighter);
     filter: brightness(150%);
 
-    transition: all 0.1s  linear;
+    transition: all 0.1s linear;
     -webkit-transition: all 0.1s linear;
     -ms-transition: all 0.1s linear;
 
 }
 
-.label-pill:hover, .add-label-button:hover{
+.label-pill:hover, .add-label-button:hover {
     background-color: var(--backgroundC);
     color: white;
     filter: brightness(250%);
     border: 1px solid white;
 
 
-
 }
-.add-label-button:hover{
+
+.add-label-button:hover {
     border: 3px solid white;
 }
+
 .add-label-button > i {
     position: absolute;
     font-size: 1rem;
-    top:50%;
-    left:50%;
+    top: 50%;
+    left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
+}
+
+.remove-label-button {
+    display: block;
+    background-color: red;
+    float:right;
+    margin-right: auto;
+}
+
+.add-label-popover {
+    background-color: rgba(37, 42, 46, 0.96);
+    --bs-border-width: 0;
+}
+
+.add-label-popover .container .list-group > * {
+    background-color: transparent;
+}
+
+.add-label-popover label > span {
+
+    color: white;
+}
+
+.add-label-popover input[type=text] {
+    appearance: none;
+    border: none;
+    outline: none;
+
+    border-bottom: .2em solid rgb(255, 146, 255);
+    background: rgba(185, 72, 185, 0.8);
+    border-radius: .2em .2em 0 0;
+    padding: .4em;
+    color: rgb(255, 255, 255);
 }
 
