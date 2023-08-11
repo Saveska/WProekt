@@ -5,6 +5,8 @@ import com.wproekt.model.Card;
 import com.wproekt.model.Label;
 import com.wproekt.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
@@ -23,5 +25,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsUserByEmailIgnoreCase(String email);
 
     boolean existsByCardsContains(Card card);
+
+    @Modifying
+    @Query(value = "delete from task_user_labels where label_id = :id",nativeQuery = true)
+    void deleteLabelFromUser(Long id);
 
 }

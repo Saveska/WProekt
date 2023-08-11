@@ -104,7 +104,6 @@ public class CardServiceImplementation implements CardService {
         if(user.getLabels().contains(label)){
             card.getLabel().add(label);
         }
-
         return cardRepository.save(card);
     }
 

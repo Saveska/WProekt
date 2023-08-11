@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserService extends UserDetailsService {
+    User reattachUser(User user);
     User register(String username, String password, String repeatPassword, String name, String surname, String email, String host);
 
     List<Card> getHomePageCards(String username);
@@ -22,4 +23,7 @@ public interface UserService extends UserDetailsService {
     Set<Label> getUserLabels(String username);
 
     Label addLabelToUser(String username, String label);
+
+    void removeLabelFromUser(User user, Long labelId);
+
 }

@@ -71,26 +71,49 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
         fallback: 'bottom',
         html: true,
         trigger: 'click',
-        // customClass: 'color-popover',
+        customClass: 'add-label-popover',
         content: document.getElementById('labeladder-popover'),
     })
     let popovercont = document.getElementById('labeladder-popover')
     let popoverInput = popovercont.querySelector("input");
     let allActive = [];
 
-    addButton.parentElement.querySelectorAll(".label-pill").forEach(pill=>{
+    addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
         allActive.push(pill.textContent);
     })
 
     addButton.addEventListener("show.bs.popover", (e) => {
         popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
-        popovercont.querySelectorAll(".labelCheckmark").forEach(labelCheckmark=>{
-            if(allActive.includes(labelCheckmark.nextElementSibling.textContent)){
+        popovercont.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
+            if (allActive.includes(labelCheckmark.nextElementSibling.textContent)) {
                 labelCheckmark.checked = true;
             }
         })
-    })
+        popovercont.querySelectorAll(".remove-label-button").forEach(removeButton => {
+            removeButton.addEventListener("click",()=>{
+                let data = {};
 
+                data['id'] = removeButton.value;
+                $.ajax({
+                    url: 'removeLabel',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+
+                    success: (dataP) => {
+                        console.log(dataP)
+
+
+
+                    }, error: (jqXhr) => {
+                        console.log(jqXhr);
+                    }
+
+                })
+            })
+        })
+    })
+    //TODO: ko ce gi stegnis odma da se pojavi
     document.addEventListener("click", (e) => {
         let $target = $(e.target);
 
@@ -135,6 +158,9 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
     })
 })
 
+// function makeNewLabelCheckmark(){
+//     let
+// }
 // Add task to the form when the user clicks the add button
 $('#addTaskButton').click(function () {
     let taskName = $('#newTaskInput').val();
@@ -560,7 +586,7 @@ document.querySelectorAll(".labelCheckmark").forEach(label => {
         let data = {};
 
         let labelId = label.getAttribute("name");
-        let labelInput = label.parentElement.parentElement.parentElement.children[0].children[0].children[0];
+        let labelInput = label.parentElement.parentElement.parentElement.children[0].children[0].children[1];
 
         let cardId = labelInput.getAttribute("data-id");
 
@@ -569,6 +595,7 @@ document.querySelectorAll(".labelCheckmark").forEach(label => {
         data["cardId"] = cardId;
         data["checked"] = label.checked;
 
+        console.log(data);
 
         $.ajax({
             url: 'checkLabel',

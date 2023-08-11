@@ -7,12 +7,15 @@ import com.wproekt.repository.LabelRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.UserService;
+import org.hibernate.Session;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -24,21 +27,32 @@ public class UserServiceImplementation implements UserService {
     private final EmailService emailService;
     private final LabelRepository labelRepository;
     private final PasswordEncoder passwordEncoder;
+    @PersistenceContext
+    private final EntityManager entityManager;
+
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
-
-    public UserServiceImplementation(UserRepository userRepository, CardRepository cardRepository, EmailService emailService, LabelRepository labelRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImplementation(UserRepository userRepository, CardRepository cardRepository, EmailService emailService, LabelRepository labelRepository, PasswordEncoder passwordEncoder, EntityManager entityManager) {
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;
         this.emailService = emailService;
         this.labelRepository = labelRepository;
         this.passwordEncoder = passwordEncoder;
+        this.entityManager = entityManager;
     }
 
     private String generateNewToken() {
         byte[] randomBytes = new byte[24];
         secureRandom.nextBytes(randomBytes);
         return base64Encoder.encodeToString(randomBytes);
+    }
+
+    @Override
+    public User reattachUser(User user) {
+        Session session = entityManager.unwrap(Session.class);
+        User reattachedUser = (User) session.merge(user);
+        session.flush(); // Optional, can be useful to synchronize changes
+        return reattachedUser;
     }
 
     @Override
@@ -163,7 +177,7 @@ public class UserServiceImplementation implements UserService {
         return user.getLabels();
 
     }
-
+    //TODO: direk so user da raboti
     @Override
     public Label addLabelToUser(String username, String label) {
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
@@ -175,6 +189,27 @@ public class UserServiceImplementation implements UserService {
 
         userRepository.save(user);
         return newLabel;
+    }
+
+    @Override
+    public void removeLabelFromUser(User user, Long labelId) {
+//        Label label = labelRepository.getReferenceById(labelId);
+//        User reattached = reattachUser(user);
+
+//        List<Card> cards = reattached.getCards();
+
+//        cards.forEach(card->{
+//            card.getLabel().remove(label);
+//
+//        });
+//        cardRepository.saveAll(cards);
+//        reattached.getLabels().remove(label);
+        userRepository.deleteLabelFromUser(labelId);
+        labelRepository.deleteFromCardLabel(labelId);
+
+        labelRepository.deleteById(labelId);
+
+
     }
 
     @Override

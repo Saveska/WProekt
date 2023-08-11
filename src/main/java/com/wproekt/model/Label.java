@@ -3,6 +3,7 @@ package com.wproekt.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -13,6 +14,7 @@ public class Label {
 
     private Long Id;
     private String name;
+
 
 
 
