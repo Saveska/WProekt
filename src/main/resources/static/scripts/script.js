@@ -5,6 +5,7 @@ const taskTitle = document.getElementById("TaskTitle");
 const notesContainer = document.getElementById("notesContainer");
 const savingStatus = document.getElementById("status-spinner");
 const addImageModal = document.getElementById('addImageModal')
+const labelPopover = document.getElementById('labeladder-popover')
 
 let allDraggies = {};
 
@@ -72,47 +73,31 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
         html: true,
         trigger: 'click',
         customClass: 'add-label-popover',
-        content: document.getElementById('labeladder-popover'),
+        content: labelPopover,
     })
-    let popovercont = document.getElementById('labeladder-popover')
-    let popoverInput = popovercont.querySelector("input");
+
+    let popoverInput = labelPopover.querySelector("input");
     let allActive = [];
 
-    addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
-        allActive.push(pill.textContent);
-    })
 
     addButton.addEventListener("show.bs.popover", (e) => {
-        popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
-        popovercont.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
-            if (allActive.includes(labelCheckmark.nextElementSibling.textContent)) {
-                labelCheckmark.checked = true;
-            }
+
+        addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
+            allActive.push(pill.getAttribute("name"));
         })
-        popovercont.querySelectorAll(".remove-label-button").forEach(removeButton => {
-            removeButton.addEventListener("click",()=>{
-                let data = {};
-
-                data['id'] = removeButton.value;
-                $.ajax({
-                    url: 'removeLabel',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-
-                    success: (dataP) => {
-                        console.log(dataP)
-
-
-
-                    }, error: (jqXhr) => {
-                        console.log(jqXhr);
-                    }
-
-                })
-            })
+        popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
+        labelPopover.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
+            labelCheckmark.checked = allActive.includes(labelCheckmark.name);
+        })
+        labelPopover.querySelectorAll(".remove-label-button").forEach(removeButton => {
+            addRemoveButtonOnClick(removeButton);
         })
     })
+
+    addButton.addEventListener("hide.bs.popover", (e) => {
+        allActive = [];
+    });
+
     //TODO: ko ce gi stegnis odma da se pojavi
     document.addEventListener("click", (e) => {
         let $target = $(e.target);
@@ -126,15 +111,39 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
 
 })
 
+function addRemoveButtonOnClick(removeButton) {
+    removeButton.addEventListener("click", () => {
+        let data = {};
+
+        data['id'] = removeButton.value;
+        $.ajax({
+            url: 'removeLabel',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+
+            success: (dataP) => {
+                console.log(dataP)
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        })
+    })
+}
+
 document.querySelectorAll(".newLabelInput").forEach(input => {
 
     input.addEventListener("keydown", (e) => {
 
         if (e.key === "Enter") {
+            savingStatus.hidden = false;
+
             let data = {};
             console.log(e.target.value)
             console.log(e.target.getAttribute("data-id"))
-
             let name = e.target.value;
             data['name'] = name;
 
@@ -145,7 +154,12 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
                 data: JSON.stringify(data),
 
                 success: (dataP) => {
-                    console.log(dataP)
+
+                    let id = dataP[0];
+                    let name = dataP[1];
+
+                    let template = getLabelHTML(id, name);
+                    labelPopover.children[0].children[1].insertAdjacentHTML('afterbegin', template)
                     savingStatus.hidden = true;
 
 
@@ -157,6 +171,94 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
         }
     })
 })
+
+function getLabelHTML(id, name) {
+    let template = `<li class="list-group-item">
+                    <label>
+                          <input type="checkbox"
+                                class="form-check-input labelCheckmark"
+                                name="${id}"
+                             >
+                         <span>${name}</span>
+
+                           </label>
+                           <button class="btn remove-label-button" value="${id}">
+                               <i class="fa-solid fa-trash"></i>
+                           </button>
+                          </li>`
+
+    return template;
+}
+
+document.querySelectorAll(".labelCheckmark").forEach(label => {
+    label.addEventListener("change", () => {
+        savingStatus.hidden = false;
+        console.log(label);
+        let data = {};
+
+        let labelId = label.getAttribute("name");
+        let labelInput = labelPopover.querySelector("input");
+
+        let cardId = labelInput.getAttribute("data-id");
+
+
+        data["labelId"] = labelId;
+        data["cardId"] = cardId;
+        data["checked"] = label.checked;
+
+        console.log(data);
+
+        $.ajax({
+            url: 'checkLabel',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+                console.log(dataP)
+                if (label.checked) {
+                    let name = dataP[0];
+                    let id = dataP[1];
+                    let template = getLabelPillHTML(id, name);
+
+                    document.querySelectorAll(".appCard").forEach(card => {
+
+                        if (card.getAttribute("data-id") === cardId) {
+                            card.querySelector(".label-pill-container").insertAdjacentHTML("beforeend", template);
+                        }
+                    })
+                } else {
+                    document.querySelectorAll(".appCard").forEach(card => {
+                        if (card.getAttribute("data-id") === cardId) {
+
+                            card.querySelectorAll(".label-pill").forEach(pill=>{
+                                if(pill.getAttribute("name") === labelId){
+                                    pill.parentElement.remove();
+                                }
+                            });
+
+                        }
+                    })
+                }
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+
+    })
+})
+
+function getLabelPillHTML(id, name) {
+    let template = `<a href="/label/${id}">
+                        <div class="label-pill" name="${id}"> 
+                            ${name}
+                        </div>
+                   </a>`;
+    return template;
+}
 
 // function makeNewLabelCheckmark(){
 //     let
@@ -579,38 +681,3 @@ function sendEdit(id, text, type) {
     });
 }
 
-document.querySelectorAll(".labelCheckmark").forEach(label => {
-    label.addEventListener("change", () => {
-        savingStatus.hidden = false;
-        console.log(label);
-        let data = {};
-
-        let labelId = label.getAttribute("name");
-        let labelInput = label.parentElement.parentElement.parentElement.children[0].children[0].children[1];
-
-        let cardId = labelInput.getAttribute("data-id");
-
-
-        data["labelId"] = labelId;
-        data["cardId"] = cardId;
-        data["checked"] = label.checked;
-
-        console.log(data);
-
-        $.ajax({
-            url: 'checkLabel',
-            type: 'POST',
-            dataType: 'json',
-            data: JSON.stringify(data),
-            success: (dataP) => {
-                savingStatus.hidden = true;
-
-
-            }, error: (jqXhr) => {
-                console.log(jqXhr);
-            }
-
-        });
-
-    })
-})

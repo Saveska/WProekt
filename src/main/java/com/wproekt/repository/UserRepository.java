@@ -27,7 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByCardsContains(Card card);
 
     @Modifying
-    @Query(value = "delete from task_user_labels where label_id = :id",nativeQuery = true)
+    @Query(value = "delete from task_user_labels where labels_id = :id",nativeQuery = true)
     void deleteLabelFromUser(Long id);
+
+
 
 }

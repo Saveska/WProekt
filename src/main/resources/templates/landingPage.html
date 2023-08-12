@@ -224,9 +224,15 @@
                                     </p>
                                 </th:block>
                                 <div class="label-container">
-                                    <th:block th:each="label:${card.getLabel()}">
-                                        <div class="label-pill" th:text="${label.getName()}">test label</div>
-                                    </th:block>
+                                    <div class="label-pill-container">
+                                        <th:block th:each="label:${card.getLabel()}">
+                                            <a th:href="'/label/'+${label.getId()}">
+                                                <div class="label-pill" th:text="${label.getName()}"
+                                                     th:name="${label.getId()}"> test label
+                                                </div>
+                                            </a>
+                                        </th:block>
+                                    </div>
                                     <button class="btn add-label-button" th:data-id="${card.id}">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
@@ -346,14 +352,14 @@
                     <div hidden>
                         <div id="labeladder-popover">
                             <div class="container">
+                                <div><label><span>Add new label</span><input type="text"
+                                                                             class="newLabelInput w-100"
+                                                                             name="newLabel">
+                                </label>
+                                </div>
                                 <ul class="list-group list-group-flush">
 
-                                    <li class="list-group-item"><label><span>Add new label</span><input type="text"
 
-                                                                                                        class="newLabelInput"
-                                                                                                        name="newLabel">
-                                    </label>
-                                    </li>
                                     <th:block th:each="label : ${labels}">
 
                                         <li class="list-group-item">

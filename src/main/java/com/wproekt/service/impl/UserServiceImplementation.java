@@ -177,14 +177,16 @@ public class UserServiceImplementation implements UserService {
         return user.getLabels();
 
     }
-    //TODO: direk so user da raboti
+
     @Override
     public Label addLabelToUser(String username, String label) {
-        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
         Label newLabel = new Label(label);
 
         user.getLabels().add(newLabel);
+
+        System.out.println(user.getLabels());
         labelRepository.save(newLabel);
 
         userRepository.save(user);
@@ -192,7 +194,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public void removeLabelFromUser(User user, Long labelId) {
+    public void removeLabelFromUser(String username, Long labelId) {
 //        Label label = labelRepository.getReferenceById(labelId);
 //        User reattached = reattachUser(user);
 
