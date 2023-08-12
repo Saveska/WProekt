@@ -4,6 +4,7 @@ import com.wproekt.model.Card;
 import com.wproekt.model.Label;
 import com.wproekt.model.Note;
 import com.wproekt.model.User;
+import com.wproekt.model.exceptions.UserDoesntExistException;
 import com.wproekt.repository.CardRepository;
 import com.wproekt.repository.LabelRepository;
 import com.wproekt.repository.NoteRepository;
@@ -95,25 +96,28 @@ public class CardServiceImplementation implements CardService {
     }
 
     @Override
-    @Transactional
-    public Card addLabel(User user, Long cardId, Long labelId) {
+    public Label addLabel(String username, Long cardId, Long labelId) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
         Card card = cardRepository.getReferenceById(cardId);
         Label label = labelRepository.getReferenceById(labelId);
 
-        if(user.getLabels().contains(label)){
+        if (user.getLabels().contains(label)) {
             card.getLabel().add(label);
         }
-        return cardRepository.save(card);
+
+        cardRepository.save(card);
+        return label;
     }
 
     @Override
-    public Card removeLabel(User user, Long cardId, Long labelId) {
+    public Card removeLabel(String username, Long cardId, Long labelId) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
         Card card = cardRepository.getReferenceById(cardId);
         Label label = labelRepository.getReferenceById(labelId);
 
-        if(user.getLabels().contains(label)){
+        if (user.getLabels().contains(label)) {
             card.getLabel().remove(label);
         }
 

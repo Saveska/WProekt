@@ -1,6 +1,7 @@
 package com.wproekt.service;
 
 import com.wproekt.model.Card;
+import com.wproekt.model.Label;
 import com.wproekt.model.Note;
 import com.wproekt.model.Task;
 import com.wproekt.model.User;
@@ -21,8 +22,8 @@ public interface CardService {
 
     Note editTextCard(Long id, String text);
 
-    Card addLabel(User user,Long cardId, Long labelId);
+    Label addLabel(String username, Long cardId, Long labelId);
 
-    Card removeLabel(User user, Long cardId, Long labelId);
+    Card removeLabel(String username, Long cardId, Long labelId);
 
 }

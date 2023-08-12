@@ -6,6 +6,8 @@ import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
 import com.wproekt.service.UtilService;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -236,7 +238,7 @@ public class AjaxTaskController {
             JSONObject jo = new JSONObject(decodedData);
 
             Long labelId = jo.getLong("id");
-            userService.removeLabelFromUser(currentUser, labelId);
+            userService.removeLabelFromUser(currentUser.getUsername(), labelId);
 
             return true;
 
@@ -250,7 +252,7 @@ public class AjaxTaskController {
 
     @PostMapping("/checkLabel")
     @ResponseBody
-    public Boolean checkLabelAjax(Authentication authentication,
+    public List<String> checkLabelAjax(Authentication authentication,
                                   @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da se proveri dali label pripajdza na user
@@ -266,17 +268,20 @@ public class AjaxTaskController {
 
 
             if (checked) {
-                cardService.addLabel(currentUser, cardId, labelId);
-            } else {
-                cardService.removeLabel(currentUser, cardId, labelId);
-            }
+                Label label = cardService.addLabel(currentUser.getUsername(), cardId, labelId);
+                String cleanText = Jsoup.clean(label.getName(), Safelist.simpleText());
 
-            return true;
+                return List.of(cleanText,String.valueOf(labelId));
+
+            } else {
+                cardService.removeLabel(currentUser.getUsername(), cardId, labelId);
+            }
+            return new ArrayList<>();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return false;
+        return null;
     }
 }

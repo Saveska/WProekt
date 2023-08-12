@@ -24,6 +24,6 @@ public interface UserService extends UserDetailsService {
 
     Label addLabelToUser(String username, String label);
 
-    void removeLabelFromUser(User user, Long labelId);
+    void removeLabelFromUser(String username, Long labelId);
 
 }
