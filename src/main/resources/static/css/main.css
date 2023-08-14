@@ -384,7 +384,7 @@ textarea {
 
 
 .taskCheckmark:checked {
-    background-color: rgb(185, 86, 185);
+    background-color: var(--brighter);
     border: none !important;
 
 }
@@ -632,5 +632,9 @@ textarea {
 
 
 .add-new-task-input{
-    width: 100%;
+    width:100%;
+    background : var(--backgroundC);
+    color: var(--brighter);
+    border-bottom: .2em solid var(--brighter);
+
 }

@@ -13,5 +13,6 @@ public interface TaskService {
 
     void setTaskBoolean(Long id, Boolean isCompleted);
     Task editTask(Long id, String text);
+    Task addTask(Long cardId, String text);
 
 }
