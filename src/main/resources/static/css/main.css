@@ -573,7 +573,7 @@ textarea {
     color: white;
 }
 
-.add-label-popover input[type=text] {
+.add-label-popover input[type=text], .add-new-task-input {
     appearance: none;
     border: none;
     outline: none;
@@ -585,3 +585,52 @@ textarea {
     color: rgb(255, 255, 255);
 }
 
+.add-new-task-button{
+    --d: 5px;
+
+    width: 100%;
+}
+
+.add-new-task-button {
+
+    --b: .1em; /* border length*/
+    --d: 5px; /* the cube depth */
+
+    border-radius: 0;
+    --_s: calc(var(--d) + var(--b));
+
+    color: white;
+    border: solid #0000;
+    border-width: var(--b) var(--b) var(--_s) var(--_s);
+    background: conic-gradient(at left var(--d) bottom var(--d),
+    #0000 90deg, rgb(255 255 255 /0.3) 0 225deg, rgb(255 255 255 /0.6) 0) border-box,
+    conic-gradient(at left var(--_s) bottom var(--_s),
+            var(--backgroundC) 90deg, var(--c) 0) 0 100%/calc(100% - var(--b)) calc(100% - var(--b)) border-box;
+    transform: translate(calc(var(--d) / -1), var(--d));
+    clip-path: polygon(
+            var(--d) 0%,
+            var(--d) 0%,
+            100% 0%,
+            100% calc(100% - var(--d)),
+            100% calc(100% - var(--d)),
+            var(--d) calc(100% - var(--d))
+    );
+    transition: 0.2s;
+}
+
+.add-new-task-button:hover {
+    transform: translate(0, 0);
+    clip-path: polygon(
+            0% var(--d),
+            var(--d) 0%,
+            100% 0%,
+            100% calc(100% - var(--d)),
+            calc(100% - var(--d)) 100%,
+            0% 100%
+    );
+}
+
+
+.add-new-task-input{
+    width: 100%;
+}

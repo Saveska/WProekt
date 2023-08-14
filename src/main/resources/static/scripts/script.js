@@ -237,7 +237,7 @@ function addLabelCheckmarkEvent(label) {
                     document.querySelectorAll(".appCard").forEach(card => {
 
                         if (card.getAttribute("data-id") === cardId) {
-                            template.hide().appendTo(card.querySelector(".label-pill-container")).fadeIn("fast",()=>{
+                            template.hide().appendTo(card.querySelector(".label-pill-container")).fadeIn("fast", () => {
                                 $grid.packery("shiftLayout");
                             });
                         }
@@ -696,3 +696,20 @@ function sendEdit(id, text, type) {
     });
 }
 
+document.querySelectorAll(".add-new-task-input").forEach(taskInput => {
+    $(taskInput).hide();
+})
+document.querySelectorAll(".add-new-task-button").forEach(button => {
+    button.addEventListener("click", () => {
+        let input = $(button).parent().find(".add-new-task-input");
+        if (!input.is(":visible")) {
+            input.show("fast", () => {
+                $grid.packery("shiftLayout")
+            });
+        } else {
+            input.hide("fast", () => {
+                $grid.packery("shiftLayout")
+            });
+        }
+    })
+})
