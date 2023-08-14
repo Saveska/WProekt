@@ -124,7 +124,15 @@ function addRemoveButtonOnClick(removeButton) {
 
             success: (dataP) => {
                 console.log(dataP)
+                document.querySelectorAll(".label-pill").forEach(pill => {
 
+                    if (pill.getAttribute("name") === removeButton.value) {
+                        $(pill).fadeOut("fast", () =>
+                            $grid.packery("shiftLayout")
+                        );
+                    }
+                })
+                removeButton.parentElement.remove();
 
             }, error: (jqXhr) => {
                 console.log(jqXhr);
@@ -160,8 +168,9 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
 
                     let template = getLabelHTML(id, name);
                     labelPopover.children[0].children[1].insertAdjacentHTML('afterbegin', template)
+                    addLabelCheckmarkEvent(labelPopover.children[0].children[1].querySelectorAll(".labelCheckmark").item(0));
+                    $grid.packery('shiftLayout');
                     savingStatus.hidden = true;
-
 
                 }, error: (jqXhr) => {
                     console.log(jqXhr);
@@ -191,6 +200,10 @@ function getLabelHTML(id, name) {
 }
 
 document.querySelectorAll(".labelCheckmark").forEach(label => {
+    addLabelCheckmarkEvent(label);
+})
+
+function addLabelCheckmarkEvent(label) {
     label.addEventListener("change", () => {
         savingStatus.hidden = false;
         console.log(label);
@@ -219,20 +232,22 @@ document.querySelectorAll(".labelCheckmark").forEach(label => {
                 if (label.checked) {
                     let name = dataP[0];
                     let id = dataP[1];
-                    let template = getLabelPillHTML(id, name);
+                    let template = $(getLabelPillHTML(id, name));
 
                     document.querySelectorAll(".appCard").forEach(card => {
 
                         if (card.getAttribute("data-id") === cardId) {
-                            card.querySelector(".label-pill-container").insertAdjacentHTML("beforeend", template);
+                            template.hide().appendTo(card.querySelector(".label-pill-container")).fadeIn("fast",()=>{
+                                $grid.packery("shiftLayout");
+                            });
                         }
                     })
                 } else {
                     document.querySelectorAll(".appCard").forEach(card => {
                         if (card.getAttribute("data-id") === cardId) {
 
-                            card.querySelectorAll(".label-pill").forEach(pill=>{
-                                if(pill.getAttribute("name") === labelId){
+                            card.querySelectorAll(".label-pill").forEach(pill => {
+                                if (pill.getAttribute("name") === labelId) {
                                     pill.parentElement.remove();
                                 }
                             });
@@ -249,7 +264,7 @@ document.querySelectorAll(".labelCheckmark").forEach(label => {
         });
 
     })
-})
+}
 
 function getLabelPillHTML(id, name) {
     let template = `<a href="/label/${id}">
