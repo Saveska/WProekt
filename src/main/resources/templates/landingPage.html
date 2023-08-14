@@ -221,8 +221,8 @@
 
                                         </ul>
                                     </form>
-                                    <input type="text" class="add-new-task-input">
-                                    <button class="add-new-task-button" th:value="${card.getId()}">Add new Task</button>
+                                    <input type="text" class="add-new-task-input"  th:name="${card.getId()}">
+                                    <button class="add-new-task-button">Add new Task</button>
 
                                     </p>
                                 </th:block>

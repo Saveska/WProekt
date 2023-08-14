@@ -202,6 +202,37 @@ public class AjaxTaskController {
         return false;
     }
 
+    @PostMapping("/addTaskToCard")
+    @ResponseBody
+    public List<String> addTaskToCard(Authentication authentication,
+                                      @RequestBody String requestData) {
+
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long cardId = jo.getLong("id");
+            String text = jo.getString("text");
+
+            System.out.println(cardId);
+            System.out.println(text);
+
+            String cleanText = utilService.cleanHtml(text);
+            Task task = taskService.addTask(cardId,cleanText);
+            return List.of(cleanText,String.valueOf(cardId), String.valueOf(task.getId()));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+
     @PostMapping("/addLabel")
     @ResponseBody
     public List<String> addLabelAjax(Authentication authentication,
@@ -225,11 +256,12 @@ public class AjaxTaskController {
 
         return null;
     }
+
     @PostMapping("/removeLabel")
     @ResponseBody
     @Transactional
     public Boolean removeLabelAjax(Authentication authentication,
-                                     @RequestBody String requestData) {
+                                   @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
 
         try {
@@ -253,7 +285,7 @@ public class AjaxTaskController {
     @PostMapping("/checkLabel")
     @ResponseBody
     public List<String> checkLabelAjax(Authentication authentication,
-                                  @RequestBody String requestData) {
+                                       @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da se proveri dali label pripajdza na user
         try {
@@ -271,7 +303,7 @@ public class AjaxTaskController {
                 Label label = cardService.addLabel(currentUser.getUsername(), cardId, labelId);
                 String cleanText = Jsoup.clean(label.getName(), Safelist.simpleText());
 
-                return List.of(cleanText,String.valueOf(labelId));
+                return List.of(cleanText, String.valueOf(labelId));
 
             } else {
                 cardService.removeLabel(currentUser.getUsername(), cardId, labelId);

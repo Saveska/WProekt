@@ -2,10 +2,12 @@ package com.wproekt.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.core.annotation.Order;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @Data
 public class TaskCard extends Card {
     @OneToMany(fetch = FetchType.EAGER)
+    @OrderBy()
     private List<Task> tasks;
 
     public TaskCard() {

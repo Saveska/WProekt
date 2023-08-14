@@ -379,6 +379,10 @@ $('#saveNoteButton').click(() => {
 })
 //todo:istoto za task
 document.querySelectorAll(".taskCheckmark").forEach(elem => {
+    changeCompletionOfTask(elem);
+})
+
+function changeCompletionOfTask(elem) {
     elem.addEventListener("change", () => {
         savingStatus.hidden = false;
 
@@ -402,8 +406,7 @@ document.querySelectorAll(".taskCheckmark").forEach(elem => {
         })
 
     })
-})
-
+}
 
 document.querySelectorAll(".delete-note-button").forEach(elem => {
     toBinButton(elem);
@@ -698,7 +701,61 @@ function sendEdit(id, text, type) {
 
 document.querySelectorAll(".add-new-task-input").forEach(taskInput => {
     $(taskInput).hide();
+    taskInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            let data = {};
+            savingStatus.hidden = false;
+            data["id"] = taskInput.getAttribute("name");
+            data["text"] = taskInput.value;
+
+
+            $.ajax({
+                url: 'addTaskToCard',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify(data),
+                success: (dataP) => {
+                    savingStatus.hidden = true;
+                    console.log(dataP);
+                    let id = dataP[2];
+                    let text = dataP[0];
+
+                    let container = taskInput.parentElement.querySelector("form").children[0];
+
+                    let template = $(getNewTaskToCardHTML(id, text));
+
+                    changeCompletionOfTask(template.find(".taskCheckmark").get()[0]);
+                    template.hide().appendTo(container)
+                    template.fadeIn("fast", () => {
+                        $grid.packery("shiftLayout");
+                    })
+                    taskInput.value = "";
+
+                }, error: (jqXhr) => {
+                    console.log(jqXhr);
+                }
+
+            });
+        }
+    })
 })
+
+function getNewTaskToCardHTML(id, text) {
+    let template = `<li class="list-group-item ">
+                    <input type="checkbox"
+                           class="form-check-input taskCheckmark"
+                           name="${id}"
+                           >
+
+                           <label class="form-check-label card-task"
+
+                                  data-id=${id}>${text}
+                           </label>
+                    </li>`;
+
+    return template;
+}
+
 document.querySelectorAll(".add-new-task-button").forEach(button => {
     button.addEventListener("click", () => {
         let input = $(button).parent().find(".add-new-task-input");
@@ -713,3 +770,4 @@ document.querySelectorAll(".add-new-task-button").forEach(button => {
         }
     })
 })
+

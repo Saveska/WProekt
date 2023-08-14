@@ -3,6 +3,7 @@ package com.wproekt.service.impl;
 import com.wproekt.model.Task;
 import com.wproekt.model.TaskCard;
 import com.wproekt.repository.CardRepository;
+import com.wproekt.repository.TaskCardRepository;
 import com.wproekt.repository.TaskRepository;
 import com.wproekt.service.TaskService;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,13 @@ import java.util.Map;
 public class TaskServiceImplementation implements TaskService {
 
     TaskRepository taskRepository;
+    TaskCardRepository taskCardRepository;
     CardRepository cardRepository;
 
-    public TaskServiceImplementation(TaskRepository taskRepository, CardRepository cardRepository) {
+
+    public TaskServiceImplementation(TaskRepository taskRepository, TaskCardRepository taskCardRepository, CardRepository cardRepository) {
         this.taskRepository = taskRepository;
+        this.taskCardRepository = taskCardRepository;
         this.cardRepository = cardRepository;
     }
 
@@ -54,5 +58,18 @@ public class TaskServiceImplementation implements TaskService {
 
         return taskRepository.save(task);
 
+    }
+
+    @Override
+    public Task addTask(Long cardId, String text) {
+        TaskCard taskCard = taskCardRepository.getReferenceById(cardId);
+        Task task = new Task(text);
+
+        taskRepository.save(task);
+
+        taskCard.getTasks().add(task);
+
+        taskCardRepository.save(taskCard);
+        return task;
     }
 }
