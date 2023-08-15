@@ -365,7 +365,7 @@ textarea {
         color: white;
     }
     100% {
-        text-decoration-color: rgb(229, 131, 229);
+        text-decoration-color: var(--brighter);
         color: rgba(255, 255, 255, 0.7);
     }
 }
@@ -637,4 +637,23 @@ textarea {
     color: var(--brighter);
     border-bottom: .2em solid var(--brighter);
 
+}
+
+.task-li{
+    position: relative;
+}
+
+.delete-task-button{
+    position:absolute;
+    top:50%;
+    right:0;
+    opacity: 0;
+    transition: 0.1s all;
+    color:var(--brighter);
+    transform:translate(0,-50%);
+    filter:brightness(150%);
+    cursor:pointer;
+}
+.task-li:hover > .delete-task-button{
+    opacity: 1;
 }

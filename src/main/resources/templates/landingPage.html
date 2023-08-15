@@ -203,7 +203,7 @@
                                         <ul class="list-group list-group-flush taskListView">
 
 
-                                            <li class="list-group-item " th:each="task:${card.getTasks()}">
+                                            <li class="list-group-item task-li " th:each="task:${card.getTasks()}">
                                                 <input type="checkbox" th:checked="${task.isCompleted}"
                                                        class="form-check-input taskCheckmark"
                                                        th:name="${task.id}"
@@ -216,6 +216,10 @@
                                                        th:attr="data-id=${task.getId()}">
 
                                                 </label>
+
+                                                <div class="delete-task-button" th:name="${task.getId()}">
+                                                    <i class="fa-solid fa-x"></i>
+                                                </div>
                                             </li>
 
 

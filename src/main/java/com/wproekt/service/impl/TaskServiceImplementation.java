@@ -7,6 +7,7 @@ import com.wproekt.repository.TaskCardRepository;
 import com.wproekt.repository.TaskRepository;
 import com.wproekt.service.TaskService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class TaskServiceImplementation implements TaskService {
         task.setIsCompleted(isCompleted);
         taskRepository.save(task);
     }
+
     //TODO: proveri dali postoj task so takov id
     @Override
     public Task editTask(Long id, String text) {
@@ -71,5 +73,17 @@ public class TaskServiceImplementation implements TaskService {
 
         taskCardRepository.save(taskCard);
         return task;
+    }
+
+    @Override
+    @Transactional
+    public void deleteTask(Long taskId, Long cardId) {
+        Task task = taskRepository.getReferenceById(taskId);
+        TaskCard taskCard = taskCardRepository.getReferenceById(cardId);
+        taskCard.getTasks().remove(task);
+
+        taskCardRepository.save(taskCard);
+
+        taskRepository.delete(task);
     }
 }

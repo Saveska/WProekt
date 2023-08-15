@@ -12,7 +12,11 @@ public interface TaskService {
     TaskCard addTasksToTaskCard(TaskCard taskCard, List<Task> tasks);
 
     void setTaskBoolean(Long id, Boolean isCompleted);
+
     Task editTask(Long id, String text);
+
     Task addTask(Long cardId, String text);
+
+    void deleteTask(Long taskId, Long cardId);
 
 }

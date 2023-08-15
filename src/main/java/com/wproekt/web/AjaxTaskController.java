@@ -232,6 +232,33 @@ public class AjaxTaskController {
         return new ArrayList<>();
     }
 
+    @PostMapping("/removeTaskFromCard")
+    @ResponseBody
+    public Boolean RemoveTaskFromCard(Authentication authentication,
+                                      @RequestBody String requestData) {
+
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long taskId = jo.getLong("taskId");
+            Long cardId = jo.getLong("cardId");
+            System.out.println(cardId);
+
+            taskService.deleteTask(taskId,cardId);
+
+            return true;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     @PostMapping("/addLabel")
     @ResponseBody

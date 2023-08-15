@@ -771,3 +771,37 @@ document.querySelectorAll(".add-new-task-button").forEach(button => {
     })
 })
 
+document.querySelectorAll(".delete-task-button").forEach(button=>{
+    addDeleteTaskEvent(button);
+})
+
+function addDeleteTaskEvent(button){
+    button.addEventListener("click",()=>{
+        savingStatus.hidden = false;
+
+        let data = {};
+
+        data["taskId"] = button.getAttribute("name");
+        data["cardId"] = button.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute("data-id");
+
+        let parent = button.parentElement;
+        $(parent).fadeOut("fast",()=>{
+            parent.remove();
+        });
+
+        $.ajax({
+            url: 'removeTaskFromCard',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    })
+}
