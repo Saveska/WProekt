@@ -9,6 +9,14 @@ const labelPopover = document.getElementById('labeladder-popover')
 
 let allDraggies = {};
 
+let allTaskContainers = [];
+let allTaskHelpers = [];
+
+document.querySelectorAll(".helper-task-dropper").forEach(item => {
+    $(item).hide();
+    allTaskHelpers.push(item);
+})
+
 function auto_grow(element) {
     element.style.height = "auto";
     element.style.height = (element.scrollHeight) + "px";
@@ -25,7 +33,8 @@ $grid.imagesLoaded().progress(function () {
     $grid.packery();
 });
 $grid.find('.col').each(function (i, gridItem) {
-    var draggie = new Draggabilly(gridItem);
+    let handle = gridItem.querySelector(".card-title");
+    var draggie = new Draggabilly(gridItem, {handle: handle});
 
     let id = gridItem.children[0].getAttribute("data-id");
 
@@ -41,6 +50,56 @@ function orderItems() {
 }
 
 $grid.on('dragItemPositioned', orderItems);
+
+
+var drake = dragula();
+
+document.querySelectorAll(".taskListView").forEach(task => {
+    drake.containers.push(task);
+    allTaskContainers.push(task);
+})
+
+// Initialize Dragula
+
+
+// Add event listeners to handle drag-and-drop events
+drake.on("drag", (el, source) => {
+    console.log("ovde");
+    allTaskHelpers.forEach(item => {
+        $(item).fadeIn("fast");
+    })
+    allTaskContainers.forEach(container=>{
+        let newHeight = $(container).height() + 100;
+        $(container).height(newHeight);
+
+    })
+});
+
+drake.on("dragend", (el) => {
+
+    allTaskHelpers.forEach(item => {
+        $(item).fadeOut("fast");
+    })
+    allTaskContainers.forEach(container=>{
+        $(container).css("height","auto");
+
+    })
+});
+
+drake.on("drop", (el, target, source, sibling) => {
+    allTaskHelpers.forEach(item => {
+        $(item).fadeOut("fast");
+    })
+    allTaskContainers.forEach(container=>{
+        $(container).css("height","auto");
+
+
+    })
+    console.log(target);
+    // Do something with the dropped element, like reordering or updating data
+});
+
+console.log(drake);
 
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
     let colorSelector = new bootstrap.Popover(colorButton, {
@@ -771,12 +830,12 @@ document.querySelectorAll(".add-new-task-button").forEach(button => {
     })
 })
 
-document.querySelectorAll(".delete-task-button").forEach(button=>{
+document.querySelectorAll(".delete-task-button").forEach(button => {
     addDeleteTaskEvent(button);
 })
 
-function addDeleteTaskEvent(button){
-    button.addEventListener("click",()=>{
+function addDeleteTaskEvent(button) {
+    button.addEventListener("click", () => {
         savingStatus.hidden = false;
 
         let data = {};
@@ -785,7 +844,7 @@ function addDeleteTaskEvent(button){
         data["cardId"] = button.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute("data-id");
 
         let parent = button.parentElement;
-        $(parent).fadeOut("fast",()=>{
+        $(parent).fadeOut("fast", () => {
             parent.remove();
         });
 
@@ -805,3 +864,6 @@ function addDeleteTaskEvent(button){
         });
     })
 }
+
+//taskListView
+

@@ -657,3 +657,15 @@ textarea {
 .task-li:hover > .delete-task-button{
     opacity: 1;
 }
+
+.gu-mirror{
+    opacity: 1;
+    position:absolute;
+}
+.gu-transit{
+    background-color: red;
+}
+.helper-task-dropper{
+    text-align: center;
+    border: 3px dashed var(--brighter);
+}
