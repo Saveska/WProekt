@@ -86,4 +86,23 @@ public class TaskServiceImplementation implements TaskService {
 
         taskRepository.delete(task);
     }
+
+    @Override
+    @Transactional
+    public void changeCardOfTask(Long taskId, Long siblingId, Long cardSource, Long cardTarget) {
+        Task task = taskRepository.getReferenceById(taskId);
+
+        TaskCard taskCardSource = taskCardRepository.getReferenceById(cardSource);
+        TaskCard taskCardTarget = taskCardRepository.getReferenceById(cardTarget);
+
+        taskCardSource.getTasks().remove(task);
+        taskCardTarget.getTasks().add(task);
+
+        //TODO: da se cuva redosled
+
+        taskCardRepository.save(taskCardSource);
+        taskCardRepository.save(taskCardTarget);
+        taskRepository.save(task);
+
+    }
 }
