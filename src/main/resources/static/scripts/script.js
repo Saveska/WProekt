@@ -52,12 +52,17 @@ function orderItems() {
 $grid.on('dragItemPositioned', orderItems);
 
 
-var drake = dragula();
+var drake = dragula({
+    revertOnSpill: true,
+});
 
-document.querySelectorAll(".taskListView").forEach(task => {
-    drake.containers.push(task);
-    allTaskContainers.push(task);
+window.addEventListener("load", () => {
+    document.querySelectorAll(".taskListView").forEach(task => {
+        drake.containers.push(task);
+        allTaskContainers.push(task);
+    })
 })
+
 
 // Initialize Dragula
 
@@ -68,11 +73,7 @@ drake.on("drag", (el, source) => {
     allTaskHelpers.forEach(item => {
         $(item).fadeIn("fast");
     })
-    allTaskContainers.forEach(container=>{
-        let newHeight = $(container).height() + 100;
-        $(container).height(newHeight);
 
-    })
 });
 
 drake.on("dragend", (el) => {
@@ -80,22 +81,44 @@ drake.on("dragend", (el) => {
     allTaskHelpers.forEach(item => {
         $(item).fadeOut("fast");
     })
-    allTaskContainers.forEach(container=>{
-        $(container).css("height","auto");
 
-    })
 });
 
 drake.on("drop", (el, target, source, sibling) => {
     allTaskHelpers.forEach(item => {
         $(item).fadeOut("fast");
     })
-    allTaskContainers.forEach(container=>{
-        $(container).css("height","auto");
+    let data = {};
+
+    let taskId = $(el).children()[0].getAttribute("name");
+    let siblingId = $(sibling).children()[0].getAttribute("name");
+
+    let cardSource = source.parentElement.parentElement.parentElement.getAttribute("data-id")
+    let cardTarget = target.parentElement.parentElement.parentElement.getAttribute("data-id");
+
+    data["taskId"] = taskId;
+    data["siblingId"] = siblingId;
+    data["cardSource"] = cardSource;
+    data["cardTarget"] = cardTarget;
+
+    savingStatus.hidden = false;
+
+    $.ajax({
+        url: 'changeCardOfTask',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(data),
+        success: (dataP) => {
+            savingStatus.hidden = true;
 
 
-    })
-    console.log(target);
+        }, error: (jqXhr) => {
+            console.log(jqXhr);
+        }
+
+    });
+
+
     // Do something with the dropped element, like reordering or updating data
 });
 

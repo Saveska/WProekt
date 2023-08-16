@@ -21,395 +21,402 @@
 
 <body style="overflow-x: hidden;">
 
+<div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
+        <div class="container-fluid d-flex align-items-center col-md-10">
+            <a class="navbar-brand" href="#"><img src="/img/logo.svg" width="48" height="48" alt="Logo Mindmappr"></a>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
-    <div class="container-fluid d-flex align-items-center col-md-10">
-        <a class="navbar-brand" href="#"><img src="/img/logo.svg" width="48" height="48" alt="Logo Mindmappr"></a>
-
-        <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="navbar-brand" aria-current="page" href="#">MindMappr</a>
-                </li>
-            </ul>
-
-            <form class="d-flex search" role="search">
-                <input class="form-control me-2 flex-grow-1 tasks-input" type="search" placeholder="Search"
-                       aria-label="Search">
-                <button class="btn btn-outline-success " type="submit">Search</button>
-            </form>
-            <li class="nav-item dropdown">
-                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-                        th:text="${#authentication.name}">
-                    User
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="/logout">Log Out</a></li>
-
+            <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="navbar-brand" aria-current="page" href="#">MindMappr</a>
+                    </li>
                 </ul>
-            </li>
+
+                <form class="d-flex search" role="search">
+                    <input class="form-control me-2 flex-grow-1 tasks-input" type="search" placeholder="Search"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success " type="submit">Search</button>
+                </form>
+                <li class="nav-item dropdown">
+                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                            th:text="${#authentication.name}">
+                        User
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+
+                    </ul>
+                </li>
 
 
-        </div>
-    </div>
-    <div id="status-spinner" class="text-white position-absolute end-0 me-4" hidden>
-        <div class="spinner-grow text-white " role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <span class="fw-bold fs-3">Saving..</span>
-    </div>
-</nav>
-
-
-<div class="container-fluid p-0">
-    <div class="row">
-        <div class="col-md-2 p-0 cont-side">
-            <div class="list-group sidebar">
-
-                <a href="/home" class="list-group-item "
-                   th:classappend='${page.equals("home") ? "currentSidebar" : "" }'>
-                    <div class="container text-center">
-
-                        <div class="row">
-                            <div class="col col-5">
-                                <img src="/img/pencil.png" alt="Pencil icon">
-                            </div>
-                            <div class="col col-7">
-                                <span> Home </span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/labels" class="list-group-item ">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col col-5">
-                                <img src="/img/product-development.png" alt="Lables icon">
-                            </div>
-                            <div class="col col-7">
-                                <span>Labels</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/archive" class="list-group-item ">
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col col-5">
-                                <img src="/img/archive.png" alt="Archive icon">
-                            </div>
-                            <div class="col col-7">
-                                <span>Archive</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/trash" class="list-group-item "
-                   th:classappend='${page.equals("trash") ? "currentSidebar" : "" }'>
-                    <div class="container text-center">
-                        <div class="row">
-                            <div class="col col-5">
-                                <img src="/img/trash.png" alt="Trash icon">
-                            </div>
-                            <div class="col col-7">
-                                <span>Trash</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
             </div>
         </div>
+        <div id="status-spinner" class="text-white position-absolute end-0 me-4" hidden>
+            <div class="spinner-grow text-white " role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="fw-bold fs-3">Saving..</span>
+        </div>
+    </nav>
 
 
-        <div class="col-md-10 p-0">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-md-2 p-0 cont-side">
+                <div class="list-group sidebar">
 
-            <div class="container col-md-10 mt-5 mb-5">
-                <div class="row d-flex justify-content-center">
-                    <div class="d-grid col-4 p-0">
-                        <button class="btn btn-lg btn-dark btn-color note" type="button" data-bs-toggle="modal"
-                                data-bs-target="#NoteModal">Note
-                        </button>
-                    </div>
-                    <div class="d-grid col-4 p-0">
-                        <button class="btn btn-lg btn-dark btn-color tasks" type="button" data-bs-toggle="modal"
-                                data-bs-target="#TasksModal">Tasks
-                        </button>
-                    </div>
+                    <a href="/home" class="list-group-item "
+                       th:classappend='${page.equals("home") ? "currentSidebar" : "" }'>
+                        <div class="container text-center">
+
+                            <div class="row">
+                                <div class="col col-5">
+                                    <img src="/img/pencil.png" alt="Pencil icon">
+                                </div>
+                                <div class="col col-7">
+                                    <span> Home </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/labels" class="list-group-item ">
+                        <div class="container text-center">
+                            <div class="row">
+                                <div class="col col-5">
+                                    <img src="/img/product-development.png" alt="Lables icon">
+                                </div>
+                                <div class="col col-7">
+                                    <span>Labels</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/archive" class="list-group-item ">
+                        <div class="container text-center">
+                            <div class="row">
+                                <div class="col col-5">
+                                    <img src="/img/archive.png" alt="Archive icon">
+                                </div>
+                                <div class="col col-7">
+                                    <span>Archive</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/trash" class="list-group-item "
+                       th:classappend='${page.equals("trash") ? "currentSidebar" : "" }'>
+                        <div class="container text-center">
+                            <div class="row">
+                                <div class="col col-5">
+                                    <img src="/img/trash.png" alt="Trash icon">
+                                </div>
+                                <div class="col col-7">
+                                    <span>Trash</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-            <!----------------- Modals --------------------->
 
-            <div class="modal fade" id="NoteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <form id="addNoteForm">
-                            <div class="modal-header">
-                                <input class="form-control border-0 note_input" type="text" placeholder="Note"
-                                       aria-label="Note"
-                                       id="titleNoteInput">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="mb-3">
-                                        <div class="textarea-container">
+
+            <div class="col-md-10 p-0">
+
+                <div class="container col-md-10 mt-5 mb-5">
+                    <div class="row d-flex justify-content-center">
+                        <div class="d-grid col-4 p-0">
+                            <button class="btn btn-lg btn-dark btn-color note" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#NoteModal">Note
+                            </button>
+                        </div>
+                        <div class="d-grid col-4 p-0">
+                            <button class="btn btn-lg btn-dark btn-color tasks" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#TasksModal">Tasks
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!----------------- Modals --------------------->
+
+                <div class="modal fade" id="NoteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <form id="addNoteForm">
+                                <div class="modal-header">
+                                    <input class="form-control border-0 note_input" type="text" placeholder="Note"
+                                           aria-label="Note"
+                                           id="titleNoteInput">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="mb-3">
+                                            <div class="textarea-container">
                                                 <textarea class="form-control border-0" id="noteTextInput"
                                                           rows="3" oninput="auto_grow(this)"
                                                           placeholder="Write your note here"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button id="saveNoteButton" type="button" class="btn btn-save-changes">Save changes
+                                </button>
                             </div>
-                        </form>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button id="saveNoteButton" type="button" class="btn btn-save-changes">Save changes</button>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div class="container col-md-12 ">
-                <div class=" gap-2" id="notesContainer">
+                <div class="container col-md-12 ">
+                    <div class=" gap-2" id="notesContainer">
 
-                    <div class="col mb-3 " th:each="card : ${cards}">
-                        <div class="card appCard position-relative "
-                             th:classappend="${card instanceof T(com.wproekt.model.Note)} ? 'noteCard' : 'taskCard'"
-                             th:attr="data-id=${card.getId()},
+                        <div class="col mb-3 " th:each="card : ${cards}">
+                            <div class="card appCard position-relative "
+                                 th:classappend="${card instanceof T(com.wproekt.model.Note)} ? 'noteCard' : 'taskCard'"
+                                 th:attr="data-id=${card.getId()},
                                       original-c=${card.getRGBColor()},
                                       original-brighter=${card.getBrighterRGB()},
                                       original-background=${card.getBackgroundColor()}" style="width: 14rem;"
-                             th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
+                                 th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
-                            <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
-                                 class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
-                                <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
-                                   th:utext="${#strings.replace(card.getText(), '\n', '&lt;br&gt;')}">
-
-                                </p>
-                                <p th:text="${#strings.replace(testtext, '\n', '&lt;br&gt;')}"></p>
-
-                                <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
-                                    <p class="card-text">
-
-                                    <form>
-                                        <ul class="list-group list-group-flush taskListView">
-
-
-                                            <li class="list-group-item task-li " th:each="task:${card.getTasks()}">
-                                                <input type="checkbox" th:checked="${task.isCompleted}"
-                                                       class="form-check-input taskCheckmark"
-                                                       th:name="${task.id}"
-                                                >
-
-                                                <label class="form-check-label card-task"
-
-                                                       th:classappend="${task.isCompleted ? 'strike' : ''}"
-                                                       th:text="${task.text}"
-                                                       th:attr="data-id=${task.getId()}">
-
-                                                </label>
-
-                                                <div class="delete-task-button" th:name="${task.getId()}">
-                                                    <i class="fa-solid fa-x"></i>
-                                                </div>
-                                            </li>
-
-
-                                        </ul>
-                                        <div class="helper-task-dropper">
-                                            Drag task here
-                                        </div>
-                                    </form>
-                                    <input type="text" class="add-new-task-input" th:name="${card.getId()}">
-                                    <button class="add-new-task-button">Add new Task</button>
+                                <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
+                                     class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
+                                    <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
+                                       th:utext="${#strings.replace(card.getText(), '\n', '&lt;br&gt;')}">
 
                                     </p>
-                                </th:block>
-                                <div class="label-container">
-                                    <div class="label-pill-container">
-                                        <th:block th:each="label:${card.getLabel()}">
-                                            <a th:href="'/label/'+${label.getId()}">
-                                                <div class="label-pill" th:text="${label.getName()}"
-                                                     th:name="${label.getId()}"> test label
-                                                </div>
-                                            </a>
-                                        </th:block>
+                                    <p th:text="${#strings.replace(testtext, '\n', '&lt;br&gt;')}"></p>
+
+                                    <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
+                                        <p class="card-text">
+
+                                        <form>
+                                            <ul class="list-group list-group-flush taskListView">
+
+
+                                                <li class="list-group-item task-li " th:each="task:${card.getTasks()}">
+                                                    <input type="checkbox" th:checked="${task.isCompleted}"
+                                                           class="form-check-input taskCheckmark"
+                                                           th:name="${task.id}"
+                                                    >
+
+                                                    <label class="form-check-label card-task"
+
+                                                           th:classappend="${task.isCompleted ? 'strike' : ''}"
+                                                           th:text="${task.text}"
+                                                           th:attr="data-id=${task.getId()}">
+
+                                                    </label>
+
+                                                    <div class="delete-task-button" th:name="${task.getId()}">
+                                                        <i class="fa-solid fa-x"></i>
+                                                    </div>
+                                                </li>
+
+
+                                            </ul>
+                                            <div class="helper-task-dropper">
+                                                Drag task here
+                                            </div>
+                                        </form>
+                                        <input type="text" class="add-new-task-input" th:name="${card.getId()}">
+                                        <button class="add-new-task-button">Add new Task</button>
+
+                                        </p>
+                                    </th:block>
+                                    <div class="label-container">
+                                        <div class="label-pill-container">
+                                            <th:block th:each="label:${card.getLabel()}">
+                                                <a th:href="'/label/'+${label.getId()}">
+                                                    <div class="label-pill" th:text="${label.getName()}"
+                                                         th:name="${label.getId()}"> test label
+                                                    </div>
+                                                </a>
+                                            </th:block>
+                                        </div>
+                                        <button class="btn add-label-button" th:data-id="${card.id}">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
                                     </div>
-                                    <button class="btn add-label-button" th:data-id="${card.id}">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
+
+
                                 </div>
 
 
-                            </div>
+                                <div class="d-flex flex-row " style="height:4rem">
+                                    <button class="flex-grow-1 btn p-2 text-center add-color-button"
+                                            th:value="${card.id}">
+                                        <i class="fa-solid fa-brush"></i>
+                                    </button>
+                                    <button class="flex-grow-1 btn  p-2 text-center add-image-button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#addImageModal" th:value="${card.id}">
+                                        <i class="fa-solid fa-image"></i>
+                                    </button>
+                                    <button class="flex-grow-1 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
+                                            th:value="${card.id}">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
 
+                                </div>
 
-                            <div class="d-flex flex-row " style="height:4rem">
-                                <button class="flex-grow-1 btn p-2 text-center add-color-button" th:value="${card.id}">
-                                    <i class="fa-solid fa-brush"></i>
-                                </button>
-                                <button class="flex-grow-1 btn  p-2 text-center add-image-button" data-bs-toggle="modal"
-                                        data-bs-target="#addImageModal" th:value="${card.id}">
-                                    <i class="fa-solid fa-image"></i>
-                                </button>
-                                <button class="flex-grow-1 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
-                                        th:value="${card.id}">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-
-                            </div>
-
-                            <div class="position-absolute top-0 end-0 me-1  ">
-                                <button class="btn pin mt-0 me-0">
-                                    <i class="fa-solid fa-map-pin"></i>
-                                    <!--                                    <i class="fa-light fa-map-pin"></i>-->
-                                </button>
+                                <div class="position-absolute top-0 end-0 me-1  ">
+                                    <button class="btn pin mt-0 me-0">
+                                        <i class="fa-solid fa-map-pin"></i>
+                                        <!--                                    <i class="fa-light fa-map-pin"></i>-->
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <div class="modal fade" id="TasksModal" tabindex="-1" role="dialog"
-                         aria-labelledby="tasksModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal fade" id="TasksModal" tabindex="-1" role="dialog"
+                             aria-labelledby="tasksModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
 
-                            <div class="modal-content">
-                                <form id="tasksForm">
-                                    <div class="modal-header">
-                                        <input class="form-control border-0 note_input" type="text" placeholder="Tasks"
-                                               aria-label="Tasks"
-                                               id="TaskTitle"
-                                               name="taskTitle">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body p-4">
+                                <div class="modal-content">
+                                    <form id="tasksForm">
+                                        <div class="modal-header">
+                                            <input class="form-control border-0 note_input" type="text"
+                                                   placeholder="Tasks"
+                                                   aria-label="Tasks"
+                                                   id="TaskTitle"
+                                                   name="taskTitle">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-4">
 
-                                        <div class="form-group mb-2">
-                                            <label for="newTaskInput">Add New Task:</label>
-                                            <div class="input-group mt-2">
-                                                <input type="text" class="form-control tasks-input" id="newTaskInput"
+                                            <div class="form-group mb-2">
+                                                <label for="newTaskInput">Add New Task:</label>
+                                                <div class="input-group mt-2">
+                                                    <input type="text" class="form-control tasks-input"
+                                                           id="newTaskInput"
 
-                                                       placeholder="Enter task name">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-save-changes" type="button"
-                                                            id="addTaskButton">Add Task
-                                                    </button>
+                                                           placeholder="Enter task name">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-save-changes" type="button"
+                                                                id="addTaskButton">Add Task
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-
-                                    </div>
-                                </form>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save
-                                        changes
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!------------------->
-                    <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModal"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                                <div class="modal-body">
-
-                                    <form th:action="@{/uploadimage}" method="POST" enctype="multipart/form-data">
-                                        <input type="text" hidden name="cardId" id="addImageModalId">
-                                        <input type="file" name="image" accept="image/*" onchange="this.form.submit();">
-                                        <div class="text-center my-auto">
-                                            <i class="fa-regular fa-image"></i>
-                                            <p>Drag Your Image Here!</p>
 
                                         </div>
                                     </form>
-
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save
+                                            changes
+                                        </button>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
-                    </div>
-                    <!-- ---------------------------------------------- -->
-                    <div hidden>
-                        <div id="colorpopover-content">
-                            <div class="d-flex flex-row justify-content-around">
-                                <th:block th:each="color:${colors}">
-                                    <div class="color-circle"
-                                         th:attr="data-color='rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+')',
+                        <!------------------->
+                        <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModal"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+
+                                        <form th:action="@{/uploadimage}" method="POST" enctype="multipart/form-data">
+                                            <input type="text" hidden name="cardId" id="addImageModalId">
+                                            <input type="file" name="image" accept="image/*"
+                                                   onchange="this.form.submit();">
+                                            <div class="text-center my-auto">
+                                                <i class="fa-regular fa-image"></i>
+                                                <p>Drag Your Image Here!</p>
+
+                                            </div>
+                                        </form>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ---------------------------------------------- -->
+                        <div hidden>
+                            <div id="colorpopover-content">
+                                <div class="d-flex flex-row justify-content-around">
+                                    <th:block th:each="color:${colors}">
+                                        <div class="color-circle"
+                                             th:attr="data-color='rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+')',
                                                data-light='rgb('+${color.brighter().getRed()}+','+${color.brighter().getGreen()}+','+${color.brighter().getBlue()}+')',
                                                 data-dark='rgba('+${color.darker().getRed()}+','+${color.darker().getGreen()}+','+${color.darker().getBlue()}+',0.1)'"
-                                         th:style="'background-color:rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+');' "></div>
-                                </th:block>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div hidden>
-                        <div id="labeladder-popover">
-                            <div class="container">
-                                <div><label><span>Add new label</span><input type="text"
-                                                                             class="newLabelInput w-100"
-                                                                             name="newLabel">
-                                </label>
-                                </div>
-                                <ul class="list-group list-group-flush">
-
-
-                                    <th:block th:each="label : ${labels}">
-
-                                        <li class="list-group-item">
-                                            <label>
-                                                <input type="checkbox"
-                                                       class="form-check-input labelCheckmark"
-                                                       th:name="${label.getId()}"
-                                                >
-                                                <span th:text="${label.getName()}"></span>
-
-                                            </label>
-                                            <button class="btn remove-label-button" th:value="${label.getId()}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </li>
+                                             th:style="'background-color:rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+');' "></div>
                                     </th:block>
-
-                                </ul>
+                                </div>
                             </div>
                         </div>
+
+                        <div hidden>
+                            <div id="labeladder-popover">
+                                <div class="container">
+                                    <div><label><span>Add new label</span><input type="text"
+                                                                                 class="newLabelInput w-100"
+                                                                                 name="newLabel">
+                                    </label>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+
+
+                                        <th:block th:each="label : ${labels}">
+
+                                            <li class="list-group-item">
+                                                <label>
+                                                    <input type="checkbox"
+                                                           class="form-check-input labelCheckmark"
+                                                           th:name="${label.getId()}"
+                                                    >
+                                                    <span th:text="${label.getName()}"></span>
+
+                                                </label>
+                                                <button class="btn remove-label-button" th:value="${label.getId()}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </li>
+                                        </th:block>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
-
-
                 </div>
+
             </div>
 
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                    crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+            <script src="https://unpkg.com/draggabilly@3/dist/draggabilly.pkgd.min.js"></script>
+            <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+            <script src="../static/scripts/script.js"></script>
+            <script src="/scripts/script.js"></script>
+
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-                crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
-        <script src="https://unpkg.com/draggabilly@3/dist/draggabilly.pkgd.min.js"></script>
-        <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
-        <script src="../static/scripts/script.js"></script>
-        <script src="/scripts/script.js"></script>
-
     </div>
 </div>
 </body>

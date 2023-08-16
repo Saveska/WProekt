@@ -222,8 +222,8 @@ public class AjaxTaskController {
             System.out.println(text);
 
             String cleanText = utilService.cleanHtml(text);
-            Task task = taskService.addTask(cardId,cleanText);
-            return List.of(cleanText,String.valueOf(cardId), String.valueOf(task.getId()));
+            Task task = taskService.addTask(cardId, cleanText);
+            return List.of(cleanText, String.valueOf(cardId), String.valueOf(task.getId()));
 
         } catch (Exception e) {
 
@@ -249,7 +249,41 @@ public class AjaxTaskController {
             Long cardId = jo.getLong("cardId");
             System.out.println(cardId);
 
-            taskService.deleteTask(taskId,cardId);
+            taskService.deleteTask(taskId, cardId);
+
+            return true;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @PostMapping("/changeCardOfTask")
+    @ResponseBody
+    public Boolean changeOrder(Authentication authentication,
+                               @RequestBody String requestData) {
+
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long taskId = jo.getLong("taskId");
+            Long siblingId = jo.getLong("siblingId");
+            Long cardSource = jo.getLong("cardSource");
+            Long cardTarget = jo.getLong("cardTarget");
+
+            System.out.println(taskId);
+            System.out.println(siblingId);
+            System.out.println(cardSource);
+            System.out.println(cardTarget);
+
+            taskService.changeCardOfTask(taskId, siblingId, cardSource, cardTarget);
 
             return true;
 

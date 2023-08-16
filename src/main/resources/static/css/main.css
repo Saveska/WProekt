@@ -660,10 +660,44 @@ textarea {
 
 .gu-mirror{
     opacity: 1;
-    position:absolute;
+
+    background-color: rgb(37, 42, 46);
+    color:white;
+    font-weight: 500;
+    padding: 8px;
+    cursor: grabbing;
+    position: fixed;
+    margin: 0;
+    z-index: 9999;
+
+    border: 3px dashed gray;
+
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80)
 }
+
+.gu-mirror .taskCheckmark:checked {
+    background-color: rgb(186, 207, 225);
+    border: none !important;
+}
+.gu-mirror .strike{
+    animation:none;
+}
+.gu-mirror .delete-task-button{
+    display:none;
+}
+.gu-unselectable{
+    -webkit-user-select: none!important;
+    -moz-user-select: none!important;
+    -ms-user-select: none!important;
+    user-select: none!important
+}
+.gu-hide {
+    display: none!important
+}
+
 .gu-transit{
-    background-color: red;
+    background-color: var(--c);
 }
 .helper-task-dropper{
     text-align: center;
