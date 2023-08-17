@@ -275,6 +275,9 @@
                                     </button>
 
                                 </div>
+                                <div th:text="${card.position}">
+
+                                </div>
                                 <div class="position-absolute top-0 end-0 me-1  ">
                                     <button class="btn pin mt-0 me-0" th:classappend="${card.getIsPinned() ? 'isPinned' : ''}">
                                         <i class="fa-solid fa-map-pin"></i>

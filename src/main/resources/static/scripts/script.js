@@ -25,15 +25,16 @@ function auto_grow(element) {
 var $grid = $('#notesContainer').packery({
     itemSelector: '.col',
     // columnWidth helps with drop positioning
-    columnWidth: 80,
-    gutter: 3
+    columnWidth: 240,
+    //TODO: poubo da se zacuvuva
+
 });
 
 $grid.imagesLoaded().progress(function () {
     $grid.packery("shiftLayout");
 });
 $grid.find('.col').each(function (i, gridItem) {
-    let handle = gridItem.querySelector(".card-title");
+    let handle = gridItem.querySelectorAll(".card-title, .card-img-top, .card-text");
     var draggie = new Draggabilly(gridItem, {handle: handle});
 
     let id = gridItem.children[0].getAttribute("data-id");
@@ -46,8 +47,39 @@ $grid.find('.col').each(function (i, gridItem) {
 
 
 function orderItems() {
-    console.log($grid.packery('getItemElements'));
+    let order = []
+    $grid.packery('getItemElements').forEach(col => {
+        order.push(col.querySelector(".appCard").getAttribute("data-id"));
+    });
+    let data = {};
+
+    data['order'] = order;
+    console.log(data);
+    debounce(() => {
+        $.ajax({
+            url: 'orderCards',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        })
+    },500);
 }
+
+
+let debounceTimer;
+
+const debounce = (callback, time) => {
+    window.clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(callback, time);
+};
 
 $grid.on('dragItemPositioned', orderItems);
 
@@ -535,7 +567,7 @@ document.querySelectorAll(".archive-note-button").forEach(elem => {
     toArchiveButton(elem);
 })
 
-function toArchiveButton(elem){
+function toArchiveButton(elem) {
     elem.addEventListener("click", () => {
         savingStatus.hidden = false;
 
@@ -746,7 +778,7 @@ document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content
                 let text = content.innerText;
                 removeFocusEdit(content);
 
-                if (type !== "task")
+                if (type !== "task" && draggieInstance !== null)
                     draggieInstance.enable();
 
                 document.removeEventListener("click", outOfInputClick);

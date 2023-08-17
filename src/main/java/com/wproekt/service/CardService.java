@@ -5,6 +5,8 @@ import com.wproekt.model.Label;
 import com.wproekt.model.Note;
 import com.wproekt.model.User;
 
+import java.util.List;
+
 public interface CardService {
     boolean putCardInArchive(User user, Long id);
     boolean putCardInBin(User user, Long id);
@@ -24,5 +26,7 @@ public interface CardService {
     Card removeLabel(String username, Long cardId, Long labelId);
 
     Card togglePin(Long cardId);
+
+    List<Card> reorderUsersCard(String username, List<Object> cardIds);
 
 }

@@ -5,6 +5,7 @@ import com.wproekt.service.CardService;
 import com.wproekt.service.TaskService;
 import com.wproekt.service.UserService;
 import com.wproekt.service.UtilService;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
@@ -428,4 +429,30 @@ public class AjaxTaskController {
 
         return new ArrayList<>();
     }
+
+    @PostMapping("/orderCards")
+    @ResponseBody
+    public List<String> orderCards(Authentication authentication,
+                                      @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+
+            List<Object> array = jo.getJSONArray("order").toList();
+            cardService.reorderUsersCard(currentUser.getUsername(),array);
+
+            return new ArrayList<>();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+
 }

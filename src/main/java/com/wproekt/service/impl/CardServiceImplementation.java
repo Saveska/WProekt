@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
+import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -148,5 +150,25 @@ public class CardServiceImplementation implements CardService {
         card.setIsPinned(!pinned);
 
         return cardRepository.save(card);
+    }
+
+    @Override
+    public List<Card> reorderUsersCard(String username, List<Object> cardIds) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
+
+        List<Card> userCards = user.getCards();
+
+        for(int i = 0 ; i < cardIds.size(); i++){
+            Long id = Long.parseLong(cardIds.get(i).toString());
+            System.out.println(cardIds.get(i));
+            System.out.println(userCards);
+            System.out.println(id);
+            if(userCards.stream().anyMatch(card->card.getId().equals(id))){
+                System.out.println("test");
+                userCards.stream().filter(card->card.getId().equals(id)).findFirst().get().setPosition(i);
+            }
+        }
+        return cardRepository.saveAll(userCards);
+
     }
 }
