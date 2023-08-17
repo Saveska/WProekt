@@ -3,13 +3,10 @@ package com.wproekt.service;
 import com.wproekt.model.Card;
 import com.wproekt.model.Label;
 import com.wproekt.model.Note;
-import com.wproekt.model.Task;
 import com.wproekt.model.User;
 
-import java.awt.*;
-import java.util.List;
-
 public interface CardService {
+    boolean putCardInArchive(User user, Long id);
     boolean putCardInBin(User user, Long id);
 
     Card getCardById(Long id);
@@ -25,5 +22,7 @@ public interface CardService {
     Label addLabel(String username, Long cardId, Long labelId);
 
     Card removeLabel(String username, Long cardId, Long labelId);
+
+    Card togglePin(Long cardId);
 
 }

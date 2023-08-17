@@ -34,6 +34,22 @@ public class CardServiceImplementation implements CardService {
     }
 
     @Override
+    public boolean putCardInArchive(User user, Long id) {
+        if (cardRepository.existsById(id)) {
+            Card card = cardRepository.getReferenceById(id);
+
+            if (userRepository.existsByCardsContains(card)) {
+                card.setIsArchived(true);
+                cardRepository.save(card);
+
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    @Override
     public boolean putCardInBin(User user, Long id) {
         if (cardRepository.existsById(id)) {
             Card card = cardRepository.getReferenceById(id);
@@ -120,6 +136,16 @@ public class CardServiceImplementation implements CardService {
         if (user.getLabels().contains(label)) {
             card.getLabel().remove(label);
         }
+
+        return cardRepository.save(card);
+    }
+
+    @Override
+    public Card togglePin(Long cardId) {
+        Card card = cardRepository.getReferenceById(cardId);
+
+        Boolean pinned = card.getIsPinned();
+        card.setIsPinned(!pinned);
 
         return cardRepository.save(card);
     }
