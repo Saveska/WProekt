@@ -91,13 +91,21 @@ drake.on("drop", (el, target, source, sibling) => {
     let data = {};
 
     let taskId = $(el).children()[0].getAttribute("name");
-    let siblingId = $(sibling).children()[0].getAttribute("name");
 
+    let siblingId = null
+    let siblingChildren = $(sibling).children();
+
+    if(siblingChildren.length > 0){
+        siblingId = siblingChildren[0].getAttribute("name");
+        data["siblingExists"] = true;
+        data["siblingId"] = siblingId;
+    }else{
+        data["siblingExists"] = false;
+    }
     let cardSource = source.parentElement.parentElement.parentElement.getAttribute("data-id")
     let cardTarget = target.parentElement.parentElement.parentElement.getAttribute("data-id");
 
     data["taskId"] = taskId;
-    data["siblingId"] = siblingId;
     data["cardSource"] = cardSource;
     data["cardTarget"] = cardTarget;
 
