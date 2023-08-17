@@ -242,12 +242,28 @@ textarea {
 }
 
 
+
 .pin {
     --bs-btn-color: white;
     --bs-btn-hover-color: rgba(255, 255, 255, 0.75);
     opacity: 0;
     transition: 0.2s ease-in-out;
     font-size: 1.5rem;
+}
+.isPinned{
+    opacity:1;
+    color:var(--brighter);
+}
+
+.archive-note-button{
+    border-radius: 0;
+    color: white;
+    font-size: 1.2rem;
+
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+
+
 }
 
 .delete-note-button {
@@ -333,6 +349,11 @@ textarea {
 
     opacity: 1;
 }
+
+.appCard:hover > div > .archive-note-button{
+    opacity: 1;
+}
+
 
 .appCard:hover > div > .pin {
 

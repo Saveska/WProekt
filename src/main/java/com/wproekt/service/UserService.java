@@ -4,6 +4,7 @@ import com.wproekt.model.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface UserService extends UserDetailsService {
@@ -25,5 +26,7 @@ public interface UserService extends UserDetailsService {
     Label addLabelToUser(String username, String label);
 
     void removeLabelFromUser(String username, Long labelId);
+
+
 
 }

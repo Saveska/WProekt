@@ -30,7 +30,7 @@ var $grid = $('#notesContainer').packery({
 });
 
 $grid.imagesLoaded().progress(function () {
-    $grid.packery();
+    $grid.packery("shiftLayout");
 });
 $grid.find('.col').each(function (i, gridItem) {
     let handle = gridItem.querySelector(".card-title");
@@ -95,11 +95,11 @@ drake.on("drop", (el, target, source, sibling) => {
     let siblingId = null
     let siblingChildren = $(sibling).children();
 
-    if(siblingChildren.length > 0){
+    if (siblingChildren.length > 0) {
         siblingId = siblingChildren[0].getAttribute("name");
         data["siblingExists"] = true;
         data["siblingId"] = siblingId;
-    }else{
+    } else {
         data["siblingExists"] = false;
     }
     let cardSource = source.parentElement.parentElement.parentElement.getAttribute("data-id")
@@ -531,6 +531,38 @@ function toBinButton(elem) {
     })
 }
 
+document.querySelectorAll(".archive-note-button").forEach(elem => {
+    toArchiveButton(elem);
+})
+
+function toArchiveButton(elem){
+    elem.addEventListener("click", () => {
+        savingStatus.hidden = false;
+
+        let data = {};
+
+        data['id'] = elem.value;
+        $(elem.parentElement.parentElement.parentElement).fadeOut(200, () => {
+
+            $.ajax({
+                url: 'archiveCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+                    console.log(dataP);
+                    $grid.packery('remove', elem)
+
+                        .packery('shiftLayout');
+                    $(elem).remove();
+                    savingStatus.hidden = true;
+
+                }, error: (jqXhr) => {
+                    console.log(jqXhr);
+                }
+
+            })
+        })
+
+    })
+}
+
 function makeNote(title, text, id) {
     let template = `<div class="col ">
         <div class="card appCard position-relative " style="width: 14rem;">
@@ -897,4 +929,34 @@ function addDeleteTaskEvent(button) {
 }
 
 //taskListView
+document.querySelectorAll(".pin").forEach(pin => {
+    addPinEvent(pin);
+});
+
+function addPinEvent(pin) {
+    pin.addEventListener("click", () => {
+        savingStatus.hidden = false;
+
+        console.log(pin.parentElement.parentElement);
+        let cardId = pin.parentElement.parentElement.getAttribute("data-id");
+        let data = {};
+
+        data['cardId'] = cardId;
+
+        $.ajax({
+            url: 'togglePin',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    })
+}
 

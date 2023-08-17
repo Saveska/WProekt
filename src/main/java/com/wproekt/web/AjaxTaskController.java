@@ -119,6 +119,26 @@ public class AjaxTaskController {
 
     }
 
+    @PostMapping("/archiveCard")
+    @ResponseBody
+    public List<Note> archiveCardAjax(Authentication authentication, @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+            Long id = jo.getLong("id");
+
+            cardService.putCardInArchive(currentUser, id);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     @PostMapping("/binCard")
     @ResponseBody
     public List<Note> binCardAjax(Authentication authentication, @RequestBody String requestData) {
@@ -383,5 +403,29 @@ public class AjaxTaskController {
         }
 
         return null;
+    }
+
+    @PostMapping("/togglePin")
+    @ResponseBody
+    public List<String> togglePinAjax(Authentication authentication,
+                                       @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long cardId = jo.getLong("cardId");
+
+            cardService.togglePin(cardId);
+
+            return new ArrayList<>();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 }

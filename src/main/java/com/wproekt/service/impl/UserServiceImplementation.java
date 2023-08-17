@@ -92,8 +92,8 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    @Transactional
     public List<Card> getHomePageCards(String username) {
+
         if (userRepository.findByUsername(username).isPresent()) {
             User user = userRepository.findByUsername(username).get();
             List<Card> cards = user.getCards();
@@ -104,6 +104,7 @@ public class UserServiceImplementation implements UserService {
             throw new UserDoesntExistException();
         }
     }
+
 
     @Override
     public List<Card> getTrashPageCards(String username) {
