@@ -273,8 +273,15 @@ public class AjaxTaskController {
 
             JSONObject jo = new JSONObject(decodedData);
 
+            Long siblingId = null;
+
             Long taskId = jo.getLong("taskId");
-            Long siblingId = jo.getLong("siblingId");
+            boolean siblingExists = jo.getBoolean("siblingExists");
+
+            if(siblingExists){
+                siblingId = jo.getLong("siblingId");
+            }
+
             Long cardSource = jo.getLong("cardSource");
             Long cardTarget = jo.getLong("cardTarget");
 

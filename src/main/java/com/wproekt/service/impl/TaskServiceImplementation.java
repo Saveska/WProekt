@@ -95,8 +95,11 @@ public class TaskServiceImplementation implements TaskService {
         TaskCard taskCardSource = taskCardRepository.getReferenceById(cardSource);
         TaskCard taskCardTarget = taskCardRepository.getReferenceById(cardTarget);
 
-        taskCardSource.getTasks().remove(task);
-        taskCardTarget.getTasks().add(task);
+        if(taskCardSource != taskCardTarget){
+            taskCardSource.getTasks().remove(task);
+            taskCardTarget.getTasks().add(task);
+        }
+
 
         //TODO: da se cuva redosled
 
