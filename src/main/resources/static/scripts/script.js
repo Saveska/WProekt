@@ -70,7 +70,7 @@ function orderItems() {
             }
 
         })
-    },500);
+    }, 500);
 }
 
 
@@ -990,5 +990,38 @@ function addPinEvent(pin) {
 
         });
     })
+}
+
+document.querySelectorAll(".delete-image-button").forEach((elem) => {
+    addDeleteImageEvent(elem);
+})
+
+function addDeleteImageEvent(elem) {
+    elem.addEventListener("click", () => {
+        savingStatus.hidden = false;
+        let cardId = elem.parentElement.getAttribute("data-id");
+
+        console.log(cardId);
+        let data = {};
+
+        data["cardId"] = cardId;
+
+        $.ajax({
+            url: 'deleteImage',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+                window.location.reload();
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    })
+
 }
 

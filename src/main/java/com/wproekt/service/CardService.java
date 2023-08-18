@@ -28,5 +28,6 @@ public interface CardService {
     Card togglePin(Long cardId);
 
     List<Card> reorderUsersCard(String username, List<Object> cardIds);
+    Card deleteImage(String username, Long cardId);
 
 }

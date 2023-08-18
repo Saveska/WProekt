@@ -1,14 +1,17 @@
 package com.wproekt.model;
 
+import com.wproekt.model.eventListeners.LastUpdatedListener;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Set;
 
 @Entity
+@EntityListeners(LastUpdatedListener.class)
 @Data
 abstract public class Card {
     @Id

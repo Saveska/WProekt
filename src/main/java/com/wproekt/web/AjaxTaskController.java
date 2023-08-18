@@ -454,5 +454,27 @@ public class AjaxTaskController {
         return new ArrayList<>();
     }
 
+    @PostMapping("/deleteImage")
+    @ResponseBody
+    public boolean deleteImage(Authentication authentication,
+                               @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
 
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long cardId = jo.getLong("cardId");
+
+            cardService.deleteImage(currentUser.getUsername(),cardId);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

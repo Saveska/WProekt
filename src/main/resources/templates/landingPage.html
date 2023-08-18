@@ -191,6 +191,9 @@
 
                                 <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
                                      class="card-img-top" alt="...">
+                                <div th:if="${card.getImageLink() != null}" class="delete-image-button">
+                                    <i class="fa-regular fa-square-minus"></i>
+                                </div>
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
                                     <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
@@ -254,7 +257,12 @@
 
                                 </div>
 
+                                <div>
+                                    <span th:text="${card.getDateLastUpdated().getDayOfMonth()}"></span>
+                                    <span th:text="${card.getDateLastUpdated().getMonth().getDisplayName(1,'en')}"></span>,
+                                    <span  th:text="${card.getDateLastUpdated().getYear()}"></span>
 
+                                </div>
                                 <div class="d-flex flex-row " style="height:50px">
                                     <button class="flex-grow-1 btn p-2 text-center add-color-button"
                                             th:value="${card.id}">
@@ -275,9 +283,7 @@
                                     </button>
 
                                 </div>
-                                <div th:text="${card.position}">
 
-                                </div>
                                 <div class="position-absolute top-0 end-0 me-1  ">
                                     <button class="btn pin mt-0 me-0" th:classappend="${card.getIsPinned() ? 'isPinned' : ''}">
                                         <i class="fa-solid fa-map-pin"></i>
