@@ -1025,3 +1025,20 @@ function addDeleteImageEvent(elem) {
 
 }
 
+
+
+Dropzone.options.imageForm ={
+    withCredentials:true,
+    maxFilesize:16384,
+    maxFiles:1,
+    acceptedFiles:"image/*",
+    paramName:"image",
+    complete: function(file,done){
+        window.location.reload();
+    }
+}
+
+
+// let imageDropzone=new Dropzone("#imageForm");
+// console.log(imageDropzone);
+
