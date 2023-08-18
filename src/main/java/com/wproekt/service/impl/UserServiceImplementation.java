@@ -32,6 +32,7 @@ public class UserServiceImplementation implements UserService {
 
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+
     public UserServiceImplementation(UserRepository userRepository, CardRepository cardRepository, EmailService emailService, LabelRepository labelRepository, PasswordEncoder passwordEncoder, EntityManager entityManager) {
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;

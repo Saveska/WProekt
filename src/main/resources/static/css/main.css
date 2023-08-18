@@ -724,3 +724,24 @@ textarea {
     text-align: center;
     border: 3px dashed var(--brighter);
 }
+
+.delete-image-button{
+    position:absolute;
+    cursor:pointer;
+    top:0;
+    left:0;
+    margin:5px;
+    margin-left:10px;
+    color:red;
+    font-size: 24px;
+    opacity: 0;
+    transition: 0.3s all;
+
+}
+.appCard:hover .delete-image-button{
+    opacity: 0.9;
+}
+.delete-image-button>i{
+    box-shadow: 1px 0px 400px 10px var(--c);
+
+}

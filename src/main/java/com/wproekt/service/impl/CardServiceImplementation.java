@@ -10,12 +10,14 @@ import com.wproekt.repository.LabelRepository;
 import com.wproekt.repository.NoteRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.CardService;
+import com.wproekt.web.TaskController;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -170,5 +172,19 @@ public class CardServiceImplementation implements CardService {
         }
         return cardRepository.saveAll(userCards);
 
+    }
+
+    @Override
+    public Card deleteImage(String username, Long cardId) {
+        //TODO: da se proveri dali e od user
+
+        Card card = cardRepository.getReferenceById(cardId);
+        File image = new File(TaskController.STATIC_DIRECTORY+'\\' +card.getImageLink());
+
+
+        image.delete();
+        card.setImageLink(null);
+
+        return cardRepository.save(card);
     }
 }
