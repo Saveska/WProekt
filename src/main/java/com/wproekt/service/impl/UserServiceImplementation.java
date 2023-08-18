@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -32,6 +34,7 @@ public class UserServiceImplementation implements UserService {
 
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+
 
     public UserServiceImplementation(UserRepository userRepository, CardRepository cardRepository, EmailService emailService, LabelRepository labelRepository, PasswordEncoder passwordEncoder, EntityManager entityManager) {
         this.userRepository = userRepository;
@@ -215,6 +218,26 @@ public class UserServiceImplementation implements UserService {
 
 
     }
+
+    @Override
+    public String getHashedUsername(User user) {
+
+        if (user.getHashedUsername() == null) {
+            try {
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+                messageDigest.update(user.getUsername().getBytes());
+                String usernameHash = DatatypeConverter.printHexBinary(messageDigest.digest());
+                user.setHashedUsername(usernameHash);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        userRepository.save(user);
+
+        return user.getHashedUsername();
+    }
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -26,7 +26,19 @@ public interface UserService extends UserDetailsService {
     Label addLabelToUser(String username, String label);
 
     void removeLabelFromUser(String username, Long labelId);
+    String getHashedUsername(User user);
 
+    static String getStaticDir() {
+        String STATIC_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static";
+
+        return STATIC_DIRECTORY;
+    }
+
+    static String getUploadDir() {
+        String UPLOAD_DIRECTORY = getStaticDir() + "/uploads";
+
+        return UPLOAD_DIRECTORY;
+    }
 
 
 }

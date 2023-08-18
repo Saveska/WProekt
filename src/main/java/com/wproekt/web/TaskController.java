@@ -31,8 +31,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Controller
 public class TaskController {
-    public static String STATIC_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static";
-    public static String UPLOAD_DIRECTORY = STATIC_DIRECTORY + "/uploads";
+
 
     public static List<Color> colors = List.of(new Color(185, 86, 185),
             new Color(0, 109, 170),
@@ -94,19 +93,7 @@ public class TaskController {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da ne mozi drug user da klaj slika za tret korisnik
 
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        messageDigest.update(currentUser.getUsername().getBytes());
-        String usernameHash = DatatypeConverter.printHexBinary(messageDigest.digest());
-
-        //TODO: ova vo service klaj go
-        System.out.println(Files.createDirectories(Paths.get(UPLOAD_DIRECTORY, usernameHash)));
-        Path fileNameAndPath = Paths.get(Paths.get(UPLOAD_DIRECTORY, usernameHash).toString(), file.getOriginalFilename());
-
-        String imgPath = String.valueOf(Path.of(STATIC_DIRECTORY).relativize(fileNameAndPath));
-        cardService.editImageCard(cardId, imgPath);
-
-
-        Files.write(fileNameAndPath, file.getBytes());
+        cardService.editImageCard(currentUser, cardId, file);
 
         return "redirect:/";
     }

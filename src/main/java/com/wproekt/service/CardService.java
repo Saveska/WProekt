@@ -4,6 +4,7 @@ import com.wproekt.model.Card;
 import com.wproekt.model.Label;
 import com.wproekt.model.Note;
 import com.wproekt.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface CardService {
 
     Card getCardById(Long id);
 
-    void editImageCard(Long id, String path);
+    void editImageCard(User user, Long id, MultipartFile file);
 
     Card setColor(Long id, Integer red, Integer green, Integer blue);
 

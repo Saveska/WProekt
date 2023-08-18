@@ -10,16 +10,23 @@ import com.wproekt.repository.LabelRepository;
 import com.wproekt.repository.NoteRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.CardService;
+import com.wproekt.service.UserService;
 import com.wproekt.web.TaskController;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Service
@@ -27,12 +34,14 @@ public class CardServiceImplementation implements CardService {
 
     CardRepository cardRepository;
     UserRepository userRepository;
+    UserService  userService;
     NoteRepository noteRepository;
     LabelRepository labelRepository;
 
-    public CardServiceImplementation(CardRepository cardRepository, UserRepository userRepository, NoteRepository noteRepository, LabelRepository labelRepository) {
+    public CardServiceImplementation(CardRepository cardRepository, UserRepository userRepository, UserService userService, NoteRepository noteRepository, LabelRepository labelRepository) {
         this.cardRepository = cardRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
         this.noteRepository = noteRepository;
         this.labelRepository = labelRepository;
     }
@@ -76,10 +85,28 @@ public class CardServiceImplementation implements CardService {
     }
 
     @Override
-    public void editImageCard(Long id, String path) {
+    public void editImageCard(User user, Long id, MultipartFile file) {
         Card card = cardRepository.getReferenceById(id);
-        card.setImageLink(path);
-        cardRepository.save(card);
+
+        String usernameHash = userService.getHashedUsername(user);
+        try{
+            Files.createDirectories(Paths.get(UserService.getUploadDir(), usernameHash));
+            String uuid = UUID.randomUUID().toString();
+            Path fileNameAndPath = Paths.get(Paths.get(UserService.getUploadDir(), usernameHash).toString(),uuid );
+
+            String imgPath = String.valueOf(Path.of(UserService.getStaticDir()).relativize(fileNameAndPath));
+
+            card.setImageLink(imgPath);
+            cardRepository.save(card);
+
+            Files.write(fileNameAndPath, file.getBytes());
+
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
 
     }
 
@@ -179,7 +206,7 @@ public class CardServiceImplementation implements CardService {
         //TODO: da se proveri dali e od user
 
         Card card = cardRepository.getReferenceById(cardId);
-        File image = new File(TaskController.STATIC_DIRECTORY+'\\' +card.getImageLink());
+        File image = new File(UserService.getStaticDir()+'\\' +card.getImageLink());
 
 
         image.delete();

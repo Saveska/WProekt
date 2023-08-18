@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String name;
     private String surname;
     private String token;
+    private String hashedUsername;
     @OneToMany
     private List<Card> cards;
 
