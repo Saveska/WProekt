@@ -754,3 +754,9 @@ textarea {
 .appCard:hover .time-last-modification{
     opacity:0.8;
 }
+/*  /////////////////////////////////////////////////// */
+
+.highlighted {
+    background-color:  var(--brighter);
+    font-weight: bold;
+}

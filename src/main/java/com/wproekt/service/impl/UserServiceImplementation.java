@@ -101,7 +101,7 @@ public class UserServiceImplementation implements UserService {
         if (userRepository.findByUsername(username).isPresent()) {
             User user = userRepository.findByUsername(username).get();
             List<Card> cards = user.getCards();
-            cards = cards.stream().filter(card -> !card.getIsArchived() && !card.getIsInBin()).sorted(Comparator.comparing(Card::getPosition).thenComparing(Card::getDateLastUpdated)).toList();
+            cards = cards.stream().filter(card -> !card.getIsArchived() && !card.getIsInBin()).toList();
             return cards;
 
         } else {
