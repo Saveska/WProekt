@@ -499,6 +499,8 @@ $('#saveNoteButton').click(() => {
 
     })
 })
+
+
 //todo:istoto za task
 document.querySelectorAll(".taskCheckmark").forEach(elem => {
     changeCompletionOfTask(elem);
@@ -1024,8 +1026,63 @@ function addDeleteImageEvent(elem) {
     })
 
 }
+// ////////////////////////////////////////////////////////////////////////////////
 
+// TODO: highlight searched text on new added card without reloading the page
 
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.tasks-input');
+    const notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+
+        notesAndTasks.forEach(function(card) {
+            const cardTitleElement = card.querySelector('.card-title');
+            const cardContentElement = card.querySelector('.card-text');
+
+            const cardTitle = cardTitleElement.textContent.toLowerCase();
+            const cardContent = cardContentElement.textContent.toLowerCase();
+
+            // Search within tasks if it's a task card
+            if (card.classList.contains('taskCard')) {
+                const taskItems = card.querySelectorAll('.list-group-item');
+                let shouldDisplay = false;
+
+                taskItems.forEach(function(taskItem) {
+                    const taskTitleElement = taskItem.querySelector('.card-task');
+                    const taskTitle = taskTitleElement.textContent.toLowerCase();
+
+                    if (taskTitle.includes(searchTerm)) {
+                        taskItem.style.display = 'block';
+                        highlightText(taskTitleElement, searchTerm);
+                        shouldDisplay = true;
+                    } else {
+                        taskItem.style.display = 'none';
+                    }
+                });
+
+                card.style.display = shouldDisplay ? 'block' : 'none';
+            } else {
+                if (cardTitle.includes(searchTerm) || cardContent.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    highlightText(cardTitleElement, searchTerm);
+                    highlightText(cardContentElement, searchTerm);
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        });
+    });
+
+    function highlightText(element, term) {
+        const regex = new RegExp(`(${term})`, 'gi');
+        const replacement = '<span class="highlighted">$1</span>';
+        element.innerHTML = element.textContent.replace(regex, replacement);
+    }
+});
+
+// //////////////////////////////////////////////////////////////////////////////////
 
 Dropzone.options.imageForm ={
     withCredentials:true,
