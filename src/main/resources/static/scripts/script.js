@@ -14,6 +14,8 @@ let allDraggies = {};
 let allTaskContainers = [];
 let allTaskHelpers = [];
 
+const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 document.querySelectorAll(".helper-task-dropper").forEach(item => {
     $(item).hide();
     allTaskHelpers.push(item);
@@ -36,6 +38,10 @@ $grid.imagesLoaded().progress(function () {
     $grid.packery("shiftLayout");
 });
 $grid.find('.col').each(function (i, gridItem) {
+    bindDraggie(gridItem);
+});
+
+function bindDraggie(gridItem){
     let handle = gridItem.querySelectorAll(".card-title, .card-img-top, .card-text");
     var draggie = new Draggabilly(gridItem, {handle: handle});
 
@@ -45,7 +51,7 @@ $grid.find('.col').each(function (i, gridItem) {
 
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
-});
+}
 
 
 function orderItems() {
@@ -167,6 +173,9 @@ drake.on("drop", (el, target, source, sibling) => {
 console.log(drake);
 
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
+    addColorButtonListener(colorButton);
+})
+function addColorButtonListener(colorButton){
     let colorSelector = new bootstrap.Popover(colorButton, {
         container: 'body',
         placement: 'bottom',
@@ -238,7 +247,12 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
 // TODO: da se zacuvuva na karticki labelite
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+}
 document.querySelectorAll(".add-label-button").forEach(addButton => {
+    addLabelButtonListener(addButton);
+
+})
+function addLabelButtonListener(addButton){
     let labelSelector = new bootstrap.Popover(addButton, {
         container: 'body',
         placement: 'bottom',
@@ -327,8 +341,7 @@ document.querySelectorAll(".labels").forEach(addButton => {
         }
     })
 
-
-})
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -547,8 +560,6 @@ $('#saveTasksButton').click(function () {
 
 });
 
-//TODO: dodavanje na taskoj
-//TODO: editiranje na taskoj
 
 $('#saveNoteButton').click(() => {
 
@@ -577,7 +588,19 @@ $('#saveNoteButton').click(() => {
             //TODO: fix so novite karticki
 
             toBinButton(element.find('.delete-note-button')[0]);
-            console.log(element);
+            toArchiveButton(element.find('.archive-note-button')[0]);
+            bindDraggie(element[0]);
+
+            addColorButtonListener(element[0].querySelector(".add-color-button"));
+            addLabelButtonListener(element[0].querySelector(".add-label-button"));
+
+            element[0].querySelectorAll(".card-title, .card-text").forEach(content=>{
+                editContentEvent(content);
+            })
+
+
+            addPinEvent(element[0].querySelector(".pin"));
+
             $grid.prepend(element[0]).packery('prepended', element[0]);
 
 
@@ -694,44 +717,77 @@ function toArchiveButton(elem) {
 }
 
 function makeNote(title, text, id) {
-    let template = `<div class="col ">
-        <div class="card appCard position-relative " style="width: 14rem;">
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let template = `<div class="col mb-3 ">
+    <div class="card appCard position-relative noteCard "
+         
+        data-id=${id}
+        original-c="rgb(185, 86, 185)"
+        original-brighter="rgb(255,122,255)"
+        original-background="rgba(129,60,129,0.1)"
+        style="width: 14rem;
+        --c:rgb(185, 86, 185);
+        --brighter:rgb(255,122,255);
+        --backgroundC:rgba(129,60,129,0.1)"
+         >
 
-                <div class="card-body">
-                    <h5 class="card-title">${title}</h5>
-                    <p class="card-text" 
-                       >
-                    ${text}
-                    </p>
+        <div class="card-body">
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text" >
+                ${text}
+            </p>
+
+            
+            <div class="label-container">
+                <div class="label-pill-container">
                     
-                  
                 </div>
+                <button class="btn add-label-button" data-id="${id}">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
 
 
-                <div class="d-flex flex-row ">
-                    <button class="flex-grow-1 btn p-3 text-center add-color-button">
-                        <i class="fa-solid fa-brush"></i>
-                    </button>
-                    <button class="flex-grow-1 btn  p-3 text-center add-image-button"
-                    data-bs-target="#addImageModal"
-                    value="${id}">
-                        <i class="fa-solid fa-image"></i>
-                    </button>
-                    <button
-                        class="flex-grow-1 btn btn-danger rounded-0 p-3 text-white text-center delete-note-button"
-                        value="${id}">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-
-                </div>
-
-                <div class="position-absolute top-0 end-0 me-1  ">
-                    <button class="btn pin mt-0 me-0">
-                        <i class="fa-solid fa-map-pin"></i>
-                    </button>
-                </div>
         </div>
-    </div>`;
+
+        <div class="time-last-modification">
+            <span >${day}</span>
+            <span >${monthList[month]}</span>,
+            <span >${year}</span>
+
+        </div>
+        <div class="d-flex flex-row " style="height:50px">
+            <button class="flex-grow-1 btn p-2 text-center add-color-button"
+                    value="${id}">
+                <i class="fa-solid fa-brush"></i>
+            </button>
+            <button class="flex-grow-1 btn  p-2 text-center add-image-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addImageModal" value="${id}">
+                <i class="fa-solid fa-image"></i>
+            </button>
+            <button class="flex-grow-1 btn btn-warning rounded-0 p-2 text-white text-center archive-note-button"
+                    value="${id}">
+                <i class="fa-solid fa-box"></i>
+            </button>
+            <button class="flex-grow-3 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
+                    value="${id}">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+
+        </div>
+
+        <div class="position-absolute top-0 end-0 me-1  ">
+            <button class="btn pin mt-0 me-0">
+                <i class="fa-solid fa-map-pin"></i>
+                
+            </button>
+        </div>
+    </div>
+</div>`;
 
     return template;
 
@@ -829,6 +885,10 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
 
 
 document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content => {
+    editContentEvent(content);
+})
+
+function editContentEvent(content){
     content.addEventListener("dblclick", () => {
 
         content.classList.add("editing-title")
@@ -860,9 +920,9 @@ document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content
 
         sel.removeAllRanges()
         sel.addRange(range)
-
+        let draggieInstance = null;
         if (type !== "task") {
-            let draggieInstance = allDraggies[id];
+            draggieInstance = allDraggies[id];
             draggieInstance.disable();
         }
 
@@ -917,8 +977,7 @@ document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content
         $grid
             .packery('shiftLayout');
     })
-})
-
+}
 
 function removeFocusEdit(elem) {
     elem.classList.remove("editing-title")
@@ -1122,18 +1181,19 @@ function addDeleteImageEvent(elem) {
     })
 
 }
+
 // ////////////////////////////////////////////////////////////////////////////////
 
 // TODO: highlight searched text on new added card without reloading the page
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector('.tasks-input');
     const notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
 
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         const searchTerm = searchInput.value.trim().toLowerCase();
 
-        notesAndTasks.forEach(function(card) {
+        notesAndTasks.forEach(function (card) {
             const cardTitleElement = card.querySelector('.card-title');
             const cardContentElement = card.querySelector('.card-text');
 
@@ -1145,7 +1205,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const taskItems = card.querySelectorAll('.list-group-item');
                 let shouldDisplayCard = false; // Keep track if any task matches
 
-                taskItems.forEach(function(taskItem) {
+                taskItems.forEach(function (taskItem) {
                     const taskTitleElement = taskItem.querySelector('.card-task');
                     const taskTitle = taskTitleElement.textContent.toLowerCase();
 
@@ -1163,8 +1223,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'block';
                     highlightText(cardTitleElement, searchTerm);
                     highlightText(cardContentElement, searchTerm);
+                    $grid.packery("shiftLayout");
                 } else {
                     card.style.display = 'none';
+                    $grid.packery("shiftLayout");
                 }
             }
         });
@@ -1185,13 +1247,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // //////////////////////////////////////////////////////////////////////////////////
 
-Dropzone.options.imageForm ={
-    withCredentials:true,
-    maxFilesize:16384,
-    maxFiles:1,
-    acceptedFiles:"image/*",
-    paramName:"image",
-    complete: function(file,done){
+Dropzone.options.imageForm = {
+    withCredentials: true,
+    maxFilesize: 16384,
+    maxFiles: 1,
+    acceptedFiles: "image/*",
+    paramName: "image",
+    complete: function (file, done) {
         window.location.reload();
     }
 }

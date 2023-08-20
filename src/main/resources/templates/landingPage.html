@@ -202,7 +202,6 @@
                                        th:utext="${#strings.replace(card.getText(), '\n', '&lt;br&gt;')}">
 
                                     </p>
-                                    <p th:text="${#strings.replace(testtext, '\n', '&lt;br&gt;')}"></p>
 
                                     <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
                                         <p class="card-text">
@@ -352,13 +351,6 @@
 
                                         <form th:action="@{/uploadimage}" method="POST" id="imageForm" class="dropzone" enctype="multipart/form-data">
                                             <input type="text" hidden name="cardId" id="addImageModalId">
-<!--                                            <input type="file" name="image" accept="image/*">-->
-<!--                                                   onchange="this.form.submit();">-->
-<!--                                            <div class="text-center my-auto">-->
-<!--                                                <i class="fa-regular fa-image"></i>-->
-<!--                                                <p>Drag Your Image Here!</p>-->
-
-<!--                                            </div>-->
 
                                         </form>
 
