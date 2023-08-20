@@ -67,7 +67,7 @@ public class AjaxTaskController {
 
     @PostMapping("/giveTask")
     @ResponseBody
-    public List<Note> taskPostAjax(Authentication authentication, @RequestBody String requestData) {
+    public List<TaskCard> taskPostAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         Map<String, Object> tasks;
 
@@ -85,7 +85,10 @@ public class AjaxTaskController {
             TaskCard card = userService.addTaskCard(currentUser.getUsername(), title);
             List<Task> taskList = taskService.createList(tasks);
 
-            taskService.addTasksToTaskCard(card, taskList);
+
+            TaskCard taskCard = taskService.addTasksToTaskCard(card, taskList);
+
+            return List.of(taskCard);
 
         } catch (Exception e) {
 
