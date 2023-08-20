@@ -32,6 +32,7 @@ abstract public class Card {
     private Set<Label> label;
 
     public Card() {
+        this.position = 0;
         this.color = new Color(185, 86, 185);
     }
 
@@ -44,6 +45,7 @@ abstract public class Card {
         this.isArchived = false;
         this.isInBin = false;
         this.color = new Color(185, 86, 185);
+        this.position = 0;
     }
 
     public String getRGBColor() {
