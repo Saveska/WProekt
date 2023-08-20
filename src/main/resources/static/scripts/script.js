@@ -17,9 +17,12 @@ let allTaskHelpers = [];
 const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 document.querySelectorAll(".helper-task-dropper").forEach(item => {
+    hideTaskHelpers(item);
+})
+function hideTaskHelpers(item){
     $(item).hide();
     allTaskHelpers.push(item);
-})
+}
 
 function auto_grow(element) {
     element.style.height = "auto";
@@ -98,11 +101,14 @@ var drake = dragula({
 
 window.addEventListener("load", () => {
     document.querySelectorAll(".taskListView").forEach(task => {
-        drake.containers.push(task);
-        allTaskContainers.push(task);
+        addTaskContainers(task);
     })
 })
 
+function addTaskContainers(task){
+    drake.containers.push(task);
+    allTaskContainers.push(task);
+}
 
 // Initialize Dragula
 
@@ -548,6 +554,45 @@ $('#saveTasksButton').click(function () {
 
         success: (dataP) => {
             console.log(dataP)
+            let tCardObj = dataP[0];
+
+            let cardId = tCardObj['id'];
+            let title = tCardObj['title'];
+            let taskArray = tCardObj['tasks'];
+
+            let template = makeTaskCard(cardId,title,taskArray);
+
+            let element = $($.parseHTML(template));
+
+            toBinButton(element.find('.delete-note-button')[0]);
+            toArchiveButton(element.find('.archive-note-button')[0]);
+            bindDraggie(element[0]);
+
+            addColorButtonListener(element[0].querySelector(".add-color-button"));
+            addLabelButtonListener(element[0].querySelector(".add-label-button"));
+
+            hideTaskHelpers(element[0].querySelector(".helper-task-dropper"));
+
+            element[0].querySelectorAll(".card-title, .card-text, .card-task").forEach(content=>{
+                editContentEvent(content);
+            })
+            //TODO: bug ko ce imas selektirano na inputo i ne se pojavuva posle
+            addTaskContainers(element[0].querySelector(".taskListView"));
+
+            element[0].querySelectorAll(".taskCheckmark").forEach(elem=>{
+                changeCompletionOfTask(elem);
+            })
+            element[0].querySelectorAll(".delete-task-button").forEach(elem=>{
+                addDeleteTaskEvent(elem);
+            })
+
+            taskInputEvent(element[0].querySelector(".add-new-task-input"));
+            addNewTaskButtonEvent(element[0].querySelector(".add-new-task-button"));
+
+            addPinEvent(element[0].querySelector(".pin"));
+
+            $grid.prepend(element[0]).packery('prepended', element[0]);
+
             savingStatus.hidden = true;
 
 
@@ -561,6 +606,110 @@ $('#saveTasksButton').click(function () {
 });
 
 
+function makeTaskCard(id, title, taskArray){
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+
+    let template = `<div class="col mb-3 " >
+        <div class="card appCard position-relative taskCard "
+             
+            data-id=${id}
+            original-c="rgb(185, 86, 185)"
+            original-brighter="rgb(255,122,255)"
+            original-background="rgba(129,60,129,0.1)"
+            style="width: 14rem;
+            --c:rgb(185, 86, 185);
+            --brighter:rgb(255,122,255);
+            --backgroundC:rgba(129,60,129,0.1)"
+             >
+            
+             <div class="card-body">
+                <h5 class="card-title">${title}</h5>
+                
+                    <p class="card-text">
+                    <form>
+                        <ul class="list-group list-group-flush taskListView">
+                        `
+        for(let i = 0 ; i < taskArray.length; i++){
+            template += `<li class="list-group-item task-li ">
+                <input type="checkbox" ${taskArray[i]["isCompleted"] ? "checked" : ""}
+                       class="form-check-input taskCheckmark"
+                       name="${taskArray[i]["id"]}"
+                >
+                    <label class="form-check-label card-task"
+
+                     
+                           th:attr="data-id=${taskArray[i]["id"]}">
+                           ${taskArray[i]["text"]}
+                    </label>
+                    <div class="delete-task-button" name="${taskArray[i]["id"]}">
+                        <i class="fa-solid fa-x"></i>
+                    </div>
+            </li>`
+        }
+
+
+    template +=`
+                        </ul>
+                        <div class="helper-task-dropper">
+                            Drag task here
+                        </div>
+                    </form>
+                    <input type="text" class="add-new-task-input" name="${id}">
+                    <button class="add-new-task-button">Add new Task</button>
+                    </p>
+                
+                <div class="label-container">
+                    <div class="label-pill-container">
+                          
+                    </div>
+                    <button class="btn add-label-button" data-id="${id}">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+    
+    
+            </div>
+    
+            <div class="time-last-modification">
+                <span >${day}</span>
+                <span >${monthList[month]}</span>,
+                <span >${year}</span>
+    
+            </div>
+            <div class="d-flex flex-row " style="height:50px">
+                <button class="flex-grow-1 btn p-2 text-center add-color-button"
+                        value="${id}">
+                    <i class="fa-solid fa-brush"></i>
+                </button>
+                <button class="flex-grow-1 btn  p-2 text-center add-image-button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addImageModal" value="${id}">
+                    <i class="fa-solid fa-image"></i>
+                </button>
+                <button class="flex-grow-1 btn btn-warning rounded-0 p-2 text-white text-center archive-note-button"
+                        value="${id}">
+                    <i class="fa-solid fa-box"></i>
+                </button>
+                <button class="flex-grow-3 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
+                        value="${id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+    
+            </div>
+    
+            <div class="position-absolute top-0 end-0 me-1  ">
+                <button class="btn pin mt-0 me-0">
+                    <i class="fa-solid fa-map-pin"></i>
+                    
+                </button>
+            </div>
+        </div>
+    </div>`;
+    return template;
+}
 $('#saveNoteButton').click(() => {
 
     savingStatus.hidden = false;
@@ -1011,6 +1160,9 @@ function sendEdit(id, text, type) {
 }
 
 document.querySelectorAll(".add-new-task-input").forEach(taskInput => {
+    taskInputEvent(taskInput);
+})
+function taskInputEvent(taskInput){
     $(taskInput).hide();
     taskInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -1049,8 +1201,7 @@ document.querySelectorAll(".add-new-task-input").forEach(taskInput => {
             });
         }
     })
-})
-
+}
 function getNewTaskToCardHTML(id, text) {
     let template = `<li class="list-group-item ">
                     <input type="checkbox"
@@ -1068,6 +1219,9 @@ function getNewTaskToCardHTML(id, text) {
 }
 
 document.querySelectorAll(".add-new-task-button").forEach(button => {
+    addNewTaskButtonEvent(button);
+})
+function addNewTaskButtonEvent(button){
     button.addEventListener("click", () => {
         let input = $(button).parent().find(".add-new-task-input");
         if (!input.is(":visible")) {
@@ -1080,7 +1234,7 @@ document.querySelectorAll(".add-new-task-button").forEach(button => {
             });
         }
     })
-})
+}
 
 document.querySelectorAll(".delete-task-button").forEach(button => {
     addDeleteTaskEvent(button);
