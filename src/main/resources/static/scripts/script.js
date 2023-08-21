@@ -202,7 +202,7 @@ function addColorButtonListener(colorButton){
     colorButton.addEventListener('hide.bs.popover', () => {
         colorButton.classList.remove('focused-color-button');
     })
-})
+}
 
 // document.querySelectorAll(".add-label-button").forEach(addButton => {
 //     let labelSelector = new bootstrap.Popover(addButton, {
@@ -253,7 +253,7 @@ function addColorButtonListener(colorButton){
 // TODO: da se zacuvuva na karticki labelite
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-}
+
 document.querySelectorAll(".add-label-button").forEach(addButton => {
     addLabelButtonListener(addButton);
 
@@ -302,7 +302,7 @@ function addLabelButtonListener(addButton){
     })
 
 
-})
+}
 
 document.querySelectorAll(".labels").forEach(addButton => {
     let labelSelector = new bootstrap.Popover(addButton, {
@@ -347,7 +347,7 @@ document.querySelectorAll(".labels").forEach(addButton => {
         }
     })
 
-}
+});
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 

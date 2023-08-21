@@ -15,6 +15,8 @@ public interface UserService extends UserDetailsService {
 
     List<Card> getTrashPageCards(String username);
 
+    List<Card> getArchivePageCards(String username);
+
     Note addNoteCard(String username, String title, String Text);
 
     TaskCard addTaskCard(String username, String title);

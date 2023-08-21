@@ -108,5 +108,17 @@ public class TaskController {
     }
 
 
+    @GetMapping({"/archive"})
+    public String GetArchivePage(Authentication authentication,
+                               Model model) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        List<Card> userCards = userService.getArchivePageCards(currentUser.getUsername());
+
+        model.addAttribute("cards", userCards);
+        model.addAttribute("page", "archive");
+
+        return "landingPage";
+    }
 
 }

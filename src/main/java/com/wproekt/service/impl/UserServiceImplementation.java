@@ -123,6 +123,20 @@ public class UserServiceImplementation implements UserService {
         }
     }
 
+
+    @Override
+    public List<Card> getArchivePageCards(String username) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            User user = userRepository.findByUsername(username).get();
+            List<Card> cards = user.getCards();
+            cards = cards.stream().filter(Card::getIsArchived).toList();
+            return cards;
+
+        } else {
+            throw new UserDoesntExistException();
+        }
+    }
+
     @Override
     public Note addNoteCard(String username, String title, String text) {
         if (userRepository.findByUsername(username).isPresent()) {
