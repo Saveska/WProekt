@@ -83,7 +83,7 @@
                         </div>
                     </a>
 
-                    <a href="/labels" class="list-group-item ">
+                    <a href="#" class="list-group-item labels">
                         <div class="container text-center">
                             <div class="row">
                                 <div class="col col-5">
@@ -244,7 +244,7 @@
                                     <div class="label-container">
                                         <div class="label-pill-container">
                                             <th:block th:each="label:${card.getLabel()}">
-                                                <a th:href="'/label/'+${label.getId()}">
+<!--                                                <a th:href="'/label/'+${label.getId()}">-->
                                                     <div class="label-pill" th:text="${label.getName()}"
                                                          th:name="${label.getId()}"> test label
                                                     </div>
@@ -382,44 +382,119 @@
                             </div>
                         </div>
 
-                        <div hidden>
-                            <div id="labeladder-popover">
-                                <div class="container">
-                                    <div><label><span>Add new label</span><input type="text"
-                                                                                 class="newLabelInput w-100"
-                                                                                 name="newLabel">
+<!--                        <div hidden>-->
+<!--                            <div id="labeladder-popover">-->
+<!--                                <div class="container">-->
+<!--                                    <div><label><span>Add new label</span><input type="text"-->
+<!--                                                                                 class="newLabelInput w-100"-->
+<!--                                                                                 name="newLabel">-->
+<!--                                    </label>-->
+<!--                                    </div>-->
+<!--                                    <ul class="list-group list-group-flush">-->
+
+
+<!--                                        <th:block th:each="label : ${labels}">-->
+
+<!--                                            <li class="list-group-item">-->
+<!--                                                <label>-->
+<!--                                                    <input type="checkbox"-->
+<!--                                                           class="form-check-input labelCheckmark"-->
+<!--                                                           th:name="${label.getId()}"-->
+<!--                                                    >-->
+<!--                                                    <span th:text="${label.getName()}"></span>-->
+
+<!--                                                </label>-->
+<!--                                                <button class="btn remove-label-button" th:value="${label.getId()}">-->
+<!--                                                    <i class="fa-solid fa-trash"></i>-->
+<!--                                                </button>-->
+<!--                                            </li>-->
+<!--                                        </th:block>-->
+
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
+
+
+<!--            ////////////////////////////////////////////////////////////////////////////////////-->
+
+
+            <div hidden>
+                <div id="labeladder-popover-card">
+                    <div class="container">
+                        <ul class="list-group list-group-flush">
+
+
+                            <th:block th:each="label : ${labels}">
+
+                                <li class="list-group-item">
+                                    <label>
+                                        <input type="checkbox"
+                                               class="form-check-input labelCheckmark"
+                                               th:name="${label.getId()}"
+                                        >
+                                        <span th:text="${label.getName()}"></span>
                                     </label>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
+                                </li>
+                            </th:block>
 
-
-                                        <th:block th:each="label : ${labels}">
-
-                                            <li class="list-group-item">
-                                                <label>
-                                                    <input type="checkbox"
-                                                           class="form-check-input labelCheckmark"
-                                                           th:name="${label.getId()}"
-                                                    >
-                                                    <span th:text="${label.getName()}"></span>
-
-                                                </label>
-                                                <button class="btn remove-label-button" th:value="${label.getId()}">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </li>
-                                        </th:block>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        </ul>
                     </div>
                 </div>
-
             </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+            <div hidden>
+                <div id="labeladder-popover">
+                    <div class="container">
+                        <div><label><span>Add new label</span><input type="text"
+                                                                     class="newLabelInput w-100"
+                                                                     name="newLabel">
+                        </label>
+                        </div>
+                        <ul class="list-group list-group-flush">
+
+
+                            <th:block th:each="label : ${labels}">
+
+                                <li class="list-group-item">
+                                    <label>
+<!--                                        <input type="checkbox"-->
+<!--                                               class="form-check-input labelCheckmark"-->
+<!--                                               th:name="${label.getId()}"-->
+<!--                                        >-->
+                                        <span th:text="${label.getName()}"></span>
+
+                                    </label>
+                                    <button class="btn remove-label-button" th:value="${label.getId()}">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </li>
+                            </th:block>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+<!--            ////////////////////////////////////////////////////////////////////////////////////-->
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
                     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"

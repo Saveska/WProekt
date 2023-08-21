@@ -7,6 +7,8 @@ const savingStatus = document.getElementById("status-spinner");
 const addImageModal = document.getElementById('addImageModal')
 const labelPopover = document.getElementById('labeladder-popover')
 
+const labelPopoverCard = document.getElementById('labeladder-popover-card')
+
 let allDraggies = {};
 
 let allTaskContainers = [];
@@ -187,11 +189,106 @@ document.querySelectorAll(".add-color-button").forEach(colorButton => {
     })
 })
 
+// document.querySelectorAll(".add-label-button").forEach(addButton => {
+//     let labelSelector = new bootstrap.Popover(addButton, {
+//         container: 'body',
+//         placement: 'bottom',
+//         fallback: 'bottom',
+//         html: true,
+//         trigger: 'click',
+//         customClass: 'add-label-popover',
+//         content: labelPopover,
+//     })
+//
+//     let popoverInput = labelPopover.querySelector("input");
+//     let allActive = [];
+//
+//
+//     addButton.addEventListener("show.bs.popover", (e) => {
+//
+//         addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
+//             allActive.push(pill.getAttribute("name"));
+//         })
+//         popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
+//         labelPopover.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
+//             labelCheckmark.checked = allActive.includes(labelCheckmark.name);
+//         })
+//         labelPopover.querySelectorAll(".remove-label-button").forEach(removeButton => {
+//             addRemoveButtonOnClick(removeButton);
+//         })
+//     })
+//
+//     addButton.addEventListener("hide.bs.popover", (e) => {
+//         allActive = [];
+//     });
+//
+//     //TODO: ko ce gi stegnis odma da se pojavi
+//     document.addEventListener("click", (e) => {
+//         let $target = $(e.target);
+//
+//         if ($target.parents("#labeladder-popover-card").length !== 1) {
+//             labelSelector.hide();
+//             popoverInput.value = "";
+//         }
+//     })
+//
+//
+// })
+
+// TODO: da se zacuvuva na karticki labelite
+///////////////////////////////////////////////////////////////////////////////////////////
+
 document.querySelectorAll(".add-label-button").forEach(addButton => {
     let labelSelector = new bootstrap.Popover(addButton, {
         container: 'body',
         placement: 'bottom',
         fallback: 'bottom',
+        html: true,
+        trigger: 'click',
+        customClass: 'add-label-popover',
+        content: labelPopoverCard,
+    })
+
+    // let popoverInput = labelPopover.querySelector("input");
+    let allActive = [];
+
+
+    addButton.addEventListener("show.bs.popover", (e) => {
+
+        addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
+            allActive.push(pill.getAttribute("name"));
+        })
+        popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
+        labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
+            labelCheckmark.checked = allActive.includes(labelCheckmark.name);
+        })
+        // labelPopover.querySelectorAll(".remove-label-button").forEach(removeButton => {
+        //     addRemoveButtonOnClick(removeButton);
+        // })
+    })
+
+    addButton.addEventListener("hide.bs.popover", (e) => {
+        allActive = [];
+    });
+
+    //TODO: ko ce gi stegnis odma da se pojavi
+    document.addEventListener("click", (e) => {
+        let $target = $(e.target);
+
+        if ($target.parents("#labeladder-popover-card").length !== 1) {
+            labelSelector.hide();
+            popoverInput.value = "";
+        }
+    })
+
+
+})
+
+document.querySelectorAll(".labels").forEach(addButton => {
+    let labelSelector = new bootstrap.Popover(addButton, {
+        container: 'body',
+        placement: 'right',
+        fallback: 'right',
         html: true,
         trigger: 'click',
         customClass: 'add-label-popover',
@@ -232,6 +329,8 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
 
 
 })
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 function addRemoveButtonOnClick(removeButton) {
     removeButton.addEventListener("click", () => {
@@ -306,10 +405,7 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
 function getLabelHTML(id, name) {
     let template = `<li class="list-group-item">
                     <label>
-                          <input type="checkbox"
-                                class="form-check-input labelCheckmark"
-                                name="${id}"
-                             >
+                        
                          <span>${name}</span>
 
                            </label>
@@ -332,7 +428,7 @@ function addLabelCheckmarkEvent(label) {
         let data = {};
 
         let labelId = label.getAttribute("name");
-        let labelInput = labelPopover.querySelector("input");
+        let labelInput = labelPopoverCard.querySelector("input");
 
         let cardId = labelInput.getAttribute("data-id");
 
@@ -1047,22 +1143,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Search within tasks if it's a task card
             if (card.classList.contains('taskCard')) {
                 const taskItems = card.querySelectorAll('.list-group-item');
-                let shouldDisplay = false;
+                let shouldDisplayCard = false; // Keep track if any task matches
 
                 taskItems.forEach(function(taskItem) {
                     const taskTitleElement = taskItem.querySelector('.card-task');
                     const taskTitle = taskTitleElement.textContent.toLowerCase();
 
                     if (taskTitle.includes(searchTerm)) {
-                        taskItem.style.display = 'block';
                         highlightText(taskTitleElement, searchTerm);
-                        shouldDisplay = true;
+                        shouldDisplayCard = true;
                     } else {
-                        taskItem.style.display = 'none';
+                        unhighlightText(taskTitleElement);
                     }
                 });
 
-                card.style.display = shouldDisplay ? 'block' : 'none';
+                card.style.display = shouldDisplayCard ? 'block' : 'none'; // Show the entire task card if any task matches
             } else {
                 if (cardTitle.includes(searchTerm) || cardContent.includes(searchTerm)) {
                     card.style.display = 'block';
@@ -1080,7 +1175,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const replacement = '<span class="highlighted">$1</span>';
         element.innerHTML = element.textContent.replace(regex, replacement);
     }
+
+    function unhighlightText(element) {
+        element.innerHTML = element.textContent; // Remove the highlighting
+    }
 });
+
+
 
 // //////////////////////////////////////////////////////////////////////////////////
 
