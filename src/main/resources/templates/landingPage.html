@@ -182,13 +182,18 @@
                 <div class="container col-md-12 ">
                     <div class=" gap-2" id="notesContainer">
 
-                        <div class="col mb-3 " th:each="card : ${cards}">
+                        <div class="col mb-3 " th:each="card : ${cards}"
+                             th:classappend="${card.getIsPinned()} ? 'pinnedCard' : ''"
+                        >
                             <div class="card appCard position-relative "
                                  th:classappend="${card instanceof T(com.wproekt.model.Note)} ? 'noteCard' : 'taskCard'"
                                  th:attr="data-id=${card.getId()},
                                       original-c=${card.getRGBColor()},
                                       original-brighter=${card.getBrighterRGB()},
-                                      original-background=${card.getBackgroundColor()}" style="width: 14rem;"
+                                      original-background=${card.getBackgroundColor()},
+                                      x-pos=${card.getXPosition()},
+                                      y-pos=${card.getYPosition()},
+                                      is-pinned=${card.getIsPinned()}" style="width: 14rem;"
                                  th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
 

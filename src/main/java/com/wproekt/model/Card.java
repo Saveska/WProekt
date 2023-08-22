@@ -23,6 +23,8 @@ abstract public class Card {
     private LocalDateTime dateCreated;
     private LocalDateTime dateLastUpdated;
     private Boolean isPinned;
+    private Integer xPosition;
+    private Integer yPosition;
     private Boolean isArchived;
     private Boolean isInBin;
     private Color color;
@@ -34,6 +36,8 @@ abstract public class Card {
     public Card() {
         this.position = 0;
         this.color = new Color(185, 86, 185);
+        this.xPosition = 0;
+        this.yPosition = 0;
     }
 
     public Card(String title) {

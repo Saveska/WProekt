@@ -171,6 +171,7 @@ textarea {
     --b: .1em; /* border length*/
     --d: 10px; /* the cube depth */
     --brighter: rgb(211, 156, 211);
+    box-shadow: inset 0px 0px 5px 20px var(--backgroundC);
 
     border-radius: 0;
     --_s: calc(var(--d) + var(--b));
@@ -759,4 +760,13 @@ textarea {
 .highlighted {
     background-color:  var(--brighter);
     font-weight: bold;
+}
+.appCard{
+    z-index: 100;
+}
+.pinnedCard > .appCard{
+    z-index: 1000;
+    box-shadow: inset 0px 0px 15px 3px var(--c);
+    background-color: rgb(37, 42, 46);
+
 }

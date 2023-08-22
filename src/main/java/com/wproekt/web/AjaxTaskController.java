@@ -302,7 +302,7 @@ public class AjaxTaskController {
             Long taskId = jo.getLong("taskId");
             boolean siblingExists = jo.getBoolean("siblingExists");
 
-            if(siblingExists){
+            if (siblingExists) {
                 siblingId = jo.getLong("siblingId");
             }
 
@@ -412,7 +412,7 @@ public class AjaxTaskController {
     @PostMapping("/togglePin")
     @ResponseBody
     public List<String> togglePinAjax(Authentication authentication,
-                                       @RequestBody String requestData) {
+                                      @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da se proveri dali card pripajdza na user
         try {
@@ -421,8 +421,10 @@ public class AjaxTaskController {
             JSONObject jo = new JSONObject(decodedData);
 
             Long cardId = jo.getLong("cardId");
+            Integer xPos = jo.getInt("xPos");
+            Integer yPos = jo.getInt("yPos");
 
-            cardService.togglePin(cardId);
+            cardService.togglePin(cardId, xPos, yPos);
 
             return new ArrayList<>();
 
@@ -436,17 +438,21 @@ public class AjaxTaskController {
     @PostMapping("/orderCards")
     @ResponseBody
     public List<String> orderCards(Authentication authentication,
-                                      @RequestBody String requestData) {
+                                   @RequestBody String requestData) {
         User currentUser = (User) authentication.getPrincipal();
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
             JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
 
+            JSONObject jsonObject= jo.getJSONObject("order");
+            Map<String,Object> jsonMap = jsonObject.toMap();
 
-            List<Object> array = jo.getJSONArray("order").toList();
-            cardService.reorderUsersCard(currentUser.getUsername(),array);
+            System.out.println(jsonMap);
+
+            cardService.reorderUsersCard(currentUser.getUsername(), jsonMap);
 
             return new ArrayList<>();
 
@@ -470,7 +476,7 @@ public class AjaxTaskController {
 
             Long cardId = jo.getLong("cardId");
 
-            cardService.deleteImage(currentUser.getUsername(),cardId);
+            cardService.deleteImage(currentUser.getUsername(), cardId);
 
             return true;
 
