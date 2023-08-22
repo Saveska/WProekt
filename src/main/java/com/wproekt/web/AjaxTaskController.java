@@ -445,14 +445,10 @@ public class AjaxTaskController {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
             JSONObject jo = new JSONObject(decodedData);
-            System.out.println(jo);
 
-            JSONObject jsonObject= jo.getJSONObject("order");
-            Map<String,Object> jsonMap = jsonObject.toMap();
 
-            System.out.println(jsonMap);
-
-            cardService.reorderUsersCard(currentUser.getUsername(), jsonMap);
+            List<Object> array = jo.getJSONArray("order").toList();
+            cardService.reorderUsersCard(currentUser.getUsername(),array);
 
             return new ArrayList<>();
 

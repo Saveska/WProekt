@@ -20,7 +20,8 @@ const monthList = ["January", "February", "March", "April", "May", "June", "July
 document.querySelectorAll(".helper-task-dropper").forEach(item => {
     hideTaskHelpers(item);
 })
-function hideTaskHelpers(item){
+
+function hideTaskHelpers(item) {
     $(item).hide();
     allTaskHelpers.push(item);
 }
@@ -45,20 +46,21 @@ $grid.find('.col').each(function (i, gridItem) {
     bindDraggie(gridItem);
 });
 
-function bindDraggie(gridItem){
+function bindDraggie(gridItem) {
     let handle = gridItem.querySelectorAll(".card-title, .card-img-top, .card-text");
     var draggie = new Draggabilly(gridItem, {handle: handle});
 
     let id = gridItem.children[0].getAttribute("data-id");
-    let xPos = gridItem.children[0].getAttribute("x-pos");
-    let yPos = gridItem.children[0].getAttribute("y-pos");
+
 
     allDraggies[id] = draggie;
-    if(gridItem.children[0].getAttribute("is-pinned") === "true"){
+    if (gridItem.children[0].getAttribute("is-pinned") === "true") {
         console.log(allDraggies[id]);
         // $grid.packery("stamp",$(gridItem));
+        allDraggies[id].disable();
     }
-    draggie.setPosition(xPos,yPos);
+
+    console.log(draggie);
 
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
@@ -66,13 +68,11 @@ function bindDraggie(gridItem){
 
 
 function orderItems() {
-    let order = {}
+    let order = []
     $grid.packery('getItemElements').forEach(col => {
-        order[`${col.querySelector(".appCard").getAttribute("data-id")}`] =allDraggies[col.querySelector(".appCard").getAttribute("data-id")].position ;
+        order.push(col.querySelector(".appCard").getAttribute("data-id"));
     });
     let data = {};
-    console.log(order);
-    console.log(allDraggies)
 
     data['order'] = order;
     console.log(data);
@@ -115,7 +115,7 @@ window.addEventListener("load", () => {
     })
 })
 
-function addTaskContainers(task){
+function addTaskContainers(task) {
     drake.containers.push(task);
     allTaskContainers.push(task);
 }
@@ -271,7 +271,8 @@ document.querySelectorAll(".add-label-button").forEach(addButton => {
     addLabelButtonListener(addButton);
 
 })
-function addLabelButtonListener(addButton){
+
+function addLabelButtonListener(addButton) {
     let labelSelector = new bootstrap.Popover(addButton, {
         container: 'body',
         placement: 'bottom',
@@ -332,7 +333,7 @@ document.querySelectorAll(".labels").forEach(addButton => {
 
 
     addButton.addEventListener("show.bs.popover", (e) => {
-``
+        ``
         addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
             allActive.push(pill.getAttribute("name"));
         })
@@ -572,7 +573,7 @@ $('#saveTasksButton').click(function () {
             let title = tCardObj['title'];
             let taskArray = tCardObj['tasks'];
 
-            let template = makeTaskCard(cardId,title,taskArray);
+            let template = makeTaskCard(cardId, title, taskArray);
 
             let element = $($.parseHTML(template));
 
@@ -585,16 +586,16 @@ $('#saveTasksButton').click(function () {
 
             hideTaskHelpers(element[0].querySelector(".helper-task-dropper"));
 
-            element[0].querySelectorAll(".card-title, .card-text, .card-task").forEach(content=>{
+            element[0].querySelectorAll(".card-title, .card-text, .card-task").forEach(content => {
                 editContentEvent(content);
             })
             //TODO: bug ko ce imas selektirano na inputo i ne se pojavuva posle
             addTaskContainers(element[0].querySelector(".taskListView"));
 
-            element[0].querySelectorAll(".taskCheckmark").forEach(elem=>{
+            element[0].querySelectorAll(".taskCheckmark").forEach(elem => {
                 changeCompletionOfTask(elem);
             })
-            element[0].querySelectorAll(".delete-task-button").forEach(elem=>{
+            element[0].querySelectorAll(".delete-task-button").forEach(elem => {
                 addDeleteTaskEvent(elem);
             })
 
@@ -618,7 +619,7 @@ $('#saveTasksButton').click(function () {
 });
 
 
-function makeTaskCard(id, title, taskArray){
+function makeTaskCard(id, title, taskArray) {
     const date = new Date();
     let day = date.getDate();
     let month = date.getMonth();
@@ -644,8 +645,8 @@ function makeTaskCard(id, title, taskArray){
                     <form>
                         <ul class="list-group list-group-flush taskListView">
                         `
-        for(let i = 0 ; i < taskArray.length; i++){
-            template += `<li class="list-group-item task-li ">
+    for (let i = 0; i < taskArray.length; i++) {
+        template += `<li class="list-group-item task-li ">
                 <input type="checkbox" ${taskArray[i]["isCompleted"] ? "checked" : ""}
                        class="form-check-input taskCheckmark"
                        name="${taskArray[i]["id"]}"
@@ -660,10 +661,10 @@ function makeTaskCard(id, title, taskArray){
                         <i class="fa-solid fa-x"></i>
                     </div>
             </li>`
-        }
+    }
 
 
-    template +=`
+    template += `
                         </ul>
                         <div class="helper-task-dropper">
                             Drag task here
@@ -722,6 +723,7 @@ function makeTaskCard(id, title, taskArray){
     </div>`;
     return template;
 }
+
 $('#saveNoteButton').click(() => {
 
     savingStatus.hidden = false;
@@ -755,7 +757,7 @@ $('#saveNoteButton').click(() => {
             addColorButtonListener(element[0].querySelector(".add-color-button"));
             addLabelButtonListener(element[0].querySelector(".add-label-button"));
 
-            element[0].querySelectorAll(".card-title, .card-text").forEach(content=>{
+            element[0].querySelectorAll(".card-title, .card-text").forEach(content => {
                 editContentEvent(content);
             })
 
@@ -1049,7 +1051,7 @@ document.querySelectorAll(".card-title, .card-text, .card-task").forEach(content
     editContentEvent(content);
 })
 
-function editContentEvent(content){
+function editContentEvent(content) {
     content.addEventListener("dblclick", () => {
 
         content.classList.add("editing-title")
@@ -1174,7 +1176,8 @@ function sendEdit(id, text, type) {
 document.querySelectorAll(".add-new-task-input").forEach(taskInput => {
     taskInputEvent(taskInput);
 })
-function taskInputEvent(taskInput){
+
+function taskInputEvent(taskInput) {
     $(taskInput).hide();
     taskInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -1214,6 +1217,7 @@ function taskInputEvent(taskInput){
         }
     })
 }
+
 function getNewTaskToCardHTML(id, text) {
     let template = `<li class="list-group-item ">
                     <input type="checkbox"
@@ -1233,7 +1237,8 @@ function getNewTaskToCardHTML(id, text) {
 document.querySelectorAll(".add-new-task-button").forEach(button => {
     addNewTaskButtonEvent(button);
 })
-function addNewTaskButtonEvent(button){
+
+function addNewTaskButtonEvent(button) {
     button.addEventListener("click", () => {
         let input = $(button).parent().find(".add-new-task-input");
         if (!input.is(":visible")) {
@@ -1301,9 +1306,9 @@ function addPinEvent(pin) {
         data['xPos'] = position["x"];
         data['yPos'] = position["y"];
 
-        if(pin.classList.contains("isPinned")){
+        if (pin.classList.contains("isPinned")) {
             pin.classList.remove("isPinned");
-        }else{
+        } else {
             pin.classList.add("isPinned");
         }
 
@@ -1417,7 +1422,6 @@ document.addEventListener('DOMContentLoaded', function () {
         element.innerHTML = element.textContent; // Remove the highlighting
     }
 });
-
 
 
 // //////////////////////////////////////////////////////////////////////////////////
