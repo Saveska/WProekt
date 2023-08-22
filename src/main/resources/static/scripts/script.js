@@ -6,6 +6,7 @@ const notesContainer = document.getElementById("notesContainer");
 const savingStatus = document.getElementById("status-spinner");
 const addImageModal = document.getElementById('addImageModal')
 const labelPopover = document.getElementById('labeladder-popover')
+const popoverInput = labelPopover.querySelector(".newLabelInput");
 
 const labelPopoverCard = document.getElementById('labeladder-popover-card')
 
@@ -49,8 +50,15 @@ function bindDraggie(gridItem){
     var draggie = new Draggabilly(gridItem, {handle: handle});
 
     let id = gridItem.children[0].getAttribute("data-id");
+    let xPos = gridItem.children[0].getAttribute("x-pos");
+    let yPos = gridItem.children[0].getAttribute("y-pos");
 
     allDraggies[id] = draggie;
+    if(gridItem.children[0].getAttribute("is-pinned") === "true"){
+        console.log(allDraggies[id]);
+        // $grid.packery("stamp",$(gridItem));
+    }
+    draggie.setPosition(xPos,yPos);
 
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
@@ -58,11 +66,13 @@ function bindDraggie(gridItem){
 
 
 function orderItems() {
-    let order = []
+    let order = {}
     $grid.packery('getItemElements').forEach(col => {
-        order.push(col.querySelector(".appCard").getAttribute("data-id"));
+        order[`${col.querySelector(".appCard").getAttribute("data-id")}`] =allDraggies[col.querySelector(".appCard").getAttribute("data-id")].position ;
     });
     let data = {};
+    console.log(order);
+    console.log(allDraggies)
 
     data['order'] = order;
     console.log(data);
@@ -181,7 +191,8 @@ console.log(drake);
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
     addColorButtonListener(colorButton);
 })
-function addColorButtonListener(colorButton){
+
+function addColorButtonListener(colorButton) {
     let colorSelector = new bootstrap.Popover(colorButton, {
         container: 'body',
         placement: 'bottom',
@@ -190,19 +201,21 @@ function addColorButtonListener(colorButton){
         trigger: 'click',
         customClass: 'color-popover',
         content: document.getElementById('colorpopover-content'),
-    })
-    let popovercont = document.getElementById('colorpopover-content')
+    });
+    let popovercont = document.getElementById('colorpopover-content');
 
     document.addEventListener("click", () => {
         colorSelector.hide();
-    })
+    });
     colorButton.addEventListener('show.bs.popover', () => {
         colorButton.classList.add('focused-color-button');
-    })
+    });
     colorButton.addEventListener('hide.bs.popover', () => {
         colorButton.classList.remove('focused-color-button');
-    })
+    });
+
 }
+
 
 // document.querySelectorAll(".add-label-button").forEach(addButton => {
 //     let labelSelector = new bootstrap.Popover(addButton, {
@@ -315,12 +328,11 @@ document.querySelectorAll(".labels").forEach(addButton => {
         content: labelPopover,
     })
 
-    let popoverInput = labelPopover.querySelector("input");
     let allActive = [];
 
 
     addButton.addEventListener("show.bs.popover", (e) => {
-
+``
         addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
             allActive.push(pill.getAttribute("name"));
         })
@@ -1283,8 +1295,17 @@ function addPinEvent(pin) {
         console.log(pin.parentElement.parentElement);
         let cardId = pin.parentElement.parentElement.getAttribute("data-id");
         let data = {};
+        let position = allDraggies[cardId].position;
 
         data['cardId'] = cardId;
+        data['xPos'] = position["x"];
+        data['yPos'] = position["y"];
+
+        if(pin.classList.contains("isPinned")){
+            pin.classList.remove("isPinned");
+        }else{
+            pin.classList.add("isPinned");
+        }
 
         $.ajax({
             url: 'togglePin',

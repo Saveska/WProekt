@@ -7,6 +7,7 @@ import com.wproekt.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CardService {
     boolean putCardInArchive(User user, Long id);
@@ -26,9 +27,8 @@ public interface CardService {
 
     Card removeLabel(String username, Long cardId, Long labelId);
 
-    Card togglePin(Long cardId);
-
-    List<Card> reorderUsersCard(String username, List<Object> cardIds);
+    Card togglePin(Long cardId, Integer xPos, Integer yPos);
+    List<Card> reorderUsersCard(String username, Map<String,Object> cardIds);
     Card deleteImage(String username, Long cardId);
 
 }
