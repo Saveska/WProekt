@@ -28,7 +28,7 @@ public interface CardService {
     Card removeLabel(String username, Long cardId, Long labelId);
 
     Card togglePin(Long cardId, Integer xPos, Integer yPos);
-    List<Card> reorderUsersCard(String username, Map<String,Object> cardIds);
+    List<Card> reorderUsersCard(String username, List<Object> cardIds);
     Card deleteImage(String username, Long cardId);
 
 }

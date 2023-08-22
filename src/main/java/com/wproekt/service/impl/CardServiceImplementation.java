@@ -11,23 +11,19 @@ import com.wproekt.repository.NoteRepository;
 import com.wproekt.repository.UserRepository;
 import com.wproekt.service.CardService;
 import com.wproekt.service.UserService;
-import com.wproekt.web.TaskController;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Service
@@ -183,28 +179,37 @@ public class CardServiceImplementation implements CardService {
     }
 
     @Override
-    public List<Card> reorderUsersCard(String username, Map<String,Object> stringObjectMap) {
+    public List<Card> reorderUsersCard(String username, List<Object> cardIds) {
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
 
         List<Card> userCards = user.getCards();
-
-        userCards.forEach(card->{
-            Long cardId = card.getId();
-
-            Object obj = stringObjectMap.get(String.valueOf(cardId));
-            System.out.println(obj);
-        });
-        //TODO: od ovde
-//        for(int i = 0 ; i < cardIds.size(); i++){
-//            Long id = Long.parseLong(cardIds.get(i).toString());
-//            System.out.println(cardIds.get(i));
-//            System.out.println(userCards);
-//            System.out.println(id);
-//            if(userCards.stream().anyMatch(card->card.getId().equals(id))){
-//                System.out.println("test");
-//                userCards.stream().filter(card->card.getId().equals(id)).findFirst().get().setPosition(i);
+//        System.out.println(stringObjectMap);
+//        AtomicInteger position = new AtomicInteger();
+//        stringObjectMap.forEach((cardId,obj)->{
+//
+//            Integer xPos = Integer.valueOf(obj.toString().split(",")[0].split("=")[1]);
+//            Integer yPos = Integer.valueOf(obj.toString().split(",")[1].split("=")[1].replace("}",""));
+//
+//            if(userCards.stream().anyMatch(card-> Objects.equals(card.getId(), Long.valueOf(cardId)))){
+//                Card cardObj = userCards.stream().filter(card-> Objects.equals(card.getId(), Long.valueOf(cardId))).findFirst().get();
+//                cardObj.setXPosition(xPos);
+//                cardObj.setYPosition(yPos);
+//                cardObj.setPosition(position.get());
 //            }
-//        }
+//            position.getAndIncrement();
+//
+//        });
+        //TODO: od ovde
+        for(int i = 0 ; i < cardIds.size(); i++){
+            Long id = Long.parseLong(cardIds.get(i).toString());
+            System.out.println(cardIds.get(i));
+            System.out.println(userCards);
+            System.out.println(id);
+            if(userCards.stream().anyMatch(card->card.getId().equals(id))){
+                System.out.println("test");
+                userCards.stream().filter(card->card.getId().equals(id)).findFirst().get().setPosition(i);
+            }
+        }
         return cardRepository.saveAll(userCards);
 
     }
