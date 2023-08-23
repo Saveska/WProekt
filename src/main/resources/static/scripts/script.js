@@ -283,16 +283,20 @@ function addLabelButtonListener(addButton) {
         content: labelPopoverCard,
     })
 
-    // let popoverInput = labelPopover.querySelector("input");
+
     let allActive = [];
 
+    let cardId = addButton.getAttribute("data-id");
 
     addButton.addEventListener("show.bs.popover", (e) => {
 
         addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
             allActive.push(pill.getAttribute("name"));
         })
-        popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
+        let popoverElem = document.querySelector("#labeladder-popover-card")
+
+        popoverElem.setAttribute("data-id",cardId);
+
         labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
             labelCheckmark.checked = allActive.includes(labelCheckmark.name);
         })
@@ -460,9 +464,9 @@ function addLabelCheckmarkEvent(label) {
         let data = {};
 
         let labelId = label.getAttribute("name");
-        let labelInput = labelPopoverCard.querySelector("input");
+        let container = label.parentElement.parentElement.parentElement.parentElement.parentElement;
 
-        let cardId = labelInput.getAttribute("data-id");
+        let cardId = container.getAttribute("data-id");
 
 
         data["labelId"] = labelId;
