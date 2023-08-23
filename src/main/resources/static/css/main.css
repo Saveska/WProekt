@@ -761,12 +761,22 @@ textarea {
     background-color:  var(--brighter);
     font-weight: bold;
 }
+
+.pinnedCard{
+    /*box-shadow: 0 0 15px 3px red;*/
+}
 .appCard{
     z-index: 100;
+    transition: 0.3s all;
 }
 .pinnedCard > .appCard{
     z-index: 1000;
-    box-shadow: inset 0px 0px 15px 3px var(--c);
+    box-shadow: inset 0px 0px 15px 5px var(--c),
+    0 0 15px 3px red;
+
+    transform: scale(1.05) translate(-4%,0);
+
+
     background-color: rgb(37, 42, 46);
 
 }

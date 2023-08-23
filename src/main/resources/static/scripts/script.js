@@ -1297,8 +1297,8 @@ function addPinEvent(pin) {
     pin.addEventListener("click", () => {
         savingStatus.hidden = false;
 
-        console.log(pin.parentElement.parentElement);
-        let cardId = pin.parentElement.parentElement.getAttribute("data-id");
+        let card = pin.parentElement.parentElement;
+        let cardId = card.getAttribute("data-id");
         let data = {};
         let position = allDraggies[cardId].position;
 
@@ -1308,9 +1308,15 @@ function addPinEvent(pin) {
 
         if (pin.classList.contains("isPinned")) {
             pin.classList.remove("isPinned");
+            card.parentElement.classList.remove("pinnedCard");
+            allDraggies[cardId].enable();
         } else {
             pin.classList.add("isPinned");
+            card.parentElement.classList.add("pinnedCard");
+            allDraggies[cardId].disable();
+
         }
+
 
         $.ajax({
             url: 'togglePin',
