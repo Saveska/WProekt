@@ -295,7 +295,7 @@ function addLabelButtonListener(addButton) {
         })
         let popoverElem = document.querySelector("#labeladder-popover-card")
 
-        popoverElem.setAttribute("data-id",cardId);
+        popoverElem.setAttribute("data-id", cardId);
 
         labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
             labelCheckmark.checked = allActive.includes(labelCheckmark.name);
@@ -488,9 +488,13 @@ function addLabelCheckmarkEvent(label) {
                     let id = dataP[1];
                     let template = $(getLabelPillHTML(id, name));
 
+                    console.log(template);
+
                     document.querySelectorAll(".appCard").forEach(card => {
 
                         if (card.getAttribute("data-id") === cardId) {
+
+                            addFilterByLabelEvent(template[0]);
                             template.hide().appendTo(card.querySelector(".label-pill-container")).fadeIn("fast", () => {
                                 $grid.packery("shiftLayout");
                             });
@@ -501,8 +505,9 @@ function addLabelCheckmarkEvent(label) {
                         if (card.getAttribute("data-id") === cardId) {
 
                             card.querySelectorAll(".label-pill").forEach(pill => {
+
                                 if (pill.getAttribute("name") === labelId) {
-                                    pill.parentElement.remove();
+                                    pill.remove();
                                 }
                             });
 
@@ -521,11 +526,11 @@ function addLabelCheckmarkEvent(label) {
 }
 
 function getLabelPillHTML(id, name) {
-    let template = `<a href="/label/${id}">
+    let template = `
                         <div class="label-pill" name="${id}"> 
                             ${name}
                         </div>
-                   </a>`;
+                   `;
     return template;
 }
 
@@ -587,6 +592,7 @@ $('#saveTasksButton').click(function () {
 
             addColorButtonListener(element[0].querySelector(".add-color-button"));
             addLabelButtonListener(element[0].querySelector(".add-label-button"));
+
 
             hideTaskHelpers(element[0].querySelector(".helper-task-dropper"));
 
@@ -1420,7 +1426,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
+
+
     });
+    document.querySelectorAll(".label-pill").forEach(label => {
+        addFilterByLabelEvent(label);
+    })
 
     function highlightText(element, term) {
         const regex = new RegExp(`(${term})`, 'gi');
@@ -1431,8 +1442,79 @@ document.addEventListener('DOMContentLoaded', function () {
     function unhighlightText(element) {
         element.innerHTML = element.textContent; // Remove the highlighting
     }
-});
 
+
+
+
+});
+function highlightLabel(label){
+    label.classList.add("highlight-label");
+}
+function unhighlightLabel(label){
+    label.classList.remove("highlight-label");
+}
+
+function addFilterByLabelEvent(label) {
+    label.addEventListener("click", () => {
+        let labelId = label.getAttribute("name");
+        console.log(labelId);
+        const notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+        console.log(notesAndTasks);
+        notesAndTasks.forEach(function (card) {
+            const cardTitleElement = card.querySelector('.card-title');
+            const cardContentElement = card.querySelector('.card-text');
+
+
+            // Search within tasks if it's a task card
+
+            const labelsFromCard = card.querySelectorAll('.label-pill');
+            let shouldDisplayCard = false; // Keep track if any task matches
+
+            labelsFromCard.forEach(function (labelItem) {
+
+                const labelCardId = labelItem.getAttribute("name");
+
+                if (labelCardId === labelId) {
+                    highlightLabel(labelItem);
+                    shouldDisplayCard = true;
+                } else {
+                    unhighlightLabel(labelItem);
+                }
+            });
+
+            // card.style.display = shouldDisplayCard ? 'block' : 'none'; // Show the entire task card if any task matches
+            if(!shouldDisplayCard){
+                $(card).fadeOut("fast",()=>{
+                    $grid.packery("shiftLayout");
+                });
+            }else{
+                $(card).fadeIn("fast",()=>{
+                    $grid.packery("shiftLayout");
+                })
+            }
+
+        });
+
+        document.addEventListener("click",defocusClick);
+        function defocusClick(e){
+
+            if(e.target.classList.contains("label-pill")){
+                return;
+            }
+
+            notesAndTasks.forEach((card)=>{
+                card.style.display = 'block';
+            })
+            $grid.packery("shiftLayout");
+
+            document.querySelectorAll(".highlight-label").forEach(highlightedLabel=>{
+                highlightedLabel.classList.remove("highlight-label");
+            })
+            document.removeEventListener("click",defocusClick);
+        }
+    })
+
+}
 
 // //////////////////////////////////////////////////////////////////////////////////
 

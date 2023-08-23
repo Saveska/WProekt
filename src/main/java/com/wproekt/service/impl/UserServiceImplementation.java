@@ -139,6 +139,21 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public List<Card> getLabelFilteredCards(String username, Long labelId) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            User user = userRepository.findByUsername(username).get();
+            Label label = labelRepository.getReferenceById(labelId);
+
+            List<Card> cards = user.getCards();
+            cards = cards.stream().filter(card -> card.getLabel().contains(label)).toList();
+            return cards;
+
+        } else {
+            throw new UserDoesntExistException();
+        }
+    }
+
+    @Override
     public Note addNoteCard(String username, String title, String text) {
         if (userRepository.findByUsername(username).isPresent()) {
             User user = userRepository.findByUsername(username).get();

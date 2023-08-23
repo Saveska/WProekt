@@ -197,7 +197,7 @@
                                  th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
 
-                                <img th:if="${card.getImageLink() != null}" th:src="${card.getImageLink()}"
+                                <img th:if="${card.getImageLink() != null}" th:src="${'/' +card.getImageLink()}"
                                      class="card-img-top" alt="...">
                                 <div th:if="${card.getImageLink() != null}" class="delete-image-button">
                                     <i class="fa-regular fa-square-minus"></i>
@@ -253,7 +253,7 @@
                                                     <div class="label-pill" th:text="${label.getName()}"
                                                          th:name="${label.getId()}"> test label
                                                     </div>
-                                                </a>
+<!--                                                </a>-->
                                             </th:block>
                                         </div>
                                         <button class="btn add-label-button" th:data-id="${card.id}">
