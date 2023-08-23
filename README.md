@@ -12,26 +12,34 @@
 
 ---
 
-## 📝 Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
+## 🧐 
 
-## 🧐 About <a name = "about"></a>
+Семинарска задача по Веб Програмирање:
 
-Write about 1-2 paragraphs describing the purpose of your project.
+Апликација за менаџирање на таскови
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+## ✍️ Создадено од
+
+- Марија Савеска 201062 - [@Saveska](https://github.com/Saveska)
+- Давид Арсовски 206003 - [@arsovskii](https://github.com/arsovskii)
+
+## 🏁 Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing
 purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+
+
+## ⛏️ Искористени технологии
+
+- [Spring Framework](https://spring.io/) - Backend Framework
+- [Bootstrap](https://getbootstrap.com/) - Frontend UI Library
+- [Font Awesome](https://fontawesome.com) - Icon Library
+- [JQuery](https://jquery.com/) - Javascript Library
+- [Packery](https://packery.metafizzy.co/)
+- [Draggabilly](https://draggabilly.desandro.com/)
+- [Dragula](https://bevacqua.github.io/dragula/) 
+
 
 ### Prerequisites
 
@@ -87,18 +95,6 @@ Add notes about how to use the system.
 
 Add additional notes about how to deploy this on a live system.
 
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [Spring Framework](https://spring.io/) - Backend Framework
-- [Bootstrap](https://getbootstrap.com/) - Frontend UI Library
-- [Font Awesome](https://fontawesome.com) - Icon Library
-- [JQuery](https://jquery.com/) - Javascript Library
-- [Packeryu](https://packery.metafizzy.co/) - Javascript Library
-
-## ✍️ Authors <a name = "authors"></a>
-
-- [@Saveska](https://github.com/Saveska) 
-- [@arsovskii](https://github.com/arsovskii)
 
 
 
