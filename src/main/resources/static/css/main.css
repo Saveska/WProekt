@@ -525,6 +525,7 @@ textarea {
     padding: 2px 10px;
     margin-bottom:5px;
 
+    cursor:pointer;
     width: auto;
     background-color: var(--backgroundC);
     color: var(--brighter);
@@ -532,6 +533,9 @@ textarea {
     filter: brightness(150%);
     transition: 0.1s all;
 
+}
+.highlight-label{
+    box-shadow: 0px 0px 10px 2px var(--brighter);
 }
 
 .add-label-button {

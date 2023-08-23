@@ -44,7 +44,6 @@ abstract public class Card {
         this.title = title;
         this.dateCreated = LocalDateTime.now();
         this.dateLastUpdated = LocalDateTime.now();
-        //TODO: od ajax update da se menuva
         this.isPinned = false;
         this.isArchived = false;
         this.isInBin = false;

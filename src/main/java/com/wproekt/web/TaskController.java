@@ -86,14 +86,7 @@ public class TaskController {
         return "landingPage";
     }
 
-    @GetMapping("/label/{labelId}")
-    public String getLabelPage(Authentication authentication,
-                               @PathVariable Long labelId){
-        User currentUser = (User) authentication.getPrincipal();
-        System.out.println(labelId);
-        //TODO:
-        return "landingPage";
-    }
+
 
     @PostMapping("/uploadimage")
     public String PostUploadImage(Authentication authentication,
