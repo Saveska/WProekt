@@ -293,9 +293,8 @@ function addLabelButtonListener(addButton) {
         addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
             allActive.push(pill.getAttribute("name"));
         })
-        let popoverElem = document.querySelector("#labeladder-popover-card")
 
-        popoverElem.setAttribute("data-id", cardId);
+        labelPopoverCard.setAttribute("data-id", cardId);
 
         labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
             labelCheckmark.checked = allActive.includes(labelCheckmark.name);
@@ -389,6 +388,11 @@ function addRemoveButtonOnClick(removeButton) {
                         );
                     }
                 })
+                labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(checkmark=>{
+                    if(checkmark.getAttribute("name") === removeButton.value){
+                        $(checkmark.parentElement.parentElement).fadeOut("fast");
+                    }
+                })
                 removeButton.parentElement.remove();
 
             }, error: (jqXhr) => {
@@ -407,8 +411,7 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
             savingStatus.hidden = false;
 
             let data = {};
-            console.log(e.target.value)
-            console.log(e.target.getAttribute("data-id"))
+
             let name = e.target.value;
             data['name'] = name;
 
@@ -424,8 +427,15 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
                     let name = dataP[1];
 
                     let template = getLabelHTML(id, name);
+                    let popoverTemplate = getLabelPopoverNewEntryHTML(id, name);
+
                     labelPopover.children[0].children[1].insertAdjacentHTML('afterbegin', template)
-                    addLabelCheckmarkEvent(labelPopover.children[0].children[1].querySelectorAll(".labelCheckmark").item(0));
+
+
+
+                    labelPopoverCard.children[0].children[0].insertAdjacentHTML('afterbegin', popoverTemplate)
+
+                    addLabelCheckmarkEvent(labelPopoverCard.children[0].children[0].querySelectorAll(".labelCheckmark").item(0));
                     $grid.packery('shiftLayout');
                     savingStatus.hidden = true;
 
@@ -450,6 +460,19 @@ function getLabelHTML(id, name) {
                            </button>
                           </li>`
 
+    return template;
+}
+
+function getLabelPopoverNewEntryHTML(id, name) {
+    let template = ` <li class="list-group-item">
+                          <label>
+                              <input type="checkbox"
+                                     class="form-check-input labelCheckmark"
+                                     name="${id}"
+                              >
+                              <span>${name}</span>
+                          </label>
+                      </li>`;
     return template;
 }
 
@@ -1444,13 +1467,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
-
 });
-function highlightLabel(label){
+
+function highlightLabel(label) {
     label.classList.add("highlight-label");
 }
-function unhighlightLabel(label){
+
+function unhighlightLabel(label) {
     label.classList.remove("highlight-label");
 }
 
@@ -1483,34 +1506,35 @@ function addFilterByLabelEvent(label) {
             });
 
             // card.style.display = shouldDisplayCard ? 'block' : 'none'; // Show the entire task card if any task matches
-            if(!shouldDisplayCard){
-                $(card).fadeOut("fast",()=>{
+            if (!shouldDisplayCard) {
+                $(card).fadeOut("fast", () => {
                     $grid.packery("shiftLayout");
                 });
-            }else{
-                $(card).fadeIn("fast",()=>{
+            } else {
+                $(card).fadeIn("fast", () => {
                     $grid.packery("shiftLayout");
                 })
             }
 
         });
 
-        document.addEventListener("click",defocusClick);
-        function defocusClick(e){
+        document.addEventListener("click", defocusClick);
 
-            if(e.target.classList.contains("label-pill")){
+        function defocusClick(e) {
+
+            if (e.target.classList.contains("label-pill")) {
                 return;
             }
 
-            notesAndTasks.forEach((card)=>{
+            notesAndTasks.forEach((card) => {
                 card.style.display = 'block';
             })
             $grid.packery("shiftLayout");
 
-            document.querySelectorAll(".highlight-label").forEach(highlightedLabel=>{
+            document.querySelectorAll(".highlight-label").forEach(highlightedLabel => {
                 highlightedLabel.classList.remove("highlight-label");
             })
-            document.removeEventListener("click",defocusClick);
+            document.removeEventListener("click", defocusClick);
         }
     })
 
