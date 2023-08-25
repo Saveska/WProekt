@@ -10,4 +10,6 @@ public interface LabelRepository extends JpaRepository<Label,Long> {
     @Modifying
     @Query(value = "delete from card_label where label_id = :id",nativeQuery = true)
     void deleteFromCardLabel(Long id);
+
+
 }

@@ -448,7 +448,7 @@ public class AjaxTaskController {
 
 
             List<Object> array = jo.getJSONArray("order").toList();
-            cardService.reorderUsersCard(currentUser.getUsername(),array);
+            cardService.reorderUsersCard(currentUser.getUsername(), array);
 
             return new ArrayList<>();
 
@@ -475,6 +475,53 @@ public class AjaxTaskController {
             cardService.deleteImage(currentUser.getUsername(), cardId);
 
             return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @PostMapping("/restoreCard")
+    @ResponseBody
+    public boolean restoreCardAjax(Authentication authentication,
+                                   @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long cardId = jo.getLong("cardId");
+
+            Card card = cardService.restoreCard(cardId);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @PostMapping("/deleteCardPermanent")
+    @ResponseBody
+    public boolean deleteCardAjax(Authentication authentication,
+                                  @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            Long cardId = jo.getLong("cardId");
+
+
+            return cardService.deletePermanently(cardId);
 
         } catch (Exception e) {
             e.printStackTrace();

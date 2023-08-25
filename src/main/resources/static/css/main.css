@@ -243,7 +243,6 @@ textarea {
 }
 
 
-
 .pin {
     --bs-btn-color: white;
     --bs-btn-hover-color: rgba(255, 255, 255, 0.75);
@@ -251,12 +250,13 @@ textarea {
     transition: 0.2s ease-in-out;
     font-size: 1.5rem;
 }
-.isPinned{
-    opacity:1;
-    color:var(--brighter);
+
+.isPinned {
+    opacity: 1;
+    color: var(--brighter);
 }
 
-.archive-note-button{
+.archive-note-button {
     border-radius: 0;
     color: white;
     font-size: 1.2rem;
@@ -351,7 +351,7 @@ textarea {
     opacity: 1;
 }
 
-.appCard:hover > div > .archive-note-button{
+.appCard:hover > div > .archive-note-button {
     opacity: 1;
 }
 
@@ -523,9 +523,9 @@ textarea {
     display: inline-block;
     border-radius: 500px;
     padding: 2px 10px;
-    margin-bottom:5px;
+    margin-bottom: 5px;
 
-    cursor:pointer;
+    cursor: pointer;
     width: auto;
     background-color: var(--backgroundC);
     color: var(--brighter);
@@ -534,7 +534,8 @@ textarea {
     transition: 0.1s all;
 
 }
-.highlight-label{
+
+.highlight-label {
     box-shadow: 0px 0px 10px 2px var(--brighter);
 }
 
@@ -581,7 +582,7 @@ textarea {
 .remove-label-button {
     display: block;
     background-color: red;
-    float:right;
+    float: right;
     margin-right: auto;
 }
 
@@ -611,7 +612,7 @@ textarea {
     color: rgb(255, 255, 255);
 }
 
-.add-new-task-button{
+.add-new-task-button {
     --d: 5px;
 
     width: 100%;
@@ -657,38 +658,39 @@ textarea {
 }
 
 
-.add-new-task-input{
-    width:100%;
-    background : var(--backgroundC);
+.add-new-task-input {
+    width: 100%;
+    background: var(--backgroundC);
     color: var(--brighter);
     border-bottom: .2em solid var(--brighter);
 
 }
 
-.task-li{
+.task-li {
     position: relative;
 }
 
-.delete-task-button{
-    position:absolute;
-    top:50%;
-    right:0;
+.delete-task-button {
+    position: absolute;
+    top: 50%;
+    right: 0;
     opacity: 0;
     transition: 0.1s all;
-    color:var(--brighter);
-    transform:translate(0,-50%);
-    filter:brightness(150%);
-    cursor:pointer;
+    color: var(--brighter);
+    transform: translate(0, -50%);
+    filter: brightness(150%);
+    cursor: pointer;
 }
-.task-li:hover > .delete-task-button{
+
+.task-li:hover > .delete-task-button {
     opacity: 1;
 }
 
-.gu-mirror{
+.gu-mirror {
     opacity: 1;
 
     background-color: rgb(37, 42, 46);
-    color:white;
+    color: white;
     font-weight: 500;
     padding: 8px;
     cursor: grabbing;
@@ -706,81 +708,116 @@ textarea {
     background-color: rgb(186, 207, 225);
     border: none !important;
 }
-.gu-mirror .strike{
-    animation:none;
-}
-.gu-mirror .delete-task-button{
-    display:none;
-}
-.gu-unselectable{
-    -webkit-user-select: none!important;
-    -moz-user-select: none!important;
-    -ms-user-select: none!important;
-    user-select: none!important
-}
-.gu-hide {
-    display: none!important
+
+.gu-mirror .strike {
+    animation: none;
 }
 
-.gu-transit{
+.gu-mirror .delete-task-button {
+    display: none;
+}
+
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important
+}
+
+.gu-hide {
+    display: none !important
+}
+
+.gu-transit {
     background-color: var(--c);
 }
-.helper-task-dropper{
+
+.helper-task-dropper {
     text-align: center;
     border: 3px dashed var(--brighter);
 }
 
-.delete-image-button{
-    position:absolute;
-    cursor:pointer;
-    top:0;
-    left:0;
-    margin:5px;
-    margin-left:10px;
-    color:red;
+.delete-image-button {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    margin-left: 10px;
+    color: red;
     font-size: 24px;
     opacity: 0;
     transition: 0.3s all;
 
 }
-.appCard:hover .delete-image-button{
+
+.appCard:hover .delete-image-button {
     opacity: 0.9;
 }
-.delete-image-button>i{
+
+.delete-image-button > i {
     box-shadow: 1px 0px 400px 10px var(--c);
 
 }
-.time-last-modification{
+
+.time-last-modification {
     text-align: end;
-    padding:3px;
+    padding: 3px;
     opacity: 0;
     transition: 0.3s all ease-in-out;
 }
-.appCard:hover .time-last-modification{
-    opacity:0.8;
+
+.appCard:hover .time-last-modification {
+    opacity: 0.8;
 }
+
 /*  /////////////////////////////////////////////////// */
 
 .highlighted {
-    background-color:  var(--brighter);
+    background-color: var(--brighter);
     font-weight: bold;
 }
 
-.pinnedCard{
+.pinnedCard {
     /*box-shadow: 0 0 15px 3px red;*/
 }
-.appCard{
+
+.appCard {
     z-index: 100;
     transition: 0.3s all;
 }
-.pinnedCard > .appCard{
+
+.pinnedCard > .appCard {
     z-index: 1000;
     box-shadow: inset 0px 0px 15px 5px var(--c),
     0 0 15px 3px red;
 
-    transform: scale(1.05) translate(-4%,0);
+    transform: scale(1.05) translate(-4%, 0);
 
 
     background-color: rgb(37, 42, 46);
 
+}
+
+.restore-note-button {
+    background-color: rgb(13, 163, 243);
+    opacity: 0;
+    transition: 0.3s all;
+}
+.restore-note-button:hover{
+    background-color: rgb(78, 185, 243);
+}
+
+.appCard:hover .restore-note-button {
+    opacity: 1;
+}
+
+.delete-permanent-note-button {
+    opacity: 0;
+    transition: 0.3s all;
+
+}
+
+.appCard:hover .delete-permanent-note-button {
+    opacity: 1;
 }
