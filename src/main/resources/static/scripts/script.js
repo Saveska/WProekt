@@ -7,6 +7,9 @@ const savingStatus = document.getElementById("status-spinner");
 const addImageModal = document.getElementById('addImageModal')
 const labelPopover = document.getElementById('labeladder-popover')
 const popoverInput = labelPopover.querySelector(".newLabelInput");
+const restoreButtons = document.querySelectorAll(".restore-note-button");
+const permaDeleteButtons = document.querySelectorAll(".delete-permanent-note-button");
+
 
 const labelPopoverCard = document.getElementById('labeladder-popover-card')
 
@@ -1557,3 +1560,66 @@ Dropzone.options.imageForm = {
 // let imageDropzone=new Dropzone("#imageForm");
 // console.log(imageDropzone);
 
+restoreButtons.forEach(button=>{
+    button.addEventListener("click",()=>{
+        let data = {}
+
+        let cardId = button.getAttribute("value");
+        data["cardId"] = cardId;
+
+        let cardElem = button.parentElement.parentElement.parentElement;
+
+        $(cardElem).fadeOut("fast",()=>{
+            cardElem.remove();
+            $grid.packery("shiftLayout");
+        })
+
+        $.ajax({
+            url: 'restoreCard',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    });
+
+})
+permaDeleteButtons.forEach(button=>{
+    button.addEventListener("click",()=>{
+        let data = {}
+
+        let cardId = button.getAttribute("value");
+        data["cardId"] = cardId;
+
+        let cardElem = button.parentElement.parentElement.parentElement;
+
+        $(cardElem).fadeOut("fast",()=>{
+            cardElem.remove();
+            $grid.packery("shiftLayout");
+        })
+        //TODO: da ne se gleda + i add task vo archive i trash
+        $.ajax({
+            url: 'deleteCardPermanent',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    });
+});

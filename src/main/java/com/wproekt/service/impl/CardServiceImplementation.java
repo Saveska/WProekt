@@ -14,6 +14,7 @@ import com.wproekt.service.UserService;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
@@ -31,7 +32,7 @@ public class CardServiceImplementation implements CardService {
 
     CardRepository cardRepository;
     UserRepository userRepository;
-    UserService  userService;
+    UserService userService;
     NoteRepository noteRepository;
     LabelRepository labelRepository;
 
@@ -86,10 +87,10 @@ public class CardServiceImplementation implements CardService {
         Card card = cardRepository.getReferenceById(id);
 
         String usernameHash = userService.getHashedUsername(user);
-        try{
+        try {
             Files.createDirectories(Paths.get(UserService.getUploadDir(), usernameHash));
             String uuid = UUID.randomUUID().toString();
-            Path fileNameAndPath = Paths.get(Paths.get(UserService.getUploadDir(), usernameHash).toString(),uuid );
+            Path fileNameAndPath = Paths.get(Paths.get(UserService.getUploadDir(), usernameHash).toString(), uuid);
 
             String imgPath = String.valueOf(Path.of(UserService.getStaticDir()).relativize(fileNameAndPath));
 
@@ -99,7 +100,7 @@ public class CardServiceImplementation implements CardService {
             Files.write(fileNameAndPath, file.getBytes());
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -200,14 +201,14 @@ public class CardServiceImplementation implements CardService {
 //
 //        });
         //TODO: od ovde
-        for(int i = 0 ; i < cardIds.size(); i++){
+        for (int i = 0; i < cardIds.size(); i++) {
             Long id = Long.parseLong(cardIds.get(i).toString());
             System.out.println(cardIds.get(i));
             System.out.println(userCards);
             System.out.println(id);
-            if(userCards.stream().anyMatch(card->card.getId().equals(id))){
+            if (userCards.stream().anyMatch(card -> card.getId().equals(id))) {
                 System.out.println("test");
-                userCards.stream().filter(card->card.getId().equals(id)).findFirst().get().setPosition(i);
+                userCards.stream().filter(card -> card.getId().equals(id)).findFirst().get().setPosition(i);
             }
         }
         return cardRepository.saveAll(userCards);
@@ -219,12 +220,35 @@ public class CardServiceImplementation implements CardService {
         //TODO: da se proveri dali e od user
 
         Card card = cardRepository.getReferenceById(cardId);
-        File image = new File(UserService.getStaticDir()+'\\' +card.getImageLink());
+        File image = new File(UserService.getStaticDir() + '\\' + card.getImageLink());
 
 
         image.delete();
         card.setImageLink(null);
 
         return cardRepository.save(card);
+    }
+
+    @Override
+    public Card restoreCard(Long cardId) {
+        Card card = cardRepository.getReferenceById(cardId);
+
+        card.setIsArchived(false);
+        card.setIsInBin(false);
+
+        return cardRepository.save(card);
+    }
+
+    @Override
+    @Transactional
+    public boolean deletePermanently( Long cardId) {
+        Card card = cardRepository.getReferenceById(cardId);
+
+        card.setLabel(new HashSet<>());
+        cardRepository.deleteFromUserCards(cardId);
+
+        cardRepository.delete(card);
+
+        return true;
     }
 }

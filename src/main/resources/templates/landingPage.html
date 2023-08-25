@@ -16,8 +16,9 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stlyesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.css">
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
 
+    <link rel="icon" th:href="@{/img/icon.ico}">
     <script src="https://kit.fontawesome.com/ccd029d728.js" crossorigin="anonymous"></script>
 </head>
 
@@ -249,11 +250,11 @@
                                     <div class="label-container">
                                         <div class="label-pill-container">
                                             <th:block th:each="label:${card.getLabel()}">
-<!--                                                <a th:href="'/label/'+${label.getId()}">-->
-                                                    <div class="label-pill" th:text="${label.getName()}"
-                                                         th:name="${label.getId()}"> test label
-                                                    </div>
-<!--                                                </a>-->
+                                                <!--                                                <a th:href="'/label/'+${label.getId()}">-->
+                                                <div class="label-pill" th:text="${label.getName()}"
+                                                     th:name="${label.getId()}"> test label
+                                                </div>
+                                                <!--                                                </a>-->
                                             </th:block>
                                         </div>
                                         <button class="btn add-label-button" th:data-id="${card.id}">
@@ -267,32 +268,45 @@
                                 <div class="time-last-modification">
                                     <span th:text="${card.getDateLastUpdated().getDayOfMonth()}"></span>
                                     <span th:text="${card.getDateLastUpdated().getMonth().getDisplayName(1,'en')}"></span>,
-                                    <span  th:text="${card.getDateLastUpdated().getYear()}"></span>
+                                    <span th:text="${card.getDateLastUpdated().getYear()}"></span>
 
                                 </div>
-                                <div class="d-flex flex-row " style="height:50px">
-                                    <button class="flex-grow-1 btn p-2 text-center add-color-button"
-                                            th:value="${card.id}">
-                                        <i class="fa-solid fa-brush"></i>
-                                    </button>
-                                    <button class="flex-grow-1 btn  p-2 text-center add-image-button"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#addImageModal" th:value="${card.id}">
-                                        <i class="fa-solid fa-image"></i>
-                                    </button>
-                                    <button class="flex-grow-1 btn btn-warning rounded-0 p-2 text-white text-center archive-note-button"
-                                            th:value="${card.id}">
-                                        <i class="fa-solid fa-box"></i>
-                                    </button>
-                                    <button class="flex-grow-3 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
-                                            th:value="${card.id}">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                <div class="d-flex flex-row " style="height:50px" th:value="${page}">
+                                    <th:block th:if="${page.equals('home')}">
+                                        <button class="flex-grow-1 btn p-2 text-center add-color-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-brush"></i>
+                                        </button>
+                                        <button class="flex-grow-1 btn  p-2 text-center add-image-button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#addImageModal" th:value="${card.id}">
+                                            <i class="fa-solid fa-image"></i>
+                                        </button>
+                                        <button class="flex-grow-1 btn btn-warning rounded-0 p-2 text-white text-center archive-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-box"></i>
+                                        </button>
+                                        <button class="flex-grow-3 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:if="${page.equals('archive') || page.equals('trash')}">
+                                        <button class="btn w-100 rounded-0 p-2 text-white text-center restore-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-arrow-rotate-left"></i>
+                                        </button>
+                                        <button class="btn btn-danger flex-grow-1 rounded-0 p-2 text-white text-center delete-permanent-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </th:block>
 
                                 </div>
 
                                 <div class="position-absolute top-0 end-0 me-1  ">
-                                    <button class="btn pin mt-0 me-0" th:classappend="${card.getIsPinned() ? 'isPinned' : ''}">
+                                    <button class="btn pin mt-0 me-0"
+                                            th:classappend="${card.getIsPinned() ? 'isPinned' : ''}">
                                         <i class="fa-solid fa-map-pin"></i>
                                         <!--                                    <i class="fa-light fa-map-pin"></i>-->
                                     </button>
@@ -355,7 +369,8 @@
 
                                     <div class="modal-body">
 
-                                        <form th:action="@{/uploadimage}" method="POST" id="imageForm" class="dropzone" enctype="multipart/form-data">
+                                        <form th:action="@{/uploadimage}" method="POST" id="imageForm" class="dropzone"
+                                              enctype="multipart/form-data">
                                             <input type="text" hidden name="cardId" id="addImageModalId">
 
                                         </form>
@@ -380,78 +395,78 @@
                             </div>
                         </div>
 
-<!--                        <div hidden>-->
-<!--                            <div id="labeladder-popover">-->
-<!--                                <div class="container">-->
-<!--                                    <div><label><span>Add new label</span><input type="text"-->
-<!--                                                                                 class="newLabelInput w-100"-->
-<!--                                                                                 name="newLabel">-->
-<!--                                    </label>-->
-<!--                                    </div>-->
-<!--                                    <ul class="list-group list-group-flush">-->
+                        <!--                        <div hidden>-->
+                        <!--                            <div id="labeladder-popover">-->
+                        <!--                                <div class="container">-->
+                        <!--                                    <div><label><span>Add new label</span><input type="text"-->
+                        <!--                                                                                 class="newLabelInput w-100"-->
+                        <!--                                                                                 name="newLabel">-->
+                        <!--                                    </label>-->
+                        <!--                                    </div>-->
+                        <!--                                    <ul class="list-group list-group-flush">-->
 
 
-<!--                                        <th:block th:each="label : ${labels}">-->
+                        <!--                                        <th:block th:each="label : ${labels}">-->
 
-<!--                                            <li class="list-group-item">-->
-<!--                                                <label>-->
-<!--                                                    <input type="checkbox"-->
-<!--                                                           class="form-check-input labelCheckmark"-->
-<!--                                                           th:name="${label.getId()}"-->
-<!--                                                    >-->
-<!--                                                    <span th:text="${label.getName()}"></span>-->
+                        <!--                                            <li class="list-group-item">-->
+                        <!--                                                <label>-->
+                        <!--                                                    <input type="checkbox"-->
+                        <!--                                                           class="form-check-input labelCheckmark"-->
+                        <!--                                                           th:name="${label.getId()}"-->
+                        <!--                                                    >-->
+                        <!--                                                    <span th:text="${label.getName()}"></span>-->
 
-<!--                                                </label>-->
-<!--                                                <button class="btn remove-label-button" th:value="${label.getId()}">-->
-<!--                                                    <i class="fa-solid fa-trash"></i>-->
-<!--                                                </button>-->
-<!--                                            </li>-->
-<!--                                        </th:block>-->
+                        <!--                                                </label>-->
+                        <!--                                                <button class="btn remove-label-button" th:value="${label.getId()}">-->
+                        <!--                                                    <i class="fa-solid fa-trash"></i>-->
+                        <!--                                                </button>-->
+                        <!--                                            </li>-->
+                        <!--                                        </th:block>-->
 
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--            </div>-->
+                        <!--                                    </ul>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
 
 
-<!--            ////////////////////////////////////////////////////////////////////////////////////-->
+                        <!--                    </div>-->
+                        <!--                </div>-->
+
+                        <!--            </div>-->
 
 
-            <div hidden>
-                <div id="labeladder-popover-card">
-                    <div class="container">
-                        <ul class="list-group list-group-flush">
+                        <!--            ////////////////////////////////////////////////////////////////////////////////////-->
 
 
-                            <th:block th:each="label : ${labels}">
+                        <div hidden>
+                            <div id="labeladder-popover-card">
+                                <div class="container">
+                                    <ul class="list-group list-group-flush">
 
-                                <li class="list-group-item">
-                                    <label>
-                                        <input type="checkbox"
-                                               class="form-check-input labelCheckmark"
-                                               th:name="${label.getId()}"
-                                        >
-                                        <span th:text="${label.getName()}"></span>
-                                    </label>
-                                </li>
-                            </th:block>
 
-                        </ul>
+                                        <th:block th:each="label : ${labels}">
+
+                                            <li class="list-group-item">
+                                                <label>
+                                                    <input type="checkbox"
+                                                           class="form-check-input labelCheckmark"
+                                                           th:name="${label.getId()}"
+                                                    >
+                                                    <span th:text="${label.getName()}"></span>
+                                                </label>
+                                            </li>
+                                        </th:block>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
+
             </div>
-
-
-        </div>
-    </div>
-
-</div>
 
 
             <div hidden>
@@ -469,10 +484,10 @@
 
                                 <li class="list-group-item">
                                     <label>
-<!--                                        <input type="checkbox"-->
-<!--                                               class="form-check-input labelCheckmark"-->
-<!--                                               th:name="${label.getId()}"-->
-<!--                                        >-->
+                                        <!--                                        <input type="checkbox"-->
+                                        <!--                                               class="form-check-input labelCheckmark"-->
+                                        <!--                                               th:name="${label.getId()}"-->
+                                        <!--                                        >-->
                                         <span th:text="${label.getName()}"></span>
 
                                     </label>
@@ -494,20 +509,20 @@
 </div>
 <!--            ////////////////////////////////////////////////////////////////////////////////////-->
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-                    crossorigin="anonymous"></script>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
-            <script src="https://unpkg.com/draggabilly@3/dist/draggabilly.pkgd.min.js"></script>
-            <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
-            <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-            <script src="../static/scripts/script.js"></script>
-            <script src="/scripts/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+<script src="https://unpkg.com/draggabilly@3/dist/draggabilly.pkgd.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script src="../static/scripts/script.js"></script>
+<script src="/scripts/script.js"></script>
 
-        </div>
-    </div>
+</div>
+</div>
 </div>
 </body>
 
