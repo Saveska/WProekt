@@ -22,6 +22,19 @@ let allTaskHelpers = [];
 
 const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+addNoCardNotification();
+
+function addNoCardNotification(){
+    let notes = document.querySelectorAll(".appCard");
+    if(notes.length === 0){
+        notesContainer.classList.add("notification-square");
+    }else{
+        notesContainer.classList.remove("notification-square");
+    }
+}
+
+
+
 document.querySelectorAll(".helper-task-dropper").forEach(item => {
     hideTaskHelpers(item);
 })
@@ -644,7 +657,7 @@ $('#saveTasksButton').click(function () {
             $grid.prepend(element[0]).packery('prepended', element[0]);
 
             savingStatus.hidden = true;
-
+            addNoCardNotification();
 
         }, error: (jqXhr) => {
             console.log(jqXhr);
@@ -810,6 +823,7 @@ $('#saveNoteButton').click(() => {
             textNoteInputBox.val("");
 
             savingStatus.hidden = true;
+            addNoCardNotification();
 
 
         }, error: (jqXhr) => {
@@ -873,6 +887,7 @@ function toBinButton(elem) {
                         .packery('shiftLayout');
                     $(elem).remove();
                     savingStatus.hidden = true;
+                    addNoCardNotification();
 
                 }, error: (jqXhr) => {
                     console.log(jqXhr);
@@ -905,6 +920,7 @@ function toArchiveButton(elem) {
                         .packery('shiftLayout');
                     $(elem).remove();
                     savingStatus.hidden = true;
+                    addNoCardNotification();
 
                 }, error: (jqXhr) => {
                     console.log(jqXhr);
@@ -1582,6 +1598,7 @@ restoreButtons.forEach(button => {
             data: JSON.stringify(data),
             success: (dataP) => {
                 savingStatus.hidden = true;
+                addNoCardNotification();
 
 
             }, error: (jqXhr) => {
@@ -1613,6 +1630,7 @@ permaDeleteButtons.forEach(button => {
             data: JSON.stringify(data),
             success: (dataP) => {
                 savingStatus.hidden = true;
+                addNoCardNotification();
 
 
             }, error: (jqXhr) => {
@@ -1639,6 +1657,7 @@ restoreAll.forEach(button => {
             data: JSON.stringify(data),
             success: (dataP) => {
                 savingStatus.hidden = true;
+                addNoCardNotification();
 
 
             }, error: (jqXhr) => {
@@ -1663,6 +1682,7 @@ deleteAll.forEach(button => {
             data: JSON.stringify(data),
             success: (dataP) => {
                 savingStatus.hidden = true;
+                addNoCardNotification();
 
 
             }, error: (jqXhr) => {
