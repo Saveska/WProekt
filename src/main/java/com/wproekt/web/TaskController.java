@@ -83,6 +83,9 @@ public class TaskController {
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "trash");
 
+        Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
+        model.addAttribute("labels", labels);
+
         return "landingPage";
     }
 
@@ -110,6 +113,9 @@ public class TaskController {
 
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "archive");
+
+        Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
+        model.addAttribute("labels", labels);
 
         return "landingPage";
     }

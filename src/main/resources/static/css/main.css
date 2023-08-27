@@ -822,6 +822,12 @@ textarea {
 
 .restore-all-button:hover, .restore-note-button:hover {
     background-color: rgb(78, 185, 243);
+    color:white;
+    border:none;
+}
+.restore-all-button:focus, .restore-all-button:active{
+    color:white !important;
+    border:none;
 }
 
 .appCard:hover .restore-note-button {
@@ -836,4 +842,26 @@ textarea {
 
 .appCard:hover .delete-permanent-note-button {
     opacity: 1;
+}
+
+.notification-square{
+    border: 3px dashed gray;
+    height:60vh!important;
+}
+.notification-square .notification-info{
+    display:block;
+    opacity: 1;
+}
+
+.notification-info{
+    color:white;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size: 2rem;
+    text-align: center;
+    display: none;
+    opacity: 0;
+    transition: 0.3s all;
 }
