@@ -529,4 +529,53 @@ public class AjaxTaskController {
 
         return false;
     }
+
+    @PostMapping("/restoreAll")
+    @ResponseBody
+
+    public boolean restoreAllCardsAjax(Authentication authentication,
+                                       @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            String type = jo.getString("type");
+
+            userService.restoreAllCards(currentUser.getUsername(), type);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @PostMapping("/deleteAll")
+    @ResponseBody
+
+    public boolean deleteAllCardsAjax(Authentication authentication,
+                                      @RequestBody String requestData) {
+        User currentUser = (User) authentication.getPrincipal();
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            String type = jo.getString("type");
+
+
+            userService.deleteAllCards(currentUser.getUsername(), type);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

@@ -250,6 +250,66 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    @Transactional
+    public void deleteAllCards(String username, String type) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
+        List<Card> cards = user.getCards();
+        List<Card> cardsToDelete = new ArrayList<>();
+
+        if (type.equals("archive")) {
+            for (int i = 0; i < cards.size(); i++) {
+                Card card = cards.get(i);
+                if (card.getIsArchived()) {
+                    cardsToDelete.add(card);
+                    card.setLabel(null);
+                    cardRepository.deleteFromUserCards(card.getId());
+                }
+            }
+        }
+        if (type.equals("trash")) {
+            for (int i = 0; i < cards.size(); i++) {
+                Card card = cards.get(i);
+                if (card.getIsInBin()) {
+                    cardsToDelete.add(card);
+                    card.setLabel(null);
+                    cardRepository.deleteFromUserCards(card.getId());
+
+                }
+            }
+        }
+        //TODO: direk so sql ova oti e mnogu sporo vaka
+
+        cardRepository.deleteAll(cardsToDelete);
+
+
+    }
+
+    @Override
+    @Transactional
+    public void restoreAllCards(String username, String type) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
+        List<Card> cards = user.getCards();
+        List<Card> cardsToUpdate = new ArrayList<>();
+
+        if (type.equals("archive")) {
+            for (int i = 0; i < cards.size(); i++) {
+                Card card = cards.get(i);
+                card.setIsArchived(false);
+                cardsToUpdate.add(card);
+            }
+        }
+        if (type.equals("trash")) {
+            for (int i = 0; i < cards.size(); i++) {
+                Card card = cards.get(i);
+                card.setIsInBin(false);
+                cardsToUpdate.add(card);
+            }
+        }
+
+        cardRepository.saveAll(cardsToUpdate);
+    }
+
+    @Override
     public String getHashedUsername(User user) {
 
         if (user.getHashedUsername() == null) {

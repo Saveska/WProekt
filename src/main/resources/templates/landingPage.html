@@ -132,16 +132,31 @@
 
                 <div class="container col-md-10 mt-5 mb-5">
                     <div class="row d-flex justify-content-center">
-                        <div class="d-grid col-4 p-0">
-                            <button class="btn btn-lg btn-dark btn-color note" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#NoteModal">Note
-                            </button>
-                        </div>
-                        <div class="d-grid col-4 p-0">
-                            <button class="btn btn-lg btn-dark btn-color tasks" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#TasksModal">Tasks
-                            </button>
-                        </div>
+                        <th:block th:if="${page.equals('home')}">
+                            <div class="d-grid col-4 p-0">
+                                <button class="btn btn-lg btn-dark btn-color note" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#NoteModal">Note
+                                </button>
+                            </div>
+                            <div class="d-grid col-4 p-0">
+                                <button class="btn btn-lg btn-dark btn-color tasks" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#TasksModal">Tasks
+                                </button>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${!page.equals('home')}">
+                            <div class="d-grid col-4 p-0">
+                                <button class="btn btn-lg restore-all-button" type="button" th:value="${page}">Restore
+                                    all
+                                </button>
+                            </div>
+                            <div class="d-grid col-4 p-0">
+                                <button class="btn btn-lg btn-danger delete-all-button" type="button"
+                                        th:value="${page}">Delete All
+
+                                </button>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
                 <!----------------- Modals --------------------->
@@ -171,7 +186,8 @@
                                 </div>
                             </form>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                </button>
                                 <button id="saveNoteButton" type="button" class="btn btn-save-changes">Save changes
                                 </button>
                             </div>
@@ -217,7 +233,8 @@
                                             <ul class="list-group list-group-flush taskListView">
 
 
-                                                <li class="list-group-item task-li " th:each="task:${card.getTasks()}">
+                                                <li class="list-group-item task-li "
+                                                    th:each="task:${card.getTasks()}">
                                                     <input type="checkbox" th:checked="${task.isCompleted}"
                                                            class="form-check-input taskCheckmark"
                                                            th:name="${task.id}"
@@ -242,9 +259,10 @@
                                                 Drag task here
                                             </div>
                                         </form>
-                                        <input type="text" class="add-new-task-input" th:name="${card.getId()}">
-                                        <button class="add-new-task-button">Add new Task</button>
-
+                                        <th:block th:if="${page.equals('home')}">
+                                            <input type="text" class="add-new-task-input" th:name="${card.getId()}">
+                                            <button class="add-new-task-button">Add new Task</button>
+                                        </th:block>
                                         </p>
                                     </th:block>
                                     <div class="label-container">
@@ -257,9 +275,11 @@
                                                 <!--                                                </a>-->
                                             </th:block>
                                         </div>
-                                        <button class="btn add-label-button" th:data-id="${card.id}">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
+                                        <th:block th:if="${page.equals('home')}">
+                                            <button class="btn add-label-button" th:data-id="${card.id}">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </th:block>
                                     </div>
 
 
@@ -352,7 +372,8 @@
                                         </div>
                                     </form>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
                                         </button>
                                         <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save
                                             changes
@@ -369,7 +390,8 @@
 
                                     <div class="modal-body">
 
-                                        <form th:action="@{/uploadimage}" method="POST" id="imageForm" class="dropzone"
+                                        <form th:action="@{/uploadimage}" method="POST" id="imageForm"
+                                              class="dropzone"
                                               enctype="multipart/form-data">
                                             <input type="text" hidden name="cardId" id="addImageModalId">
 

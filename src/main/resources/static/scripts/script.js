@@ -10,6 +10,8 @@ const popoverInput = labelPopover.querySelector(".newLabelInput");
 const restoreButtons = document.querySelectorAll(".restore-note-button");
 const permaDeleteButtons = document.querySelectorAll(".delete-permanent-note-button");
 
+const restoreAll = document.querySelectorAll(".restore-all-button");
+const deleteAll = document.querySelectorAll(".delete-all-button");
 
 const labelPopoverCard = document.getElementById('labeladder-popover-card')
 
@@ -391,8 +393,8 @@ function addRemoveButtonOnClick(removeButton) {
                         );
                     }
                 })
-                labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(checkmark=>{
-                    if(checkmark.getAttribute("name") === removeButton.value){
+                labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(checkmark => {
+                    if (checkmark.getAttribute("name") === removeButton.value) {
                         $(checkmark.parentElement.parentElement).fadeOut("fast");
                     }
                 })
@@ -433,7 +435,6 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
                     let popoverTemplate = getLabelPopoverNewEntryHTML(id, name);
 
                     labelPopover.children[0].children[1].insertAdjacentHTML('afterbegin', template)
-
 
 
                     labelPopoverCard.children[0].children[0].insertAdjacentHTML('afterbegin', popoverTemplate)
@@ -1560,8 +1561,8 @@ Dropzone.options.imageForm = {
 // let imageDropzone=new Dropzone("#imageForm");
 // console.log(imageDropzone);
 
-restoreButtons.forEach(button=>{
-    button.addEventListener("click",()=>{
+restoreButtons.forEach(button => {
+    button.addEventListener("click", () => {
         let data = {}
 
         let cardId = button.getAttribute("value");
@@ -1569,7 +1570,7 @@ restoreButtons.forEach(button=>{
 
         let cardElem = button.parentElement.parentElement.parentElement;
 
-        $(cardElem).fadeOut("fast",()=>{
+        $(cardElem).fadeOut("fast", () => {
             cardElem.remove();
             $grid.packery("shiftLayout");
         })
@@ -1583,7 +1584,6 @@ restoreButtons.forEach(button=>{
                 savingStatus.hidden = true;
 
 
-
             }, error: (jqXhr) => {
                 console.log(jqXhr);
             }
@@ -1592,8 +1592,8 @@ restoreButtons.forEach(button=>{
     });
 
 })
-permaDeleteButtons.forEach(button=>{
-    button.addEventListener("click",()=>{
+permaDeleteButtons.forEach(button => {
+    button.addEventListener("click", () => {
         let data = {}
 
         let cardId = button.getAttribute("value");
@@ -1601,7 +1601,7 @@ permaDeleteButtons.forEach(button=>{
 
         let cardElem = button.parentElement.parentElement.parentElement;
 
-        $(cardElem).fadeOut("fast",()=>{
+        $(cardElem).fadeOut("fast", () => {
             cardElem.remove();
             $grid.packery("shiftLayout");
         })
@@ -1615,7 +1615,6 @@ permaDeleteButtons.forEach(button=>{
                 savingStatus.hidden = true;
 
 
-
             }, error: (jqXhr) => {
                 console.log(jqXhr);
             }
@@ -1623,3 +1622,53 @@ permaDeleteButtons.forEach(button=>{
         });
     });
 });
+
+
+restoreAll.forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll("#notesContainer>.col").forEach(card => {
+            $(card).fadeOut("fast");
+        });
+        let data = {};
+        data["type"] = button.getAttribute("value");
+        //TODO: napraj da znaj dali e archive ili trash
+        $.ajax({
+            url: 'restoreAll',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    })
+})
+
+deleteAll.forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll("#notesContainer>.col").forEach(card => {
+            $(card).fadeOut("fast");
+        });
+        let data = {};
+        data["type"] = button.getAttribute("value");
+        $.ajax({
+            url: 'deleteAll',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (dataP) => {
+                savingStatus.hidden = true;
+
+
+            }, error: (jqXhr) => {
+                console.log(jqXhr);
+            }
+
+        });
+    })
+})
