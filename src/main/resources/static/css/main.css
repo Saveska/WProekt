@@ -98,7 +98,22 @@ body {
     border-bottom-right-radius: 0%;
 }
 
+.restore-all-button {
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+    --bs-btn-active-bg: rgb(13, 163, 243);
+    color: white;
+    background-color: rgb(13, 163, 243);
+}
+.restore-all-button :hover{
+    color:white;
+}
 .tasks {
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+}
+
+.delete-all-button {
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
 }
@@ -799,12 +814,13 @@ textarea {
 
 }
 
-.restore-note-button {
+ .restore-note-button {
     background-color: rgb(13, 163, 243);
     opacity: 0;
     transition: 0.3s all;
 }
-.restore-note-button:hover{
+
+.restore-all-button:hover, .restore-note-button:hover {
     background-color: rgb(78, 185, 243);
 }
 
