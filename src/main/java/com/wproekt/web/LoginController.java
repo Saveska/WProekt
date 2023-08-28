@@ -1,5 +1,6 @@
 package com.wproekt.web;
 
+import com.wproekt.model.exceptions.InvalidRepeatPassword;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 
 @Controller
@@ -27,8 +29,7 @@ public class LoginController {
     public String GetLoginPage(@RequestParam(required = false) String err, Model model
 
     ) {
-        //TODO: zacisti go malce kodov plz
-        //TODO: exceptions za logino
+
         if (err != null) {
             switch (err) {
                 case "invalid-credentials" -> model.addAttribute("err", "Invalid username or password");
@@ -62,6 +63,56 @@ public class LoginController {
         }
 
         model.addAttribute("content", "Successful registration, please check your mail to verify your account");
+        return "infoPage";
+    }
+
+    @PostMapping("/resetPassword")
+    public String postResetPassword(@RequestParam String username,
+                                    HttpServletRequest request,
+                                    Model model) {
+        System.out.println("ovde");
+        try {
+            String host = request.getServerName() + ':' + request.getServerPort();
+            userService.resetPassword(username, host);
+        } catch (Exception exception) {
+            model.addAttribute("content",exception.getMessage());
+            return "infoPage";
+        }
+        model.addAttribute("content", "A password reset link has been sent to your associated E-Mail address!");
+        return "infoPage";
+
+
+    }
+
+    @GetMapping("/reset/{username}/{token}")
+    public String VerifyResetToken(@PathVariable String username, @PathVariable String token, Model model) {
+
+        model.addAttribute("username", username);
+        model.addAttribute("token", token);
+
+
+
+        return "resetPassPage";
+    }
+    @PostMapping("/resetForm")
+    public String PasswordResetForm(@RequestParam String username,
+                                    @RequestParam String token,
+                                    @RequestParam String password,
+                                    @RequestParam String repeatPassword,
+                                    Model model){
+
+        try{
+            if(!Objects.equals(password, repeatPassword)){
+                throw new InvalidRepeatPassword();
+            }
+            userService.verifyResetToken(username, token);
+            userService.changePassword(username,password);
+        }catch (Exception exception){
+            model.addAttribute("content",exception.getMessage());
+            return "infoPage";
+        }
+        model.addAttribute("content","Password successfully changed! You can login now.");
+
         return "infoPage";
     }
 
