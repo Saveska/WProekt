@@ -126,6 +126,9 @@ body {
     margin-top: 1em;
 
 }
+.cont-side>.sidebar>*{
+    margin-bottom:5px;
+}
 
 
 textarea {
@@ -599,8 +602,11 @@ textarea {
     background-color: red;
     float: right;
     margin-right: auto;
+    border-radius: 0;
 }
-
+.remove-label-button:hover{
+    background-color: #ff9b9b;
+}
 .add-label-popover {
     background-color: white;
     --bs-border-width: 0;
@@ -865,3 +871,20 @@ textarea {
     opacity: 0;
     transition: 0.3s all;
 }
+
+#labeladder-popover .list-group{
+    max-height: 30vh;
+    overflow:auto;
+}
+
+#labeladder-popover-card .list-group{
+    max-height: 50vh;
+    overflow: auto;
+}
+.labelCheckmark{
+    background-color: rgb(138, 138, 138);
+}
+.labelCheckmark:checked{
+    background-color: rgb(217, 139, 217);
+}
+

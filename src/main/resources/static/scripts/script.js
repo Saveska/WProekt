@@ -9,6 +9,8 @@ const labelPopover = document.getElementById('labeladder-popover')
 const popoverInput = labelPopover.querySelector(".newLabelInput");
 const restoreButtons = document.querySelectorAll(".restore-note-button");
 const permaDeleteButtons = document.querySelectorAll(".delete-permanent-note-button");
+let notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+
 
 const restoreAll = document.querySelectorAll(".restore-all-button");
 const deleteAll = document.querySelectorAll(".delete-all-button");
@@ -453,8 +455,15 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
                     labelPopoverCard.children[0].children[0].insertAdjacentHTML('afterbegin', popoverTemplate)
 
                     addLabelCheckmarkEvent(labelPopoverCard.children[0].children[0].querySelectorAll(".labelCheckmark").item(0));
+
+                    labelPopover.querySelectorAll(".remove-label-button").forEach(button=>{
+                        addRemoveButtonOnClick(button);
+                    })
+
                     $grid.packery('shiftLayout');
                     savingStatus.hidden = true;
+                    popoverInput.value = "";
+
 
                 }, error: (jqXhr) => {
                     console.log(jqXhr);
@@ -633,7 +642,6 @@ $('#saveTasksButton').click(function () {
             addColorButtonListener(element[0].querySelector(".add-color-button"));
             addLabelButtonListener(element[0].querySelector(".add-label-button"));
 
-
             hideTaskHelpers(element[0].querySelector(".helper-task-dropper"));
 
             element[0].querySelectorAll(".card-title, .card-text, .card-task").forEach(content => {
@@ -658,6 +666,8 @@ $('#saveTasksButton').click(function () {
 
             savingStatus.hidden = true;
             addNoCardNotification();
+            notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+
 
         }, error: (jqXhr) => {
             console.log(jqXhr);
@@ -824,6 +834,7 @@ $('#saveNoteButton').click(() => {
 
             savingStatus.hidden = true;
             addNoCardNotification();
+            notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
 
 
         }, error: (jqXhr) => {
@@ -1427,7 +1438,6 @@ function addDeleteImageEvent(elem) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector('.tasks-input');
-    const notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
 
     searchInput.addEventListener('input', function () {
         const searchTerm = searchInput.value.trim().toLowerCase();
@@ -1448,8 +1458,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     const taskTitleElement = taskItem.querySelector('.card-task');
                     const taskTitle = taskTitleElement.textContent.toLowerCase();
 
-                    if (taskTitle.includes(searchTerm)) {
+                    if (taskTitle.includes(searchTerm) || cardTitle.includes(searchTerm)) {
                         highlightText(taskTitleElement, searchTerm);
+                        highlightText(cardTitleElement, searchTerm);
                         shouldDisplayCard = true;
                     } else {
                         unhighlightText(taskTitleElement);
