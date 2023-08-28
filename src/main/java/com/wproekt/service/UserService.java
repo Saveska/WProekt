@@ -11,6 +11,9 @@ public interface UserService extends UserDetailsService {
     User reattachUser(User user);
 
     User register(String username, String password, String repeatPassword, String name, String surname, String email, String host);
+    void changePassword(String username, String password);
+    boolean resetPassword(String username, String host);
+    boolean verifyResetToken(String username, String token);
 
     List<Card> getHomePageCards(String username);
 
