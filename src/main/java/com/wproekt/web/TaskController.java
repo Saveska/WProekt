@@ -56,8 +56,8 @@ public class TaskController {
 
     public String GetMainPage(Authentication authentication,
                               Model model) {
-
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
+//        User currentUser = userService.getUserFromAuth(authentication);
 
         List<Card> userCards = userService.getHomePageCards(currentUser.getUsername());
 
@@ -66,6 +66,7 @@ public class TaskController {
         model.addAttribute("cards", userCards);
         model.addAttribute("colors", colors);
         model.addAttribute("labels", labels);
+        model.addAttribute("username",currentUser.getName());
 
         model.addAttribute("page", "home");
 
@@ -76,12 +77,13 @@ public class TaskController {
     @GetMapping({"/trash"})
     public String GetTrashPage(Authentication authentication,
                                Model model) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         List<Card> userCards = userService.getTrashPageCards(currentUser.getUsername());
 
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "trash");
+        model.addAttribute("username",currentUser.getName());
 
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("labels", labels);
@@ -89,13 +91,13 @@ public class TaskController {
         return "landingPage";
     }
 
-
+//TODO: ko ce nema labels da se pojavuva poraka
 
     @PostMapping("/uploadimage")
     public String PostUploadImage(Authentication authentication,
                                   @RequestParam("cardId") Long cardId,
                                   @RequestParam("image") MultipartFile file) throws IOException, NoSuchAlgorithmException {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da ne mozi drug user da klaj slika za tret korisnik
 
         cardService.editImageCard(currentUser, cardId, file);
@@ -107,12 +109,13 @@ public class TaskController {
     @GetMapping({"/archive"})
     public String GetArchivePage(Authentication authentication,
                                Model model) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         List<Card> userCards = userService.getArchivePageCards(currentUser.getUsername());
 
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "archive");
+        model.addAttribute("username",currentUser.getName());
 
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("labels", labels);

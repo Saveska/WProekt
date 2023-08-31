@@ -9,9 +9,12 @@ import com.wproekt.repository.UserRepository;
 import com.wproekt.service.EmailService;
 import com.wproekt.service.UserService;
 import org.hibernate.Session;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
+import java.security.Principal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -61,6 +65,26 @@ public class UserServiceImplementation implements UserService {
         User reattachedUser = (User) session.merge(user);
         session.flush(); // Optional, can be useful to synchronize changes
         return reattachedUser;
+    }
+
+    @Override
+    public User getUserFromAuth(Authentication authentication) {
+        if(authentication.getPrincipal() instanceof User){
+            return (User) authentication.getPrincipal();
+        }
+        if(authentication.getPrincipal() instanceof DefaultOAuth2User oAuthUser){
+            String username = oAuthUser.getAttribute("login");
+            Random rand = new Random();
+            rand.setSeed(345346234);
+            while (userRepository.findByUsername(username).isPresent() && !userRepository.findByUsername(username).get().getIsGithub()) {
+                Integer num = rand.nextInt(10);
+                username += String.valueOf(num);
+            }
+
+            return  userRepository.findByUsername(username).get();
+        }
+        System.out.println(authentication.getPrincipal().getClass());
+        return null;
     }
 
     @Override

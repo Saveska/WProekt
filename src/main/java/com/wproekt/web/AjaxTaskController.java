@@ -42,7 +42,7 @@ public class AjaxTaskController {
     @PostMapping("/giveNote")
     @ResponseBody
     public List<Note> notePostAjax(Authentication authentication, @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -68,7 +68,7 @@ public class AjaxTaskController {
     @PostMapping("/giveTask")
     @ResponseBody
     public List<TaskCard> taskPostAjax(Authentication authentication, @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         Map<String, Object> tasks;
 
         try {
@@ -101,7 +101,7 @@ public class AjaxTaskController {
     @PostMapping("/changeStatus")
     @ResponseBody
     public List<Note> taskChangeAjax(Authentication authentication, @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: mislam deka mozi anon user da smeni tujdz task, FIX
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -126,7 +126,7 @@ public class AjaxTaskController {
     @PostMapping("/archiveCard")
     @ResponseBody
     public List<Note> archiveCardAjax(Authentication authentication, @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -146,7 +146,7 @@ public class AjaxTaskController {
     @PostMapping("/binCard")
     @ResponseBody
     public List<Note> binCardAjax(Authentication authentication, @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -167,7 +167,7 @@ public class AjaxTaskController {
     @ResponseBody
     public Boolean changeColorCard(Authentication authentication,
                                    @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali kartickata e od korisniko
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -200,7 +200,7 @@ public class AjaxTaskController {
     @ResponseBody
     public Boolean editCardAjax(Authentication authentication,
                                 @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali e od korisniko kartickata
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -231,7 +231,7 @@ public class AjaxTaskController {
     public List<String> addTaskToCard(Authentication authentication,
                                       @RequestBody String requestData) {
 
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali e od korisniko kartickata
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -261,7 +261,7 @@ public class AjaxTaskController {
     public Boolean RemoveTaskFromCard(Authentication authentication,
                                       @RequestBody String requestData) {
 
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali e od korisniko kartickata
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -289,7 +289,7 @@ public class AjaxTaskController {
     public Boolean changeOrder(Authentication authentication,
                                @RequestBody String requestData) {
 
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali e od korisniko kartickata
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -329,7 +329,7 @@ public class AjaxTaskController {
     @ResponseBody
     public List<String> addLabelAjax(Authentication authentication,
                                      @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -354,7 +354,7 @@ public class AjaxTaskController {
     @Transactional
     public Boolean removeLabelAjax(Authentication authentication,
                                    @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
 
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -378,7 +378,7 @@ public class AjaxTaskController {
     @ResponseBody
     public List<String> checkLabelAjax(Authentication authentication,
                                        @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali label pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -413,7 +413,7 @@ public class AjaxTaskController {
     @ResponseBody
     public List<String> togglePinAjax(Authentication authentication,
                                       @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -439,7 +439,7 @@ public class AjaxTaskController {
     @ResponseBody
     public List<String> orderCards(Authentication authentication,
                                    @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -463,7 +463,7 @@ public class AjaxTaskController {
     @ResponseBody
     public boolean deleteImage(Authentication authentication,
                                @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -487,7 +487,7 @@ public class AjaxTaskController {
     @ResponseBody
     public boolean restoreCardAjax(Authentication authentication,
                                    @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -511,7 +511,7 @@ public class AjaxTaskController {
     @ResponseBody
     public boolean deleteCardAjax(Authentication authentication,
                                   @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -535,7 +535,7 @@ public class AjaxTaskController {
 
     public boolean restoreAllCardsAjax(Authentication authentication,
                                        @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
 
@@ -560,7 +560,7 @@ public class AjaxTaskController {
 
     public boolean deleteAllCardsAjax(Authentication authentication,
                                       @RequestBody String requestData) {
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);

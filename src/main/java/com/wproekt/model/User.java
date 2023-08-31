@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String surname;
     private String token;
     private String hashedUsername;
+    private Boolean isGithub;
     @OneToMany
     private List<Card> cards;
 
@@ -38,6 +39,7 @@ public class User implements UserDetails {
     private Role role;
 
     public User() {
+        this.setIsGithub(false);
     }
 
     public User(String username, String email, String password, String name, String surname) {
@@ -48,6 +50,8 @@ public class User implements UserDetails {
         this.surname = surname;
         this.role = Role.ROLE_USER;
         this.token = null;
+        this.setIsGithub(false);
+
     }
 
     @Override
