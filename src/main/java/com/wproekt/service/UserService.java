@@ -1,6 +1,7 @@
 package com.wproekt.service;
 
 import com.wproekt.model.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Set;
 public interface UserService extends UserDetailsService {
     User reattachUser(User user);
 
+    User getUserFromAuth(Authentication authentication);
     User register(String username, String password, String repeatPassword, String name, String surname, String email, String host);
     void changePassword(String username, String password);
     boolean resetPassword(String username, String host);

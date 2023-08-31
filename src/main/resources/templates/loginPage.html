@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100;400;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ccd029d728.js" crossorigin="anonymous"></script>
+
 
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <!--<link rel="stylesheet" href="../static/css/main.css">-->
@@ -51,13 +53,20 @@
                             </button>
                             <div class="container">
                                 <a href="#" class="d-block mt-4 link-secondary text-decoration-none"
-                                    data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
+                                   data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
                                     Forgot
                                     password?</a>
 
                                 <a href="#" class="d-block mt-1 link-dark text-decoration-none " data-bs-toggle="modal"
                                    data-bs-target="#registerModal">Don't have an
                                     account? Register here!</a>
+                                <hr>
+                                <div class="text-center">
+                                    <span>Or you can log in using:</span><br>
+                                    <a href="/oauth2/authorization/github"
+                                       class="mt-1 text-decoration-none link-dark" ><i
+                                            class="fa-brands fa-square-github fs-1"></i></a>
+                                </div>
                             </div>
                         </form>
                     </div>
