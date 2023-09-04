@@ -208,6 +208,7 @@ drake.on("drop", (el, target, source, sibling) => {
 
 console.log(drake);
 
+
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
     addColorButtonListener(colorButton);
 })
@@ -410,9 +411,17 @@ function addRemoveButtonOnClick(removeButton) {
                 })
                 labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(checkmark => {
                     if (checkmark.getAttribute("name") === removeButton.value) {
-                        $(checkmark.parentElement.parentElement).fadeOut("fast");
+                        $(checkmark.parentElement.parentElement).fadeOut("fast",()=>{
+                            $(checkmark.parentElement.parentElement).remove();
+                        });
+
                     }
                 })
+
+                if(labelPopoverCard.children[0].children[0].children.length === 0){
+
+                    labelPopoverCard.children[0].classList.add("label-popover-info");
+                }
                 removeButton.parentElement.remove();
 
             }, error: (jqXhr) => {
@@ -422,6 +431,7 @@ function addRemoveButtonOnClick(removeButton) {
         })
     })
 }
+
 
 document.querySelectorAll(".newLabelInput").forEach(input => {
 
@@ -453,7 +463,7 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
 
 
                     labelPopoverCard.children[0].children[0].insertAdjacentHTML('afterbegin', popoverTemplate)
-
+                    labelPopoverCard.children[0].classList.remove("label-popover-info");
                     addLabelCheckmarkEvent(labelPopoverCard.children[0].children[0].querySelectorAll(".labelCheckmark").item(0));
 
                     labelPopover.querySelectorAll(".remove-label-button").forEach(button=>{
@@ -714,7 +724,7 @@ function makeTaskCard(id, title, taskArray) {
                     <label class="form-check-label card-task"
 
                      
-                           th:attr="data-id=${taskArray[i]["id"]}">
+                           data-id="${taskArray[i]["id"]}">
                            ${taskArray[i]["text"]}
                     </label>
                     <div class="delete-task-button" name="${taskArray[i]["id"]}">
@@ -1496,7 +1506,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function unhighlightText(element) {
         element.innerHTML = element.textContent; // Remove the highlighting
     }
-
+    console.log(labelPopoverCard.children[0].children[0]);
+    if(labelPopoverCard.children[0].children[0].children.length === 0){
+        console.log("test");
+        labelPopoverCard.children[0].classList.add("label-popover-info");
+    }
 
 });
 
