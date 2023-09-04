@@ -888,3 +888,14 @@ textarea {
     background-color: rgb(217, 139, 217);
 }
 
+.label-popover-info{
+    border: dashed 3px gray;
+    width:80px;
+    height:80px;
+
+}
+.label-popover-info:before{
+    font-size: 1rem;
+    text-align: center;
+    content:'No Labels!';
+}

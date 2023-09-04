@@ -69,10 +69,10 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User getUserFromAuth(Authentication authentication) {
-        if(authentication.getPrincipal() instanceof User){
+        if (authentication.getPrincipal() instanceof User) {
             return (User) authentication.getPrincipal();
         }
-        if(authentication.getPrincipal() instanceof DefaultOAuth2User oAuthUser){
+        if (authentication.getPrincipal() instanceof DefaultOAuth2User oAuthUser) {
             String username = oAuthUser.getAttribute("login");
             Random rand = new Random();
             rand.setSeed(345346234);
@@ -81,7 +81,7 @@ public class UserServiceImplementation implements UserService {
                 username += String.valueOf(num);
             }
 
-            return  userRepository.findByUsername(username).get();
+            return userRepository.findByUsername(username).get();
         }
         System.out.println(authentication.getPrincipal().getClass());
         return null;
@@ -147,13 +147,13 @@ public class UserServiceImplementation implements UserService {
     @Override
     public boolean verifyResetToken(String username, String token) {
         User user = userRepository.findByUsername(username).orElseThrow(UserDoesntExistException::new);
-        PasswordResetToken pToken = resetTokenRepository.getByUserAndToken(user,token);
+        PasswordResetToken pToken = resetTokenRepository.getByUserAndToken(user, token);
         if (pToken != null) {
             resetTokenRepository.delete(pToken);
         } else {
             throw new WrongTokenException();
         }
-        if(pToken.getExpiryDate().isBefore(LocalDateTime.now())){
+        if (pToken.getExpiryDate().isBefore(LocalDateTime.now())) {
             throw new TokenExpired();
         }
         return true;
@@ -293,6 +293,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    @Transactional
     public void removeLabelFromUser(String username, Long labelId) {
 //        Label label = labelRepository.getReferenceById(labelId);
 //        User reattached = reattachUser(user);
@@ -305,10 +306,16 @@ public class UserServiceImplementation implements UserService {
 //        });
 //        cardRepository.saveAll(cards);
 //        reattached.getLabels().remove(label);
-        userRepository.deleteLabelFromUser(labelId);
-        labelRepository.deleteFromCardLabel(labelId);
+        try {
 
-        labelRepository.deleteById(labelId);
+            userRepository.deleteLabelFromUser(labelId);
+            labelRepository.deleteFromCardLabel(labelId);
+            labelRepository.deleteById(labelId);
+
+
+        } catch (Exception e) {
+            //TODO: nekogas praj exception
+        }
 
 
     }

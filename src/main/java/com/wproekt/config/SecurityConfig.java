@@ -1,7 +1,7 @@
 package com.wproekt.config;
 
 
-import com.wproekt.service.OAuthUserService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
