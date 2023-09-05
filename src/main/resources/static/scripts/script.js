@@ -238,53 +238,6 @@ function addColorButtonListener(colorButton) {
 }
 
 
-// document.querySelectorAll(".add-label-button").forEach(addButton => {
-//     let labelSelector = new bootstrap.Popover(addButton, {
-//         container: 'body',
-//         placement: 'bottom',
-//         fallback: 'bottom',
-//         html: true,
-//         trigger: 'click',
-//         customClass: 'add-label-popover',
-//         content: labelPopover,
-//     })
-//
-//     let popoverInput = labelPopover.querySelector("input");
-//     let allActive = [];
-//
-//
-//     addButton.addEventListener("show.bs.popover", (e) => {
-//
-//         addButton.parentElement.querySelectorAll(".label-pill").forEach(pill => {
-//             allActive.push(pill.getAttribute("name"));
-//         })
-//         popoverInput.setAttribute("data-id", addButton.getAttribute("data-id"));
-//         labelPopover.querySelectorAll(".labelCheckmark").forEach(labelCheckmark => {
-//             labelCheckmark.checked = allActive.includes(labelCheckmark.name);
-//         })
-//         labelPopover.querySelectorAll(".remove-label-button").forEach(removeButton => {
-//             addRemoveButtonOnClick(removeButton);
-//         })
-//     })
-//
-//     addButton.addEventListener("hide.bs.popover", (e) => {
-//         allActive = [];
-//     });
-//
-//     //TODO: ko ce gi stegnis odma da se pojavi
-//     document.addEventListener("click", (e) => {
-//         let $target = $(e.target);
-//
-//         if ($target.parents("#labeladder-popover-card").length !== 1) {
-//             labelSelector.hide();
-//             popoverInput.value = "";
-//         }
-//     })
-//
-//
-// })
-
-// TODO: da se zacuvuva na karticki labelite
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 
