@@ -132,6 +132,7 @@
 <!--                </configuration>-->
 <!--            </plugin>-->
         </plugins>
+        <finalName>mindmappr</finalName>
     </build>
 
 </project>
