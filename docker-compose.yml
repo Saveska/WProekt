@@ -1,0 +1,15 @@
+version: '3'
+services:
+  mindmappr-app:
+    image: saveska/mindmappr-image:1.0
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://rogue.db.elephantsql.com/rvvqqnij
+      SPRING_DATASOURCE_USERNAME: rvvqqnij
+      SPRING_DATASOURCE_PASSWORD: A79GGL1IJmHSzHYrC3k336GxW5PmDbKn
+      SPRING_MAIL_USERNAME: mindmapprapp@gmail.com
+      SPRING_MAIL_PASSWORD: fwtxxoohsyghwbdy
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID: 42d6b6d3453bb1c1934b
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET: 8927a0bdbb6cefabd67a12a91128058a307ed26f
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_REDIRECT_URI: http://localhost:8080/login/oauth2/code/github
