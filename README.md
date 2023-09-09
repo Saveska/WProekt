@@ -81,5 +81,5 @@ Java Spring базирана апликација која им овозможу
 ![Card pin animation](/screenshots/search.png)
 
 
-![Note Features](/screenshots/noteFeatures.gif)
+![Note Features](/screenshots/noteFeatures.png)
 
