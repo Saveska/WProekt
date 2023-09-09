@@ -75,7 +75,7 @@ public class AjaxTaskController {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
             JSONObject jo = new JSONObject(decodedData);
-            System.out.println(jo);
+
             String title = jo.getString("title");
 
 
@@ -242,8 +242,7 @@ public class AjaxTaskController {
             Long cardId = jo.getLong("id");
             String text = jo.getString("text");
 
-            System.out.println(cardId);
-            System.out.println(text);
+
 
             String cleanText = utilService.cleanHtml(text);
             Task task = taskService.addTask(cardId, cleanText);
@@ -271,7 +270,6 @@ public class AjaxTaskController {
 
             Long taskId = jo.getLong("taskId");
             Long cardId = jo.getLong("cardId");
-            System.out.println(cardId);
 
             taskService.deleteTask(taskId, cardId);
 
@@ -309,10 +307,7 @@ public class AjaxTaskController {
             Long cardSource = jo.getLong("cardSource");
             Long cardTarget = jo.getLong("cardTarget");
 
-            System.out.println(taskId);
-            System.out.println(siblingId);
-            System.out.println(cardSource);
-            System.out.println(cardTarget);
+
 
             taskService.changeCardOfTask(taskId, siblingId, cardSource, cardTarget);
 

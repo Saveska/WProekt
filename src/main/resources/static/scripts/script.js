@@ -75,12 +75,12 @@ function bindDraggie(gridItem) {
 
     allDraggies[id] = draggie;
     if (gridItem.children[0].getAttribute("is-pinned") === "true") {
-        console.log(allDraggies[id]);
+        //console.log(allDraggies[id]);
         // $grid.packery("stamp",$(gridItem));
         allDraggies[id].disable();
     }
 
-    console.log(draggie);
+    //console.log(draggie);
 
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
@@ -95,7 +95,7 @@ function orderItems() {
     let data = {};
 
     data['order'] = order;
-    console.log(data);
+    //console.log(data);
     debounce(() => {
         $.ajax({
             url: 'orderCards',
@@ -107,7 +107,7 @@ function orderItems() {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         })
@@ -145,7 +145,7 @@ function addTaskContainers(task) {
 
 // Add event listeners to handle drag-and-drop events
 drake.on("drag", (el, source) => {
-    console.log("ovde");
+    //console.log("ovde");
     allTaskHelpers.forEach(item => {
         $(item).fadeIn("fast");
     })
@@ -197,7 +197,7 @@ drake.on("drop", (el, target, source, sibling) => {
 
 
         }, error: (jqXhr) => {
-            console.log(jqXhr);
+            //console.log(jqXhr);
         }
 
     });
@@ -206,7 +206,7 @@ drake.on("drop", (el, target, source, sibling) => {
     // Do something with the dropped element, like reordering or updating data
 });
 
-console.log(drake);
+//console.log(drake);
 
 
 document.querySelectorAll(".add-color-button").forEach(colorButton => {
@@ -353,7 +353,7 @@ function addRemoveButtonOnClick(removeButton) {
             data: JSON.stringify(data),
 
             success: (dataP) => {
-                console.log(dataP)
+                //console.log(dataP)
                 document.querySelectorAll(".label-pill").forEach(pill => {
 
                     if (pill.getAttribute("name") === removeButton.value) {
@@ -378,7 +378,7 @@ function addRemoveButtonOnClick(removeButton) {
                 removeButton.parentElement.remove();
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         })
@@ -429,7 +429,7 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
 
 
                 }, error: (jqXhr) => {
-                    console.log(jqXhr);
+                    //console.log(jqXhr);
                 }
 
             })
@@ -472,7 +472,7 @@ document.querySelectorAll(".labelCheckmark").forEach(label => {
 function addLabelCheckmarkEvent(label) {
     label.addEventListener("change", () => {
         savingStatus.hidden = false;
-        console.log(label);
+        //console.log(label);
         let data = {};
 
         let labelId = label.getAttribute("name");
@@ -485,7 +485,7 @@ function addLabelCheckmarkEvent(label) {
         data["cardId"] = cardId;
         data["checked"] = label.checked;
 
-        console.log(data);
+        //console.log(data);
 
         $.ajax({
             url: 'checkLabel',
@@ -494,13 +494,13 @@ function addLabelCheckmarkEvent(label) {
             data: JSON.stringify(data),
             success: (dataP) => {
                 savingStatus.hidden = true;
-                console.log(dataP)
+                //console.log(dataP)
                 if (label.checked) {
                     let name = dataP[0];
                     let id = dataP[1];
                     let template = $(getLabelPillHTML(id, name));
 
-                    console.log(template);
+                    //console.log(template);
 
                     document.querySelectorAll(".appCard").forEach(card => {
 
@@ -529,7 +529,7 @@ function addLabelCheckmarkEvent(label) {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -573,7 +573,7 @@ $('#saveTasksButton').click(function () {
         allTasks[$(x).val()] = (($(x).prop('checked')));
     });
 
-    console.log(allTasks);
+    //console.log(allTasks);
 
     // let fd = new FormData(taskForm);
 
@@ -587,7 +587,7 @@ $('#saveTasksButton').click(function () {
         url: 'giveTask', type: 'POST', dataType: 'json', data: JSON.stringify(data),
 
         success: (dataP) => {
-            console.log(dataP)
+            //console.log(dataP)
             let tCardObj = dataP[0];
 
             let cardId = tCardObj['id'];
@@ -633,7 +633,7 @@ $('#saveTasksButton').click(function () {
 
 
         }, error: (jqXhr) => {
-            console.log(jqXhr);
+            //console.log(jqXhr);
         }
 
     })
@@ -757,7 +757,7 @@ $('#saveNoteButton').click(() => {
     data['text'] = textNoteInputBox.val();
 
 
-    console.log(titleInputBox.val());
+    //console.log(titleInputBox.val());
 
     $('#saveNoteButton').html(`<div class="spinner-border spinner-border-sm" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -766,7 +766,7 @@ $('#saveNoteButton').click(() => {
 
     $.ajax({
         url: 'giveNote', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
-            console.log(dataP)
+            //console.log(dataP)
             let noteData = dataP[0];
 
             let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
@@ -801,7 +801,7 @@ $('#saveNoteButton').click(() => {
 
 
         }, error: (jqXhr) => {
-            console.log(jqXhr);
+            //console.log(jqXhr);
         }
 
     })
@@ -827,11 +827,11 @@ function changeCompletionOfTask(elem) {
 
         $.ajax({
             url: 'changeStatus', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
-                console.log(dataP)
+                //console.log(dataP)
                 savingStatus.hidden = true;
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         })
@@ -855,7 +855,7 @@ function toBinButton(elem) {
 
             $.ajax({
                 url: 'binCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
-                    console.log(dataP);
+                    //console.log(dataP);
                     $grid.packery('remove', elem)
 
                         .packery('shiftLayout');
@@ -864,7 +864,7 @@ function toBinButton(elem) {
                     addNoCardNotification();
 
                 }, error: (jqXhr) => {
-                    console.log(jqXhr);
+                    //console.log(jqXhr);
                 }
 
             })
@@ -888,7 +888,7 @@ function toArchiveButton(elem) {
 
             $.ajax({
                 url: 'archiveCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
-                    console.log(dataP);
+                    //console.log(dataP);
                     $grid.packery('remove', elem)
 
                         .packery('shiftLayout');
@@ -897,7 +897,7 @@ function toArchiveButton(elem) {
                     addNoCardNotification();
 
                 }, error: (jqXhr) => {
-                    console.log(jqXhr);
+                    //console.log(jqXhr);
                 }
 
             })
@@ -991,7 +991,7 @@ if (addImageModal) {
 
         const value = button.getAttribute('value')
 
-        console.log(value);
+        //console.log(value);
 
         const inputId = addImageModal.querySelector('#addImageModalId')
 
@@ -1030,7 +1030,7 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
         card.style.setProperty("--c", originalBase);
         card.style.setProperty("--brighter", originalLight);
         card.style.setProperty("--backgroundC", originalDark);
-        console.log(card);
+        //console.log(card);
     })
 
     colordiv.addEventListener("click", () => {
@@ -1060,7 +1060,7 @@ document.querySelectorAll(".color-circle").forEach(colordiv => {
                 savingStatus.hidden = true;
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1183,7 +1183,7 @@ function sendEdit(id, text, type) {
     data['text'] = text;
     data['type'] = type;
 
-    console.log(data);
+    //console.log(data);
     $.ajax({
         url: 'editCard',
         type: 'POST',
@@ -1194,7 +1194,7 @@ function sendEdit(id, text, type) {
 
 
         }, error: (jqXhr) => {
-            console.log(jqXhr);
+            //console.log(jqXhr);
         }
 
     });
@@ -1221,7 +1221,7 @@ function taskInputEvent(taskInput) {
                 data: JSON.stringify(data),
                 success: (dataP) => {
                     savingStatus.hidden = true;
-                    console.log(dataP);
+                    //console.log(dataP);
                     let id = dataP[2];
                     let text = dataP[0];
 
@@ -1237,7 +1237,7 @@ function taskInputEvent(taskInput) {
                     taskInput.value = "";
 
                 }, error: (jqXhr) => {
-                    console.log(jqXhr);
+                    //console.log(jqXhr);
                 }
 
             });
@@ -1308,7 +1308,7 @@ function addDeleteTaskEvent(button) {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1355,7 +1355,7 @@ function addPinEvent(pin) {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1371,7 +1371,7 @@ function addDeleteImageEvent(elem) {
         savingStatus.hidden = false;
         let cardId = elem.parentElement.getAttribute("data-id");
 
-        console.log(cardId);
+        //console.log(cardId);
         let data = {};
 
         data["cardId"] = cardId;
@@ -1387,7 +1387,7 @@ function addDeleteImageEvent(elem) {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1459,9 +1459,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function unhighlightText(element) {
         element.innerHTML = element.textContent; // Remove the highlighting
     }
-    console.log(labelPopoverCard.children[0].children[0]);
+    //console.log(labelPopoverCard.children[0].children[0]);
     if(labelPopoverCard.children[0].children[0].children.length === 0){
-        console.log("test");
+        //console.log("test");
         labelPopoverCard.children[0].classList.add("label-popover-info");
     }
 
@@ -1478,9 +1478,9 @@ function unhighlightLabel(label) {
 function addFilterByLabelEvent(label) {
     label.addEventListener("click", () => {
         let labelId = label.getAttribute("name");
-        console.log(labelId);
+        //console.log(labelId);
         const notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
-        console.log(notesAndTasks);
+        //console.log(notesAndTasks);
         notesAndTasks.forEach(function (card) {
             const cardTitleElement = card.querySelector('.card-title');
             const cardContentElement = card.querySelector('.card-text');
@@ -1553,7 +1553,7 @@ Dropzone.options.imageForm = {
 
 
 // let imageDropzone=new Dropzone("#imageForm");
-// console.log(imageDropzone);
+// //console.log(imageDropzone);
 
 restoreButtons.forEach(button => {
     button.addEventListener("click", () => {
@@ -1580,7 +1580,7 @@ restoreButtons.forEach(button => {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1612,7 +1612,7 @@ permaDeleteButtons.forEach(button => {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1639,7 +1639,7 @@ restoreAll.forEach(button => {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });
@@ -1664,7 +1664,7 @@ deleteAll.forEach(button => {
 
 
             }, error: (jqXhr) => {
-                console.log(jqXhr);
+                //console.log(jqXhr);
             }
 
         });

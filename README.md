@@ -38,3 +38,48 @@ Java Spring базирана апликација која им овозможу
 - [Dragula](https://bevacqua.github.io/dragula/) 
 
 
+## 📷 
+
+- Login
+
+![Login page with username and password](/screenshots/login.png)
+- Landing Page
+
+![Empty landing page](/screenshots/landingPage.png)
+- Adding Notes
+
+![Note add dialog](/screenshots/newNote.png)
+- Adding Cards
+
+![Card add dialog](/screenshots/newTaskCard.png)
+- Note Cards
+
+![Card add dialog](/screenshots/note.png)
+- Task Cards
+
+![Card add dialog](/screenshots/taskCard.png)
+- Editing cards
+
+![Card add dialog](/screenshots/edit.png)
+- Add labels
+
+![Card move animation](/screenshots/addLabel.png)
+- Moving Cards
+
+![Card move animation](/screenshots/changeOrder.gif)
+- Changing color of card
+
+![Card color change animation](/screenshots/colorChange.gif)
+- Moving tasks from cards
+
+![Card move animation](/screenshots/changeTaskCard.gif)
+- Pinning cards
+
+![Card pin animation](/screenshots/pinCard.gif)
+- Search
+
+![Card pin animation](/screenshots/search.png)
+
+
+![Note Features](/screenshots/noteFeatures.gif)
+

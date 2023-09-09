@@ -70,7 +70,7 @@ public class LoginController {
     public String postResetPassword(@RequestParam String username,
                                     HttpServletRequest request,
                                     Model model) {
-        System.out.println("ovde");
+
         try {
             String host = request.getServerName() + ':' + request.getServerPort();
             userService.resetPassword(username, host);
