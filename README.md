@@ -79,7 +79,8 @@ Java Spring базирана апликација која им овозможу
 - Search
 
 ![Card pin animation](/screenshots/search.png)
+- Images
 
-
+![Card image](/screenshots/image.png)
 ![Note Features](/screenshots/noteFeatures.png)
 
