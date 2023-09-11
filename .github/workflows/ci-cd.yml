@@ -45,24 +45,3 @@ jobs:
         context: .
         push: true
         tags: saveska/mindmappr-image:1.0
-
-  deploy:
-    name: Deploy with Docker Compose
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install docker-compose -y
-        continue-on-error: true  # Continue even if Docker Compose installation fails (depending on your environment)
-
-      - name: Deploy with Docker Compose
-        run: |
-          docker-compose up -d
-        working-directory: ${{ github.workspace }}
-
