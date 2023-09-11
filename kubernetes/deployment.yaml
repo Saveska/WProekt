@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mindmappr-deployment
+  namespace: mindmappr-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mindmappr
+  template:
+    metadata:
+      labels:
+        app: mindmappr
+    spec:
+      containers:
+        - image: saveska/mindmappr-image:latest
+          imagePullPolicy: Always
+          name: mindmappr
+          ports:
+            - containerPort: 8080
+              protocol: "TCP"
+          env:
+            - name: SPRING.DATASOURCE.URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-url
+            - name: SPRING.DATASOURCE.USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-username
+            - name: SPRING.DATASOURCE.PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: database-password
+            - name: SPRING.MAIL.HOST
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: mail-host
+            - name: SPRING.MAIL.PORT
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: mail-port
+            - name: SPRING.MAIL.USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: mail-username
+            - name: SPRING.MAIL.PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: mail-password
+            - name: SPRING.MAIL.PROPERTIES.MAIL.SMTP.AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: mail-smtp-auth
+            - name: SPRING.MAIL.PROPERTIES.MAIL.SMTP.STARTTLS.ENABLE
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: mail-smtp-starttls-enable
+            - name: SPRING.SECURITY.OAUTH2.CLIENT.REGISTRATION.GITHUB.CLIENT-ID
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-secret
+                  key: github-client-id
+            - name: SPRING.SECURITY.OAUTH2.CLIENT.REGISTRATION.GITHUB.CLIENT-SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-secret
+                  key: github-client-secret
+            - name: SPRING.SECURITY.OAUTH2.CLIENT.REGISTRATION.GITHUB.REDIRECT-URI
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-secret
+                  key: github-redirect-uri
