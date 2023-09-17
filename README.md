@@ -15,19 +15,19 @@
 
 ## 🧐 
 
-Семинарска задача по Веб Програмирање:
+Term project for Web Programming:
 
-Апликација за менаџирање на таскови
+Applicatoin for managing notes and tasks
 
-## ✍️ Создадено од
+## ✍️ Made by:
 
-- Марија Савеска 201062 - [@Saveska](https://github.com/Saveska)
-- Давид Арсовски 206003 - [@arsovskii](https://github.com/arsovskii)
+- Marija Saveska 201062 - [@Saveska](https://github.com/Saveska)
+- David Arsovski 206003 - [@arsovskii](https://github.com/arsovskii)
 
 ## 🏁 Информации
-Java Spring базирана апликација која им овозможува на корисниците да додаваат потсетници и задачи 
+A Java Spring-based application that allows users to add reminders and tasks.
 
-## ⛏️ Искористени технологии
+## ⛏️ Used technologies:
 
 - [Spring Framework](https://spring.io/) - Backend Framework
 - [Bootstrap](https://getbootstrap.com/) - Frontend UI Library
