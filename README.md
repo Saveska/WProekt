@@ -17,7 +17,7 @@
 
 Term project for Web Programming:
 
-Applicatoin for managing notes and tasks
+Application for managing notes and tasks
 
 ## ✍️ Made by:
 
