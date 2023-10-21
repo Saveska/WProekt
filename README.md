@@ -24,7 +24,7 @@ Application for managing notes and tasks
 - Marija Saveska 201062 - [@Saveska](https://github.com/Saveska)
 - David Arsovski 206003 - [@arsovskii](https://github.com/arsovskii)
 
-## 🏁 Информации
+## 🏁 Information
 A Java Spring-based application that allows users to add reminders and tasks.
 
 ## ⛏️ Used technologies:
