@@ -1670,3 +1670,27 @@ deleteAll.forEach(button => {
         });
     })
 })
+
+let isAiOpen = false;
+/* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+function openAiNav() {
+    if(isAiOpen){
+        closeAiNav();
+        return;
+    }
+    document.getElementById("aiSidebar").style.width = "250px";
+    document.getElementById("mainDiv").style.marginRight = "250px";
+    document.getElementById("openAibtn").style.marginRight = "250px";
+    document.getElementById("openAibtn").classList.remove("pulse");
+    isAiOpen = true;
+}
+
+/* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+function closeAiNav() {
+    document.getElementById("aiSidebar").style.width = "0";
+    document.getElementById("mainDiv").style.marginRight = "0";
+    document.getElementById("openAibtn").style.marginRight = "0";
+    document.getElementById("openAibtn").classList.add("pulse");
+
+    isAiOpen = false;
+}
