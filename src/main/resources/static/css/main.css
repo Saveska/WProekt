@@ -906,14 +906,19 @@ textarea {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+   /* z-index: 1; /* Stay on top */
     top: 0;
     right: 0;
     background-color: rgba(33,37,41,1); /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+    z-index:9999;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
+
 
 /* The sidebar links */
 .aiSidebar a {
@@ -960,6 +965,51 @@ textarea {
 
 .openAibtn:hover {
     background-color: rgb(203, 112, 203)
+}
+
+.menu-item {
+    padding: 7px;
+    cursor: pointer;
+    /*color: rgb(185, 86, 185);*/
+    color: white;
+    font-weight: 500;
+
+
+    display: flex;
+    align-items: center;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+
+.menu-item:hover {
+    background-color: rgb(81,81,81);
+}
+
+.aiMenu{
+    overflow-y: scroll;
+    background-color:rgb(37,42,46);
+
+    height: 100%;
+    width: 100%;
+
+    scrollbar-color: rgb(81,81,81) rgb(37,42,46); /* Thumb and track color */
+
+}
+
+.aiMenuWrap{
+    background-color:rgb(37,42,46);
+    padding: 1em;
+    border-radius: 5%;
+    height: 40%;
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.aiCard{
+    height: 50%;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
