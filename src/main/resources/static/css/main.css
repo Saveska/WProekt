@@ -899,3 +899,85 @@ textarea {
     text-align: center;
     content:'No Labels!';
 }
+
+
+/* The sidebar menu */
+.aiSidebar {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: rgba(33,37,41,1); /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+/* The sidebar links */
+.aiSidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.aiSidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.aiSidebar .closeAibtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openAibtn {
+    font-size: 30px;
+    cursor: pointer;
+    background-color: rgb(185, 86, 185);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+
+    transition: 0.5s;
+    border-radius: 25px 0 0 25px;
+    z-index: 1000; /* Make sure the button is above the sidebar */
+}
+
+.openAibtn:hover {
+    background-color: rgb(203, 112, 203)
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#mainDiv {
+    transition: margin-right .5s; /* If you want a transition effect */
+    /*padding: 20px;*/
+}
+
+
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+    }
+}
