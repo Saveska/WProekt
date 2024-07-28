@@ -11,6 +11,9 @@ const restoreButtons = document.querySelectorAll(".restore-note-button");
 const permaDeleteButtons = document.querySelectorAll(".delete-permanent-note-button");
 let notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
 
+const aiContainer = document.getElementById("aiDrag");
+const containers = [document.querySelector('#notesContainer'), document.querySelector('#aiDrag')];
+
 
 const restoreAll = document.querySelectorAll(".restore-all-button");
 const deleteAll = document.querySelectorAll(".delete-all-button");
@@ -22,19 +25,20 @@ let allDraggies = {};
 let allTaskContainers = [];
 let allTaskHelpers = [];
 
+let isCurrentlyDragging = false;
+
 const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 addNoCardNotification();
 
-function addNoCardNotification(){
+function addNoCardNotification() {
     let notes = document.querySelectorAll(".appCard");
-    if(notes.length === 0){
+    if (notes.length === 0) {
         notesContainer.classList.add("notification-square");
-    }else{
+    } else {
         notesContainer.classList.remove("notification-square");
     }
 }
-
 
 
 document.querySelectorAll(".helper-task-dropper").forEach(item => {
@@ -59,6 +63,11 @@ var $grid = $('#notesContainer').packery({
 
 });
 
+var $aiCardPackery = $('#aiDrag').packery({
+    itemSelector: '.col',
+    // columnWidth helps with drop positioning
+    columnWidth: 240,
+})
 $grid.imagesLoaded().progress(function () {
     $grid.packery("shiftLayout");
 });
@@ -66,12 +75,80 @@ $grid.find('.col').each(function (i, gridItem) {
     bindDraggie(gridItem);
 });
 
+const aiContainerPlaceholder = aiContainer.getElementsByClassName("ai-drop-helper").item(0);
+$(aiContainer).animate({"height": '300px'}, 100);
+$(aiContainerPlaceholder).animate({"height": '300px'}, 100);
+
 function bindDraggie(gridItem) {
     let handle = gridItem.querySelectorAll(".card-title, .card-img-top, .card-text");
     var draggie = new Draggabilly(gridItem, {handle: handle});
 
-    let id = gridItem.children[0].getAttribute("data-id");
 
+    draggie.on("dragStart", () => {
+        console.log("dragStart!");
+        if(aiContainer.children.length <= 1){
+            $(aiContainer).animate({"height": gridItem.getBoundingClientRect().height + 'px'}, 100);
+            $(aiContainerPlaceholder)
+                .animate({"height": gridItem.getBoundingClientRect().height + 'px'}, 10)
+                .fadeIn(50);
+        }
+
+    });
+
+    draggie.on("dragEnd", function (e, pointer) {
+        console.log("dragEnd!");
+
+        if(aiContainer.children.length > 1){
+            return;
+        }
+        console.log(gridItem);
+        let id = gridItem.children[0].getAttribute("data-id");
+
+
+        let newContainer = findOverlappingContainer(gridItem, containers);
+        console.log(newContainer);
+        let container = gridItem.parentElement;
+        if (newContainer !== container) {
+            console.log(newContainer);
+            console.log(container);
+            if(newContainer === aiContainer){
+
+                notesContainer.getElementsByClassName("packery-drop-placeholder").item(0).remove();
+                $(aiContainerPlaceholder).fadeOut(200)
+
+                $grid.packery('remove', gridItem)
+
+                    .packery('shiftLayout');
+
+                $aiCardPackery.prepend(gridItem)
+                    .packery("prepended", gridItem);
+                // container.removeChild(gridItem);
+                newContainer.appendChild(gridItem);
+
+                allDraggies[id].disable();
+
+
+                gridItem.style.top="50%";
+                gridItem.style.left="50%";
+                gridItem.style.transform = "translate(-50%,-50%)";
+                // pckryInstances.forEach(function (pckry) {
+                //     pckry.reloadItems();
+                //     pckry.layout();
+                // });
+            }
+
+
+
+        }else{
+            $(aiContainer).animate({"height": '300px'}, 100);
+            $(aiContainerPlaceholder).animate({"height": '300px'}, 100);
+        }
+        isCurrentlyDragging = false;
+    });
+
+
+
+    let id = gridItem.children[0].getAttribute("data-id");
 
     allDraggies[id] = draggie;
     if (gridItem.children[0].getAttribute("is-pinned") === "true") {
@@ -84,6 +161,7 @@ function bindDraggie(gridItem) {
 
     // bind drag events to Packery
     $grid.packery('bindDraggabillyEvents', draggie);
+
 }
 
 
@@ -152,7 +230,8 @@ drake.on("drag", (el, source) => {
 
 });
 
-drake.on("dragend", (el) => {
+
+drake.on("dragend", (event, pointer) => {
 
     allTaskHelpers.forEach(item => {
         $(item).fadeOut("fast");
@@ -364,14 +443,14 @@ function addRemoveButtonOnClick(removeButton) {
                 })
                 labelPopoverCard.querySelectorAll(".labelCheckmark").forEach(checkmark => {
                     if (checkmark.getAttribute("name") === removeButton.value) {
-                        $(checkmark.parentElement.parentElement).fadeOut("fast",()=>{
+                        $(checkmark.parentElement.parentElement).fadeOut("fast", () => {
                             $(checkmark.parentElement.parentElement).remove();
                         });
 
                     }
                 })
 
-                if(labelPopoverCard.children[0].children[0].children.length === 0){
+                if (labelPopoverCard.children[0].children[0].children.length === 0) {
 
                     labelPopoverCard.children[0].classList.add("label-popover-info");
                 }
@@ -419,7 +498,7 @@ document.querySelectorAll(".newLabelInput").forEach(input => {
                     labelPopoverCard.children[0].classList.remove("label-popover-info");
                     addLabelCheckmarkEvent(labelPopoverCard.children[0].children[0].querySelectorAll(".labelCheckmark").item(0));
 
-                    labelPopover.querySelectorAll(".remove-label-button").forEach(button=>{
+                    labelPopover.querySelectorAll(".remove-label-button").forEach(button => {
                         addRemoveButtonOnClick(button);
                     })
 
@@ -1459,8 +1538,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function unhighlightText(element) {
         element.innerHTML = element.textContent; // Remove the highlighting
     }
+
     //console.log(labelPopoverCard.children[0].children[0]);
-    if(labelPopoverCard.children[0].children[0].children.length === 0){
+    if (labelPopoverCard.children[0].children[0].children.length === 0) {
         //console.log("test");
         labelPopoverCard.children[0].classList.add("label-popover-info");
     }
@@ -1671,16 +1751,20 @@ deleteAll.forEach(button => {
     })
 })
 
+///////////// za ai
+
+
 let isAiOpen = false;
+
 /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
 function openAiNav() {
-    if(isAiOpen){
+    if (isAiOpen) {
         closeAiNav();
         return;
     }
-    document.getElementById("aiSidebar").style.width = "250px";
-    document.getElementById("mainDiv").style.marginRight = "250px";
-    document.getElementById("openAibtn").style.marginRight = "250px";
+    document.getElementById("aiSidebar").style.width = "300px";
+    document.getElementById("mainDiv").style.marginRight = "300px";
+    document.getElementById("openAibtn").style.marginRight = "300px";
     document.getElementById("openAibtn").classList.remove("pulse");
     isAiOpen = true;
 }
@@ -1693,4 +1777,33 @@ function closeAiNav() {
     document.getElementById("openAibtn").classList.add("pulse");
 
     isAiOpen = false;
+}
+
+
+function findOverlappingContainer(element, containers) {
+    let elementRect = element.getBoundingClientRect();
+    for (let i = 0; i < containers.length; i++) {
+        let container = containers[i];
+        let containerRect = container.getBoundingClientRect();
+
+        if (isOverlapping(elementRect, containerRect)) {
+            return container;
+        }
+    }
+    return null;
+}
+
+function isOverlapping(rect1, rect2) {
+    return !(rect1.right < rect2.left ||
+        rect1.left > rect2.right ||
+        rect1.bottom < rect2.top ||
+        rect1.top > rect2.bottom);
+}
+
+function acceptAI(){
+    console.log("accepted");
+}
+
+function cancelAI(){
+    console.log("cancelled");
 }
