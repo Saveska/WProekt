@@ -64,7 +64,13 @@
     </nav>
 
     <div id="aiSidebar" class="aiSidebar">
-        <div class="aiCard"> card </div>
+        <div class="aiCard" id="aiDrag" style="height: 300px;">
+            <div class="ai-drop-helper">
+                <span>
+                    Drag your card here!
+                    </span>
+            </div>
+        </div>
         <div class="aiMenuWrap">
             <div class="aiMenu">
                 <div class="menu-item"><i class="fas fa-align-left"></i> Summarize</div>
@@ -76,6 +82,12 @@
                 <div class="menu-item"><i class="fas fa-pencil-alt"></i> Change Tone</div>
                 <div class="menu-item"><i class="fas fa-lightbulb"></i> Brainstorm Ideas</div>
             </div>
+        </div>
+
+        <div class="ai-buttons">
+            <button onclick="cancelAI()" class="btn btn-lg btn-dark ai-cancel"><i class="fas fa-backward"></i> Cancel</button>
+            <button onclick="acceptAI()" class="btn btn-lg btn-dark ai-accept"><i class="fa-solid fa-check"></i> Accept</button>
+
         </div>
     </div>
     <button class="openAibtn pulse" id="openAibtn" onclick="openAiNav()">AI</button>

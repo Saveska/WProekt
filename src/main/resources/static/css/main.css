@@ -1031,3 +1031,71 @@ textarea {
         box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
     }
 }
+
+.ai-drop-helper{
+    border: 5px dashed rgb(185, 86, 185);
+    color:white;
+    -webkit-animation: ai-helper-glow 1s alternate infinite;
+    -moz-animation: ai-helper-glow 1s alternate infinite;
+}
+.ai-drop-helper > span{
+    position:absolute;
+    width:100%;
+    text-align: center;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size: 24px;
+}
+
+@-webkit-keyframes ai-helper-glow {
+    0% {
+
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
+        0px 0px 40px 2px rgba(185, 86, 185,1);
+    }
+    100% {
+
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
+        0px 0px 30px 2px rgba(185, 86, 185,0.3);
+    }
+}
+
+@-moz-keyframes ai-helper-glow {
+    0% {
+
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
+        0px 0px 40px 2px rgba(185, 86, 185,1);
+    }
+    100% {
+
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
+        0px 0px 30px 2px rgba(185, 86, 185,0.3);
+    }
+}
+
+#aiDrag{
+    width: 90%;
+    left:50%;
+    transform: translate(-50%,0%);
+    transition: all 0.5s;
+}
+
+.is-dragging{
+    z-index: 10000;
+}
+
+.ai-buttons{
+    display:flex;
+    justify-content:  space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+.ai-cancel{
+    background-color: red;
+}
+
+.ai-accept{
+    background-color: purple;
+}
