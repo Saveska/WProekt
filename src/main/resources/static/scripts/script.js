@@ -79,6 +79,8 @@ const aiContainerPlaceholder = aiContainer.getElementsByClassName("ai-drop-helpe
 $(aiContainer).animate({"height": '300px'}, 100);
 $(aiContainerPlaceholder).animate({"height": '300px'}, 100);
 
+let currentAICard = null;
+
 function bindDraggie(gridItem) {
     let handle = gridItem.querySelectorAll(".card-title, .card-img-top, .card-text");
     var draggie = new Draggabilly(gridItem, {handle: handle});
@@ -86,7 +88,7 @@ function bindDraggie(gridItem) {
 
     draggie.on("dragStart", () => {
         console.log("dragStart!");
-        if(aiContainer.children.length <= 1){
+        if (aiContainer.children.length <= 1) {
             $(aiContainer).animate({"height": gridItem.getBoundingClientRect().height + 'px'}, 100);
             $(aiContainerPlaceholder)
                 .animate({"height": gridItem.getBoundingClientRect().height + 'px'}, 10)
@@ -98,7 +100,7 @@ function bindDraggie(gridItem) {
     draggie.on("dragEnd", function (e, pointer) {
         console.log("dragEnd!");
 
-        if(aiContainer.children.length > 1){
+        if (aiContainer.children.length > 1) {
             return;
         }
         console.log(gridItem);
@@ -111,10 +113,11 @@ function bindDraggie(gridItem) {
         if (newContainer !== container) {
             console.log(newContainer);
             console.log(container);
-            if(newContainer === aiContainer){
+            if (newContainer === aiContainer) {
 
                 notesContainer.getElementsByClassName("packery-drop-placeholder").item(0).remove();
                 $(aiContainerPlaceholder).fadeOut(200)
+
 
                 $grid.packery('remove', gridItem)
 
@@ -128,9 +131,11 @@ function bindDraggie(gridItem) {
                 allDraggies[id].disable();
 
 
-                gridItem.style.top="50%";
-                gridItem.style.left="50%";
+                gridItem.style.top = "50%";
+                gridItem.style.left = "50%";
                 gridItem.style.transform = "translate(-50%,-50%)";
+
+                currentAICard = gridItem;
                 // pckryInstances.forEach(function (pckry) {
                 //     pckry.reloadItems();
                 //     pckry.layout();
@@ -138,14 +143,12 @@ function bindDraggie(gridItem) {
             }
 
 
-
-        }else{
+        } else {
             $(aiContainer).animate({"height": '300px'}, 100);
             $(aiContainerPlaceholder).animate({"height": '300px'}, 100);
         }
         isCurrentlyDragging = false;
     });
-
 
 
     let id = gridItem.children[0].getAttribute("data-id");
@@ -1800,10 +1803,106 @@ function isOverlapping(rect1, rect2) {
         rect1.top > rect2.bottom);
 }
 
-function acceptAI(){
+function acceptAI() {
+    if (!currentAICard) {
+        return;
+    }
+    console.log(currentAICard);
+    const title = currentAICard.getElementsByClassName("card-title").item(0).innerText;
+
+    let type;
+    let data;
+
+    if (currentAICard.getElementsByClassName("noteCard").length >= 1) {
+        type = 'note';
+        data = gatherNoteData(currentAICard)
+    }
+    if (currentAICard.getElementsByClassName("taskCard").length >= 1) {
+        type = 'task';
+        data = gatherTaskData(currentAICard);
+        console.log(data);
+    }
+
+    const toSend = {
+        "title": title,
+        "type": type,
+        "data": data
+    }
+
+    const json = JSON.stringify(toSend);
+
+    console.log(json);
+
     console.log("accepted");
 }
 
-function cancelAI(){
+function gatherNoteData(card) {
+    return {
+        noteContent: card.getElementsByClassName("card-text").item(0).innerText
+    };
+
+}
+
+function gatherTaskData(card) {
+    let tasks = [];
+    card.getElementsByClassName("card-task").forEach(task => {
+        let taskObject = {
+            taskContent: task.innerText,
+            finished: task.classList.contains("strike")
+        };
+
+        tasks.push(taskObject);
+    })
+
+    return tasks;
+}
+
+/*
+{
+"title":"...",
+"data":
+    {
+        "type": "task",
+        "tasks": [
+            [
+                {
+                "taskContent": "...",
+                "finished" : bool,
+                }
+        ]
+    },
+
+}
+
+
+ */
+
+function cancelAI() {
+    //todo: da se zacuvuva starata karticka pred ai promeni
+    if (!currentAICard) {
+        return;
+    }
+    currentAICard.style.top = "0%";
+    currentAICard.style.left = "0%";
+    currentAICard.style.transform = "";
+
+    $grid.prepend(currentAICard.cloneNode(true)).packery('prepended', currentAICard)
+
+        .packery('shiftLayout');
+
+    $aiCardPackery.remove(currentAICard)
+        .packery("remove", currentAICard);
+    // container.removeChild(gridItem);
+
+    let id = currentAICard.children[0].getAttribute("data-id");
+
+    allDraggies[id].enable();
+
+
+    $(aiContainerPlaceholder).fadeIn(200);
+
+
+    currentAICard = null;
+
     console.log("cancelled");
 }
