@@ -1824,6 +1824,7 @@ function acceptAI() {
     }
 
     const toSend = {
+        "function" : "summarize",
         "title": title,
         "type": type,
         "data": data
@@ -1834,6 +1835,23 @@ function acceptAI() {
     console.log(json);
 
     console.log("accepted");
+
+    $.ajax({
+        url: 'ai',
+        type: 'POST',
+        dataType: 'json',
+        data: json,
+        success: (dataP) => {
+            savingStatus.hidden = true;
+
+            console.log(dataP);
+
+
+        }, error: (jqXhr) => {
+            console.log(jqXhr);
+        }
+
+    });
 }
 
 function gatherNoteData(card) {
@@ -1859,7 +1877,8 @@ function gatherTaskData(card) {
 
 /*
 {
-"title":"...",
+"function" : "summarize",
+"title": "...",
 "data":
     {
         "type": "task",

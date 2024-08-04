@@ -1,7 +1,6 @@
 package com.wproekt.config;
 
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -16,6 +15,9 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 
 @EnableWebSecurity
@@ -39,37 +41,48 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/login**", "/register", "/verify/**/**", "/img/**", "/scripts/**", "/css/**", "/resetPassword","/reset/**/**","/resetForm","oauth2**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/home", true)
-                .failureHandler(customAuthenticationFailureHandler())
-                .permitAll()
 
-
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/login")
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuthUserService))
-                .loginPage("/login")
-
-                .defaultSuccessUrl("/home", true)
-                .successHandler(successHandler)
-                .failureHandler(customAuthenticationFailureHandler())
-                .permitAll();
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(
+                                antMatcher("/login**"),
+                                antMatcher("/register"),
+                                antMatcher("/verify/**/**"),
+                                antMatcher("/img/**"),
+                                antMatcher("/scripts/**"),
+                                antMatcher("/css/**"),
+                                antMatcher("/resetPassword"),
+                                antMatcher("/reset/**/**"),
+                                antMatcher("/resetForm"),
+                                antMatcher("oauth2**")).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .failureHandler(customAuthenticationFailureHandler())
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(oAuthUserService))
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .successHandler(successHandler)
+                        .failureHandler(customAuthenticationFailureHandler())
+                        .permitAll()
+                );
 
         return http.build();
     }
+
 
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
@@ -96,6 +109,7 @@ public class SecurityConfig {
         authenticationManagerBuilder.authenticationProvider(customUsernamePasswordAuthenticationProvider);
 
         return authenticationManagerBuilder.build();
+
     }
 
 
