@@ -1,14 +1,13 @@
 package com.wproekt.web;
 
 import com.wproekt.model.*;
-import com.wproekt.service.CardService;
-import com.wproekt.service.TaskService;
-import com.wproekt.service.UserService;
-import com.wproekt.service.UtilService;
-import org.json.JSONArray;
+import com.wproekt.service.*;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +30,17 @@ public class AjaxTaskController {
     CardService cardService;
     UtilService utilService;
 
-    public AjaxTaskController(UserService userService, TaskService taskService, CardService cardService, UtilService utilService) {
+    OpenAiChatModel chatModel;
+
+    AiChatService aiChatService;
+
+    public AjaxTaskController(UserService userService, TaskService taskService, CardService cardService, UtilService utilService, OpenAiChatModel chatModel, AiChatService aiChatService) {
         this.userService = userService;
         this.taskService = taskService;
         this.cardService = cardService;
         this.utilService = utilService;
+        this.chatModel = chatModel;
+        this.aiChatService = aiChatService;
     }
 
     //AJAX CALLS
@@ -169,6 +174,12 @@ public class AjaxTaskController {
                                    @RequestBody String requestData) {
         User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali kartickata e od korisniko
+
+        System.out.println("ovde sum!");
+        ChatResponse response = chatModel.call(new Prompt("how are you?"));
+        
+
+        System.out.println(response);
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
 
@@ -572,5 +583,30 @@ public class AjaxTaskController {
         }
 
         return false;
+    }
+
+
+    @PostMapping("/ai")
+    @ResponseBody
+
+    public String AIAjax(Authentication authentication,
+                                   @RequestBody String requestData) {
+
+        User currentUser = userService.getUserFromAuth(authentication);
+        //TODO: da se proveri dali card pripajdza na user
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+            JSONObject jo = new JSONObject(decodedData);
+
+            System.out.println(jo);
+            System.out.println(aiChatService.read(jo));
+
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }

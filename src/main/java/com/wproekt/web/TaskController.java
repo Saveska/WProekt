@@ -2,54 +2,48 @@ package com.wproekt.web;
 
 import com.wproekt.model.*;
 import com.wproekt.model.Label;
-import com.wproekt.service.CardService;
-import com.wproekt.service.EmailService;
-import com.wproekt.service.TaskService;
-import com.wproekt.service.UserService;
+import com.wproekt.service.*;
 
-import org.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.bind.DatatypeConverter;
-import java.awt.*;
+
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 @Controller
 public class TaskController {
 
 
-    public static List<Color> colors = List.of(new Color(185, 86, 185),
-            new Color(0, 109, 170),
-            new Color(230, 186, 25),
-            new Color(121, 186, 86),
-            new Color(76, 86, 186)
+    public static List<ColorWrapper> colors = List.of(new ColorWrapper(185, 86, 185),
+            new ColorWrapper(0, 109, 170),
+            new ColorWrapper(230, 186, 25),
+            new ColorWrapper(121, 186, 86),
+            new ColorWrapper(76, 86, 186)
     );
     UserService userService;
     TaskService taskService;
     CardService cardService;
     EmailService emailService;
 
+
+
+
+
+
     public TaskController(UserService userService, TaskService taskService, CardService cardService, EmailService emailService) {
         this.userService = userService;
         this.taskService = taskService;
         this.cardService = cardService;
         this.emailService = emailService;
+
     }
 
     @GetMapping({"/", "/home"})
@@ -66,9 +60,10 @@ public class TaskController {
         model.addAttribute("cards", userCards);
         model.addAttribute("colors", colors);
         model.addAttribute("labels", labels);
-        model.addAttribute("username",currentUser.getName());
+        model.addAttribute("username", currentUser.getName());
 
         model.addAttribute("page", "home");
+
 
         return "landingPage";
     }
@@ -83,7 +78,7 @@ public class TaskController {
 
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "trash");
-        model.addAttribute("username",currentUser.getName());
+        model.addAttribute("username", currentUser.getName());
 
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("labels", labels);
@@ -108,14 +103,14 @@ public class TaskController {
 
     @GetMapping({"/archive"})
     public String GetArchivePage(Authentication authentication,
-                               Model model) {
+                                 Model model) {
         User currentUser = userService.getUserFromAuth(authentication);
 
         List<Card> userCards = userService.getArchivePageCards(currentUser.getUsername());
 
         model.addAttribute("cards", userCards);
         model.addAttribute("page", "archive");
-        model.addAttribute("username",currentUser.getName());
+        model.addAttribute("username", currentUser.getName());
 
         Set<Label> labels = userService.getUserLabels(currentUser.getUsername());
         model.addAttribute("labels", labels);

@@ -3,7 +3,7 @@ package com.wproekt.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity

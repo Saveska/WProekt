@@ -2,9 +2,8 @@ package com.wproekt.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data
