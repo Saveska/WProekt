@@ -18,6 +18,8 @@ public class AiChatServiceImplementation implements AiChatService {
 
     OpenAiChatModel chatModel;
 
+
+
     public AiChatServiceImplementation(OpenAiChatModel chatModel) {
         this.chatModel = chatModel;
     }
@@ -48,12 +50,32 @@ public class AiChatServiceImplementation implements AiChatService {
 
 
 
-        if(function.equals("summarize")){
+        if(function.equals("summarize")) {
 
             toReturn.put("instruction", "Summarize the tasks into a concise sentence");
             toReturn.put("output",
                     "{'data': Structured Output }");
         }
+        else if(function.equals("findItems")){
+            toReturn.put("instruction", "Find action items");
+            toReturn.put("output", "{'data': found items returned in the same format they are given}");
+        } else if (function.equals("explain")) {
+            toReturn.put("instruction", "Explain the data in simpler terms");
+            toReturn.put("output", "{'data': structured simplified explanation}");
+        } else if (function.equals("improve")) {
+            toReturn.put("instruction", "Improve the writing");
+            toReturn.put("output", "{'data': improved data in the same format that is given}");
+        } else if (function.equals("spelling")) {
+            toReturn.put("instruction", "Fix the spelling and grammar");
+            toReturn.put("output", "{'data': fixed data in the same format that is given}");
+        } else if (function.equals("shorter")) {
+            toReturn.put("instruction", "Make the data shorter");
+            toReturn.put("output", "{'data': shorter data in the same format that is given}");
+        } else if (function.equals("brainstorm")) {
+            toReturn.put("instruction", "Brainstorm ideas based on the data");
+            toReturn.put("output", "{'data': new data in the same format that is given}");
+        }
+
         //1.findItems
         //       [
         //                {
@@ -68,7 +90,6 @@ public class AiChatServiceImplementation implements AiChatService {
         //
         //
         //        ]
-
 
         //2.explain
         //3.improve
