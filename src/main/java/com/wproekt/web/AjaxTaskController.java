@@ -2,6 +2,7 @@ package com.wproekt.web;
 
 import com.wproekt.model.*;
 import com.wproekt.service.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -74,7 +74,7 @@ public class AjaxTaskController {
     @ResponseBody
     public List<TaskCard> taskPostAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = userService.getUserFromAuth(authentication);
-        Map<String, Object> tasks;
+        Map<String, Object> tasks = new HashMap<>();
 
         try {
             String decodedData = URLDecoder.decode(requestData, UTF_8);
@@ -85,7 +85,13 @@ public class AjaxTaskController {
 
 
             JSONObject jsonArray = jo.getJSONObject("allTasks");
-            tasks = jsonArray.toMap();
+            Iterator<String> stringIterator = jsonArray.keys();
+            while(stringIterator.hasNext()){
+                String key = stringIterator.next();
+                tasks.put(key,jsonArray.get(key));
+            }
+
+//            tasks = jsonArray.toMap();
 
             TaskCard card = userService.addTaskCard(currentUser.getUsername(), title);
             List<Task> taskList = taskService.createList(tasks);
@@ -452,9 +458,18 @@ public class AjaxTaskController {
 
             JSONObject jo = new JSONObject(decodedData);
 
+            System.out.println("biten!");
 
-            List<Object> array = jo.getJSONArray("order").toList();
-            cardService.reorderUsersCard(currentUser.getUsername(), array);
+            JSONArray jsonArray = jo.getJSONArray("order");
+            List<Object> arrayToSend = new ArrayList<>();
+            for(int i = 0; i < jsonArray.length(); i ++ ){
+                arrayToSend.add(jsonArray.get(i));
+            }
+
+
+//            System.out.println( jo.getJSONArray("order").);
+
+            cardService.reorderUsersCard(currentUser.getUsername(), arrayToSend);
 
             return new ArrayList<>();
 

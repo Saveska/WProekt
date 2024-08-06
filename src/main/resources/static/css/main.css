@@ -977,6 +977,8 @@ textarea {
 
     display: flex;
     align-items: center;
+
+    transition: 0.1s all;
 }
 
 .menu-item i {
@@ -985,6 +987,7 @@ textarea {
 
 .menu-item:hover {
     background-color: rgb(81,81,81);
+    border-radius: 8px;
 }
 
 .aiMenu{
@@ -1098,4 +1101,12 @@ textarea {
 
 .ai-accept{
     background-color: purple;
+}
+
+.menu-item.active{
+    background-color: rgba(185, 86, 185,0.5);
+    border-radius: 10px;
+    transition: 0.1s all;
+    font-size: 18px;
+
 }

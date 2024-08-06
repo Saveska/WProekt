@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 @Service
 public class AiChatServiceImplementation implements AiChatService {
 
     OpenAiChatModel chatModel;
-
 
 
     public AiChatServiceImplementation(OpenAiChatModel chatModel) {
@@ -27,7 +27,7 @@ public class AiChatServiceImplementation implements AiChatService {
     @Override
     public String read(JSONObject input) {
 
-        Map<String,String> instructionMap = getInstructionOutput(input);
+        Map<String, String> instructionMap = getInstructionOutput(input);
 
         String instruction = instructionMap.get("instruction");
         String output = instructionMap.get("output");
@@ -39,24 +39,36 @@ public class AiChatServiceImplementation implements AiChatService {
         Prompt prompt = new Prompt(userMessage);
         ChatResponse res = chatModel.call(prompt);
 
+
+        chatModel.stream(prompt).subscribe(
+                response -> {
+                    System.out.println(response.getResult().getOutput());
+                },
+                error -> {
+                    System.err.println("Error during streaming");
+                },
+                () -> {
+                    System.out.println("Streaming Complete.");
+                }
+
+        );
+
         return res.getResult().getOutput().toString();
 
     }
 
-    private Map<String,String> getInstructionOutput(JSONObject input){
+    private Map<String, String> getInstructionOutput(JSONObject input) {
         String function = input.getString("function");
 
         Map<String, String> toReturn = new HashMap<>();
 
 
-
-        if(function.equals("summarize")) {
+        if (function.equals("summarize")) {
 
             toReturn.put("instruction", "Summarize the tasks into a concise sentence");
             toReturn.put("output",
                     "{'data': Structured Output }");
-        }
-        else if(function.equals("findItems")){
+        } else if (function.equals("findItems")) {
             toReturn.put("instruction", "Find action items");
             toReturn.put("output", "{'data': found items returned in the same format they are given}");
         } else if (function.equals("explain")) {
@@ -99,7 +111,8 @@ public class AiChatServiceImplementation implements AiChatService {
 
         return toReturn;
     }
-    private Message getSystemText(JSONObject input, String instruction, String output){
+
+    private Message getSystemText(JSONObject input, String instruction, String output) {
         String systemText;
 
         String typeCard = input.get("type").toString();
@@ -107,22 +120,21 @@ public class AiChatServiceImplementation implements AiChatService {
         String dataCard = input.get("data").toString();
 
         systemText = """
-                        You are a helpful AI assistant for a task monitoring application. You will get card
-                        information from the user and you will have to do some transformation on the card.
-                        Be concise and only output the needed data without additional comments.
-                        
-                        On the input you will get a card that contains {contains}.
-                        {instruction}
-                        
-                        Card Title: '{title}',
-                        Card Type: '{type}',
-                        Card Data: '{data}',
-                        
-                        Return in this format:
-                        {output}
-                    """;
+                    You are a helpful AI assistant for a task monitoring application. You will get card
+                    information from the user and you will have to do some transformation on the card.
+                    Be concise and only output the needed data without additional comments.
+                    
+                    On the input you will get a card that contains {contains}.
+                    {instruction}
+                    
+                    Card Title: '{title}',
+                    Card Type: '{type}',
+                    Card Data: '{data}',
+                    
+                    Return in this format:
+                    {output}
+                """;
         String contains = typeCard.equals("task") ? "tasks" : "text";
-
 
 
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText);

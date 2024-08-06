@@ -129,6 +129,7 @@ function bindDraggie(gridItem) {
                 newContainer.appendChild(gridItem);
 
                 allDraggies[id].disable();
+                delete allDraggies[id];
 
 
                 gridItem.style.top = "50%";
@@ -1803,11 +1804,25 @@ function isOverlapping(rect1, rect2) {
         rect1.top > rect2.bottom);
 }
 
+
+document.querySelectorAll(".aiMenu > .menu-item").forEach(element => {
+    element.addEventListener("click", e => {
+        console.log('ejj');
+        document.querySelectorAll(".aiMenu > .menu-item.active").forEach(el2 => {
+            el2.classList.remove("active");
+        });
+
+        element.classList.add("active");
+
+    })
+})
+
 function acceptAI() {
     if (!currentAICard) {
         return;
     }
-    console.log(currentAICard);
+
+
     const title = currentAICard.getElementsByClassName("card-title").item(0).innerText;
 
     let type;
@@ -1823,8 +1838,16 @@ function acceptAI() {
         console.log(data);
     }
 
+    const aiFunctionDiv = document.querySelector(".aiMenu > .menu-item.active");
+
+    if (aiFunctionDiv === undefined) {
+        console.error("No function chosen");
+        return;
+    }
+    const aiFunction = aiFunctionDiv.getAttribute("data-ai");
+
     const toSend = {
-        "function" : "summarize",
+        "function": aiFunction,
         "title": title,
         "type": type,
         "data": data
@@ -1901,22 +1924,23 @@ function cancelAI() {
     if (!currentAICard) {
         return;
     }
-    currentAICard.style.top = "0%";
-    currentAICard.style.left = "0%";
-    currentAICard.style.transform = "";
 
-    $grid.prepend(currentAICard.cloneNode(true)).packery('prepended', currentAICard)
+    currentAICard.style.cssText = null;
+    currentAICard.style.position = "absolute";
+    currentAICard.style.top = "0px";
+    currentAICard.style.left = "0px";
+
+    let cloned = currentAICard.cloneNode(true);
+    bindDraggie(cloned);
+
+    $grid.prepend(cloned).packery('prepended', cloned)
 
         .packery('shiftLayout');
 
     $aiCardPackery.remove(currentAICard)
         .packery("remove", currentAICard);
     // container.removeChild(gridItem);
-
-    let id = currentAICard.children[0].getAttribute("data-id");
-
-    allDraggies[id].enable();
-
+    currentAICard.remove();
 
     $(aiContainerPlaceholder).fadeIn(200);
 
