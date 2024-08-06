@@ -9,10 +9,10 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 @Service
 public class AiChatServiceImplementation implements AiChatService {
@@ -25,7 +25,7 @@ public class AiChatServiceImplementation implements AiChatService {
     }
 
     @Override
-    public String read(JSONObject input) {
+    public Flux<ChatResponse> read(JSONObject input) {
 
         Map<String, String> instructionMap = getInstructionOutput(input);
 
@@ -37,23 +37,9 @@ public class AiChatServiceImplementation implements AiChatService {
         System.out.println(userMessage);
 
         Prompt prompt = new Prompt(userMessage);
-        ChatResponse res = chatModel.call(prompt);
 
 
-        chatModel.stream(prompt).subscribe(
-                response -> {
-                    System.out.println(response.getResult().getOutput());
-                },
-                error -> {
-                    System.err.println("Error during streaming");
-                },
-                () -> {
-                    System.out.println("Streaming Complete.");
-                }
-
-        );
-
-        return res.getResult().getOutput().toString();
+        return chatModel.stream(prompt);
 
     }
 
@@ -63,29 +49,36 @@ public class AiChatServiceImplementation implements AiChatService {
         Map<String, String> toReturn = new HashMap<>();
 
 
-        if (function.equals("summarize")) {
-
-            toReturn.put("instruction", "Summarize the tasks into a concise sentence");
-            toReturn.put("output",
-                    "{'data': Structured Output }");
-        } else if (function.equals("findItems")) {
-            toReturn.put("instruction", "Find action items");
-            toReturn.put("output", "{'data': found items returned in the same format they are given}");
-        } else if (function.equals("explain")) {
-            toReturn.put("instruction", "Explain the data in simpler terms");
-            toReturn.put("output", "{'data': structured simplified explanation}");
-        } else if (function.equals("improve")) {
-            toReturn.put("instruction", "Improve the writing");
-            toReturn.put("output", "{'data': improved data in the same format that is given}");
-        } else if (function.equals("spelling")) {
-            toReturn.put("instruction", "Fix the spelling and grammar");
-            toReturn.put("output", "{'data': fixed data in the same format that is given}");
-        } else if (function.equals("shorter")) {
-            toReturn.put("instruction", "Make the data shorter");
-            toReturn.put("output", "{'data': shorter data in the same format that is given}");
-        } else if (function.equals("brainstorm")) {
-            toReturn.put("instruction", "Brainstorm ideas based on the data");
-            toReturn.put("output", "{'data': new data in the same format that is given}");
+        switch (function) {
+            case "summarize" -> {
+                toReturn.put("instruction", "Summarize the tasks into a concise sentence.");
+                toReturn.put("output", "{\"type\": \"note\", \"data\": \"Summarized sentence\"}");
+            }
+            case "findItems" -> {
+                toReturn.put("instruction", "Identify and list the action items from the given data.");
+                toReturn.put("output", "{\"type\": \"task\", \"data\": [{\"taskContent\": \"...\", \"finished\": true/false}]}");
+            }
+            case "explain" -> {
+                toReturn.put("instruction", "Explain the given data in simpler terms.");
+                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Simplified explanation\"}");
+            }
+            case "improve" -> {
+                toReturn.put("instruction", "Improve the quality of the given writing.");
+                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Improved data\"}");
+            }
+            case "spelling" -> {
+                toReturn.put("instruction", "Correct the spelling and grammar of the given data.");
+                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Corrected data\"}");
+            }
+            case "shorter" -> {
+                toReturn.put("instruction", "Shorten the given data while retaining its meaning.");
+                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Shortened data\"}");
+            }
+            case "brainstorm" -> {
+                toReturn.put("instruction", "Generate new ideas based on the given data.");
+                toReturn.put("output", "{\"type\": \"task\", \"data\": [{\"taskContent\": \"New task idea\", \"finished\": false}, ...]}");
+            }
+            default -> throw new IllegalArgumentException("Unsupported function: " + function);
         }
 
         //1.findItems
@@ -120,18 +113,18 @@ public class AiChatServiceImplementation implements AiChatService {
         String dataCard = input.get("data").toString();
 
         systemText = """
-                    You are a helpful AI assistant for a task monitoring application. You will get card
-                    information from the user and you will have to do some transformation on the card.
-                    Be concise and only output the needed data without additional comments.
+                    You are a helpful AI assistant for a task monitoring application. Your role is to transform 
+                    the provided card information based on specific instructions. Be concise and output only
+                    the required data without additional comments.
                     
-                    On the input you will get a card that contains {contains}.
+                    You will receive a card containing {contains}.
                     {instruction}
                     
                     Card Title: '{title}',
                     Card Type: '{type}',
                     Card Data: '{data}',
                     
-                    Return in this format:
+                    You must return the response in the following JSON format:
                     {output}
                 """;
         String contains = typeCard.equals("task") ? "tasks" : "text";

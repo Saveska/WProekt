@@ -10,6 +10,8 @@ const popoverInput = labelPopover.querySelector(".newLabelInput");
 const restoreButtons = document.querySelectorAll(".restore-note-button");
 const permaDeleteButtons = document.querySelectorAll(".delete-permanent-note-button");
 let notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+const AIProcessingDiv = document.getElementsByClassName("ai-processing").item(0);
+
 
 const aiContainer = document.getElementById("aiDrag");
 const containers = [document.querySelector('#notesContainer'), document.querySelector('#aiDrag')];
@@ -88,7 +90,7 @@ function bindDraggie(gridItem) {
 
     draggie.on("dragStart", () => {
         console.log("dragStart!");
-        if (aiContainer.children.length <= 1) {
+        if (aiContainer.children.length <= 2) {
             $(aiContainer).animate({"height": gridItem.getBoundingClientRect().height + 'px'}, 100);
             $(aiContainerPlaceholder)
                 .animate({"height": gridItem.getBoundingClientRect().height + 'px'}, 10)
@@ -100,7 +102,7 @@ function bindDraggie(gridItem) {
     draggie.on("dragEnd", function (e, pointer) {
         console.log("dragEnd!");
 
-        if (aiContainer.children.length > 1) {
+        if (aiContainer.children.length > 2) {
             return;
         }
         console.log(gridItem);
@@ -1817,6 +1819,8 @@ document.querySelectorAll(".aiMenu > .menu-item").forEach(element => {
     })
 })
 
+$(AIProcessingDiv).fadeOut(0);
+
 function acceptAI() {
     if (!currentAICard) {
         return;
@@ -1844,6 +1848,8 @@ function acceptAI() {
         console.error("No function chosen");
         return;
     }
+
+    $(AIProcessingDiv).fadeIn(100);
     const aiFunction = aiFunctionDiv.getAttribute("data-ai");
 
     const toSend = {
@@ -1870,8 +1876,29 @@ function acceptAI() {
             console.log(dataP);
 
 
+            try{
+                const typeResponse = dataP["type"];
+                const dataResponse = dataP["data"];
+
+                console.log(type);
+                console.log(typeResponse);
+
+                if(type === "note" && type === typeResponse){
+                    console.log(currentAICard);
+                    currentAICard.getElementsByClassName("card-text").item(0).innerText = dataResponse;
+                }
+            }
+            catch (e){
+                console.error(e);
+            }
+
+            $(AIProcessingDiv).fadeOut(100);
+
+
+
         }, error: (jqXhr) => {
             console.log(jqXhr);
+            $(AIProcessingDiv).fadeOut(100);
         }
 
     });
@@ -1918,7 +1945,6 @@ function gatherTaskData(card) {
 
 
  */
-
 function cancelAI() {
     //todo: da se zacuvuva starata karticka pred ai promeni
     if (!currentAICard) {
@@ -1949,3 +1975,4 @@ function cancelAI() {
 
     console.log("cancelled");
 }
+
