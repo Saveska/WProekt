@@ -56,23 +56,23 @@ public class AiChatServiceImplementation implements AiChatService {
             }
             case "findItems" -> {
                 toReturn.put("instruction", "Identify and list the action items from the given data.");
-                toReturn.put("output", "{\"type\": \"task\", \"data\": [{\"taskContent\": \"...\", \"finished\": true/false}]}");
+                toReturn.put("output", "{\"type\": Note or Task card data, \"data\": [{\"taskContent\": \"...\", \"finished\": true/false}]}");
             }
             case "explain" -> {
                 toReturn.put("instruction", "Explain the given data in simpler terms.");
-                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Simplified explanation\"}");
+                toReturn.put("output", "{\"type\": Note or Task card data, \"data\": \"Simplified explanation\"}");
             }
             case "improve" -> {
                 toReturn.put("instruction", "Improve the quality of the given writing.");
-                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Improved data\"}");
+                toReturn.put("output", "{\"type\": Note or Task card data, \"data\": \"Improved data\"}");
             }
             case "spelling" -> {
                 toReturn.put("instruction", "Correct the spelling and grammar of the given data.");
-                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Corrected data\"}");
+                toReturn.put("output", "{\"type\": Note or Task card data, \"data\": \"Corrected data\"}");
             }
             case "shorter" -> {
                 toReturn.put("instruction", "Shorten the given data while retaining its meaning.");
-                toReturn.put("output", "{\"type\": \"{type}\", \"data\": \"Shortened data\"}");
+                toReturn.put("output", "{\"type\": Note or Task card data, \"data\": \"Shortened data\"}");
             }
             case "brainstorm" -> {
                 toReturn.put("instruction", "Generate new ideas based on the given data.");
@@ -126,6 +126,8 @@ public class AiChatServiceImplementation implements AiChatService {
                     
                     You must return the response in the following JSON format:
                     {output}
+                   
+                    
                 """;
         String contains = typeCard.equals("task") ? "tasks" : "text";
 

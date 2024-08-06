@@ -105,9 +105,11 @@ body {
     color: white;
     background-color: rgb(13, 163, 243);
 }
-.restore-all-button :hover{
-    color:white;
+
+.restore-all-button :hover {
+    color: white;
 }
+
 .tasks {
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
@@ -126,8 +128,9 @@ body {
     margin-top: 1em;
 
 }
-.cont-side>.sidebar>*{
-    margin-bottom:5px;
+
+.cont-side > .sidebar > * {
+    margin-bottom: 5px;
 }
 
 
@@ -604,9 +607,11 @@ textarea {
     margin-right: auto;
     border-radius: 0;
 }
-.remove-label-button:hover{
+
+.remove-label-button:hover {
     background-color: #ff9b9b;
 }
+
 .add-label-popover {
     background-color: white;
     --bs-border-width: 0;
@@ -820,7 +825,7 @@ textarea {
 
 }
 
- .restore-note-button {
+.restore-note-button {
     background-color: rgb(13, 163, 243);
     opacity: 0;
     transition: 0.3s all;
@@ -828,12 +833,13 @@ textarea {
 
 .restore-all-button:hover, .restore-note-button:hover {
     background-color: rgb(78, 185, 243);
-    color:white;
-    border:none;
+    color: white;
+    border: none;
 }
-.restore-all-button:focus, .restore-all-button:active{
-    color:white !important;
-    border:none;
+
+.restore-all-button:focus, .restore-all-button:active {
+    color: white !important;
+    border: none;
 }
 
 .appCard:hover .restore-note-button {
@@ -850,21 +856,22 @@ textarea {
     opacity: 1;
 }
 
-.notification-square{
+.notification-square {
     border: 3px dashed gray;
-    height:60vh!important;
+    height: 60vh !important;
 }
-.notification-square .notification-info{
-    display:block;
+
+.notification-square .notification-info {
+    display: block;
     opacity: 1;
 }
 
-.notification-info{
-    color:white;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+.notification-info {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 2rem;
     text-align: center;
     display: none;
@@ -872,32 +879,35 @@ textarea {
     transition: 0.3s all;
 }
 
-#labeladder-popover .list-group{
+#labeladder-popover .list-group {
     max-height: 30vh;
-    overflow:auto;
+    overflow: auto;
 }
 
-#labeladder-popover-card .list-group{
+#labeladder-popover-card .list-group {
     max-height: 50vh;
     overflow: auto;
 }
-.labelCheckmark{
+
+.labelCheckmark {
     background-color: rgb(138, 138, 138);
 }
-.labelCheckmark:checked{
+
+.labelCheckmark:checked {
     background-color: rgb(217, 139, 217);
 }
 
-.label-popover-info{
+.label-popover-info {
     border: dashed 3px gray;
-    width:80px;
-    height:80px;
+    width: 80px;
+    height: 80px;
 
 }
-.label-popover-info:before{
+
+.label-popover-info:before {
     font-size: 1rem;
     text-align: center;
-    content:'No Labels!';
+    content: 'No Labels!';
 }
 
 
@@ -906,18 +916,18 @@ textarea {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-   /* z-index: 1; /* Stay on top */
+    /* z-index: 1; /* Stay on top */
     top: 0;
     right: 0;
-    background-color: rgba(33,37,41,1); /* Black*/
+    background-color: rgba(33, 37, 41, 1); /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
-    z-index:9999;
+    z-index: 9999;
     flex-direction: column;
     justify-content: space-between;
-}
 
+}
 
 
 /* The sidebar links */
@@ -986,32 +996,32 @@ textarea {
 }
 
 .menu-item:hover {
-    background-color: rgb(81,81,81);
+    background-color: rgb(81, 81, 81);
     border-radius: 8px;
 }
 
-.aiMenu{
-    overflow-y: scroll;
-    background-color:rgb(37,42,46);
+.aiMenu {
+    overflow-y: hidden;
+    background-color: rgb(37, 42, 46);
 
     height: 100%;
     width: 100%;
 
-    scrollbar-color: rgb(81,81,81) rgb(37,42,46); /* Thumb and track color */
+    scrollbar-color: rgb(81, 81, 81) rgb(37, 42, 46); /* Thumb and track color */
 
 }
 
-.aiMenuWrap{
-    background-color:rgb(37,42,46);
+.aiMenuWrap {
+    background-color: rgb(37, 42, 46);
     padding: 1em;
     border-radius: 5%;
-    height: 40%;
+    /*height: 40%;*/
     width: 80%;
     margin: 0 auto;
     box-sizing: border-box;
 }
 
-.aiCard{
+.aiCard {
     height: 50%;
 }
 
@@ -1035,95 +1045,99 @@ textarea {
     }
 }
 
-.ai-drop-helper{
+.ai-drop-helper {
     border: 5px dashed rgb(185, 86, 185);
-    color:white;
+    color: white;
     -webkit-animation: ai-helper-glow 1s alternate infinite;
     -moz-animation: ai-helper-glow 1s alternate infinite;
 }
-.ai-drop-helper > span{
-    position:absolute;
-    width:100%;
+
+.ai-drop-helper > span {
+    position: absolute;
+    width: 100%;
     text-align: center;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 24px;
 }
 
 @-webkit-keyframes ai-helper-glow {
     0% {
 
-        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
-        0px 0px 40px 2px rgba(185, 86, 185,1);
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185, 0.5),
+        0px 0px 40px 2px rgba(185, 86, 185, 1);
     }
     100% {
 
-        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
-        0px 0px 30px 2px rgba(185, 86, 185,0.3);
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185, 0.5),
+        0px 0px 30px 2px rgba(185, 86, 185, 0.3);
     }
 }
 
 @-moz-keyframes ai-helper-glow {
     0% {
 
-        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
-        0px 0px 40px 2px rgba(185, 86, 185,1);
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185, 0.5),
+        0px 0px 40px 2px rgba(185, 86, 185, 1);
     }
     100% {
 
-        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185,0.5),
-        0px 0px 30px 2px rgba(185, 86, 185,0.3);
+        box-shadow: inset 0px 0px 10px 2px rgba(185, 86, 185, 0.5),
+        0px 0px 30px 2px rgba(185, 86, 185, 0.3);
     }
 }
 
-#aiDrag{
+#aiDrag {
     width: 90%;
-    left:50%;
-    transform: translate(-50%,0%);
+    left: 50%;
+    transform: translate(-50%, 0%);
     transition: all 0.5s;
 }
 
-.is-dragging{
+.is-dragging {
     z-index: 10000;
 }
 
-.ai-buttons{
-    display:flex;
-    justify-content:  space-between;
+.ai-buttons {
+    display: flex;
+    justify-content: space-between;
     margin-left: 10px;
     margin-right: 10px;
 
 }
 
-.ai-processing{
+.ai-processing {
     background-color: rgb(37, 42, 46);
 
-    color:white;
-    position:absolute;
-    top:0;
-    left:0;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 20000;
     border-radius: 10px;
 }
-.ai-processing > div{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+
+.ai-processing > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 20px;
-    text-align:center;
+    text-align: center;
 
 }
-.ai-processing i{
+
+.ai-processing i {
     text-align: center;
     opacity: 75%;
-    width:100%;
+    width: 100%;
     animation: bounce 2s infinite;
     font-size: 48px;
 }
+
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
@@ -1135,16 +1149,48 @@ textarea {
         transform: translateY(-3px);
     }
 }
-.ai-cancel{
+
+.ai-cancel {
     background-color: red;
 }
 
-.ai-accept{
+.ai-info-button {
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    margin: 10px;
+    border: 1px rgba(185, 86, 185) solid;
+    border-radius: 5px;
+    position: relative;
+}
+
+.ai-info-button > i {
+    position: absolute;
+    top: -10px;
+    left: -5px;
+    color: rgba(185, 86, 185);
+    background-color: rgb(37, 42, 46);
+    border-radius: 50%;
+}
+
+.ai-generate {
     background-color: purple;
 }
 
-.menu-item.active{
-    background-color: rgba(185, 86, 185,0.5);
+.ai-accept {
+    background-color: forestgreen;
+    width: 80%;
+    margin: 20px 0px 10px 0px;
+}
+
+.ai-accept-wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.menu-item.active {
+    background-color: rgba(185, 86, 185, 0.5);
     border-radius: 10px;
     transition: 0.1s all;
     font-size: 18px;

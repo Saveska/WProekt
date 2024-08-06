@@ -105,13 +105,22 @@
                 </div>
             </div>
         </div>
-
+        <div class="ai-info-button">
+            Please select an AI function!
+            <i class="fa-solid fa-circle-info"></i>
+        </div>
         <div class="ai-buttons">
             <button onclick="cancelAI()" class="btn btn-lg btn-dark ai-cancel"><i class="fas fa-backward"></i> Cancel
             </button>
-            <button onclick="acceptAI()" class="btn btn-lg btn-dark ai-accept"><i class="fa-solid fa-check"></i> Accept
+            <button onclick="generateAI()" class="btn btn-lg btn-dark ai-generate"><i class="fa-solid fa-brain"></i>
+                Generate
             </button>
 
+        </div>
+
+        <div class="ai-accept-wrapper">
+            <button onclick="acceptAI()" class="btn btn-lg btn-dark ai-accept"><i class="fa-solid fa-check"></i> Accept
+            </button>
         </div>
     </div>
     <button class="openAibtn pulse" id="openAibtn" onclick="openAiNav()">AI</button>
