@@ -9,15 +9,19 @@ import org.jsoup.safety.Safelist;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -604,24 +608,40 @@ public class AjaxTaskController {
     @PostMapping("/ai")
     @ResponseBody
 
-    public String AIAjax(Authentication authentication,
-                                   @RequestBody String requestData) {
-
+    public Mono<String> AIAjax(Authentication authentication, @RequestBody String requestData) {
         User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali card pripajdza na user
         try {
-            String decodedData = URLDecoder.decode(requestData, UTF_8);
+            String decodedData = URLDecoder.decode(requestData, StandardCharsets.UTF_8);
 
             JSONObject jo = new JSONObject(decodedData);
 
             System.out.println(jo);
-            System.out.println(aiChatService.read(jo));
 
-            return "";
+            Flux<ChatResponse> responseStream = aiChatService.read(jo);
+
+            return responseStream
+                    .map(elem -> {
+                        System.out.println(elem.getResult().getOutput());
+
+                        if(elem.getResult().getOutput().getMetadata().get("finishReason").equals("")){
+                            return elem.getResult().getOutput().getContent();
+                        }
+                        System.out.println("test");
+                        return "";
+
+                    })
+                    .doOnError(error -> System.err.println("Error during streaming"))
+                    .doOnComplete(() -> System.out.println("Streaming Complete."))
+                    .collectList()
+                    .map(list -> String.join("", list));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return "";
+        return Mono.empty();
     }
+
+
 }

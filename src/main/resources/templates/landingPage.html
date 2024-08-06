@@ -70,23 +70,47 @@
                     Drag your card here!
                     </span>
             </div>
+
+
+            <div class="ai-processing">
+                <div>
+                    <i class="fa-solid fa-robot"></i>
+                    <div>
+                        Please wait...
+                    </div>
+                </div>
+
+            </div>
         </div>
         <div class="aiMenuWrap">
             <div class="aiMenu">
-                <div id="ai-summarize" data-ai="summarize" class="menu-item"><i class="fas fa-align-left"></i> Summarize</div>
-                <div id="ai-action-items" data-ai="findItems" class="menu-item"><i class="fas fa-tasks"></i> Find Action Items</div>
-                <div id="ai-explain" data-ai="explain" class="menu-item"><i class="fas fa-question-circle"></i> Explain This</div>
-                <div id="ai-improve" data-ai="improve"  class="menu-item"><i class="fas fa-pen"></i> Improve Writing</div>
-                <div id="ai-spelling" data-ai="spelling" class="menu-item"><i class="fas fa-spell-check"></i> Fix Spelling & Grammar</div>
-                <div id="ai-shorter" data-ai="shorter" class="menu-item"><i class="fas fa-compress"></i> Make Shorter</div>
-<!--                <div id="ai-tone" class="menu-item"><i class="fas fa-pencil-alt"></i> Change Tone</div>-->
-                <div id="ai-brainstorm" data-ai="brainstorm" class="menu-item"><i class="fas fa-lightbulb"></i> Brainstorm Ideas</div>
+                <div id="ai-summarize" data-ai="summarize" class="menu-item"><i class="fas fa-align-left"></i> Summarize
+                </div>
+                <div id="ai-action-items" data-ai="findItems" class="menu-item"><i class="fas fa-tasks"></i> Find Action
+                    Items
+                </div>
+                <div id="ai-explain" data-ai="explain" class="menu-item"><i class="fas fa-question-circle"></i> Explain
+                    This
+                </div>
+                <div id="ai-improve" data-ai="improve" class="menu-item"><i class="fas fa-pen"></i> Improve Writing
+                </div>
+                <div id="ai-spelling" data-ai="spelling" class="menu-item"><i class="fas fa-spell-check"></i> Fix
+                    Spelling & Grammar
+                </div>
+                <div id="ai-shorter" data-ai="shorter" class="menu-item"><i class="fas fa-compress"></i> Make Shorter
+                </div>
+                <!--                <div id="ai-tone" class="menu-item"><i class="fas fa-pencil-alt"></i> Change Tone</div>-->
+                <div id="ai-brainstorm" data-ai="brainstorm" class="menu-item"><i class="fas fa-lightbulb"></i>
+                    Brainstorm Ideas
+                </div>
             </div>
         </div>
 
         <div class="ai-buttons">
-            <button onclick="cancelAI()" class="btn btn-lg btn-dark ai-cancel"><i class="fas fa-backward"></i> Cancel</button>
-            <button onclick="acceptAI()" class="btn btn-lg btn-dark ai-accept"><i class="fa-solid fa-check"></i> Accept</button>
+            <button onclick="cancelAI()" class="btn btn-lg btn-dark ai-cancel"><i class="fas fa-backward"></i> Cancel
+            </button>
+            <button onclick="acceptAI()" class="btn btn-lg btn-dark ai-accept"><i class="fa-solid fa-check"></i> Accept
+            </button>
 
         </div>
     </div>
@@ -226,308 +250,308 @@
 
                 <div class="container col-md-12 ">
 
-                        <div class=" gap-2" id="notesContainer">
+                    <div class=" gap-2" id="notesContainer">
 
-                            <div class="col mb-3 " th:each="card : ${cards}"
-                                 th:classappend="${card.getIsPinned()} ? 'pinnedCard' : ''"
-                            >
-                                <div class="card appCard position-relative "
-                                     th:classappend="${card instanceof T(com.wproekt.model.Note)} ? 'noteCard' : 'taskCard'"
-                                     th:attr="data-id=${card.getId()},
+                        <div class="col mb-3 " th:each="card : ${cards}"
+                             th:classappend="${card.getIsPinned()} ? 'pinnedCard' : ''"
+                        >
+                            <div class="card appCard position-relative "
+                                 th:classappend="${card instanceof T(com.wproekt.model.Note)} ? 'noteCard' : 'taskCard'"
+                                 th:attr="data-id=${card.getId()},
                                       original-c=${card.getRGBColor()},
                                       original-brighter=${card.getBrighterRGB()},
                                       original-background=${card.getBackgroundColor()},
                                       x-pos=${card.getXPosition()},
                                       y-pos=${card.getYPosition()},
                                       is-pinned=${card.getIsPinned()}" style="width: 14rem;"
-                                     th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
+                                 th:styleappend="'--c: '+${card.getRGBColor()}+'; --brighter: '+${card.getBrighterRGB()}+';--backgroundC: '+${card.getBackgroundColor()}+';'">
 
 
-                                    <img th:if="${card.getImageLink() != null}" th:src="${'/' +card.getImageLink()}"
-                                         class="card-img-top" alt="...">
-                                    <div th:if="${card.getImageLink() != null}" class="delete-image-button">
-                                        <i class="fa-regular fa-square-minus"></i>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
-                                        <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
-                                           th:utext="${#strings.replace(card.getText(), '\n', '&lt;br&gt;')}">
+                                <img th:if="${card.getImageLink() != null}" th:src="${'/' +card.getImageLink()}"
+                                     class="card-img-top" alt="...">
+                                <div th:if="${card.getImageLink() != null}" class="delete-image-button">
+                                    <i class="fa-regular fa-square-minus"></i>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${card.getTitle()}">Card title</h5>
+                                    <p class="card-text" th:if="${card instanceof T(com.wproekt.model.Note)}"
+                                       th:utext="${#strings.replace(card.getText(), '\n', '&lt;br&gt;')}">
 
-                                        </p>
+                                    </p>
 
-                                        <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
-                                            <p class="card-text">
+                                    <th:block th:if="${card instanceof T(com.wproekt.model.TaskCard)}">
+                                        <p class="card-text">
 
-                                            <form>
-                                                <ul class="list-group list-group-flush taskListView">
-
-
-                                                    <li class="list-group-item task-li "
-                                                        th:each="task:${card.getTasks()}">
-                                                        <input type="checkbox" th:checked="${task.isCompleted}"
-                                                               class="form-check-input taskCheckmark"
-                                                               th:name="${task.id}"
-                                                        >
-
-                                                        <label class="form-check-label card-task"
-
-                                                               th:classappend="${task.isCompleted ? 'strike' : ''}"
-                                                               th:text="${task.text}"
-                                                               th:attr="data-id=${task.getId()}">
-
-                                                        </label>
-
-                                                        <div class="delete-task-button" th:name="${task.getId()}">
-                                                            <i class="fa-solid fa-x"></i>
-                                                        </div>
-                                                    </li>
+                                        <form>
+                                            <ul class="list-group list-group-flush taskListView">
 
 
-                                                </ul>
-                                                <div class="helper-task-dropper">
-                                                    Drag task here
-                                                </div>
-                                            </form>
-                                            <th:block th:if="${page.equals('home')}">
-                                                <input type="text" class="add-new-task-input" th:name="${card.getId()}">
-                                                <button class="add-new-task-button">Add new Task</button>
-                                            </th:block>
-                                            </p>
-                                        </th:block>
-                                        <div class="label-container">
-                                            <div class="label-pill-container">
-                                                <th:block th:each="label:${card.getLabel()}">
-                                                    <!--                                                <a th:href="'/label/'+${label.getId()}">-->
-                                                    <div class="label-pill" th:text="${label.getName()}"
-                                                         th:name="${label.getId()}"> test label
+                                                <li class="list-group-item task-li "
+                                                    th:each="task:${card.getTasks()}">
+                                                    <input type="checkbox" th:checked="${task.isCompleted}"
+                                                           class="form-check-input taskCheckmark"
+                                                           th:name="${task.id}"
+                                                    >
+
+                                                    <label class="form-check-label card-task"
+
+                                                           th:classappend="${task.isCompleted ? 'strike' : ''}"
+                                                           th:text="${task.text}"
+                                                           th:attr="data-id=${task.getId()}">
+
+                                                    </label>
+
+                                                    <div class="delete-task-button" th:name="${task.getId()}">
+                                                        <i class="fa-solid fa-x"></i>
                                                     </div>
-                                                    <!--                                                </a>-->
-                                                </th:block>
+                                                </li>
+
+
+                                            </ul>
+                                            <div class="helper-task-dropper">
+                                                Drag task here
                                             </div>
-                                            <th:block th:if="${page.equals('home')}">
-                                                <button class="btn add-label-button" th:data-id="${card.id}">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </button>
+                                        </form>
+                                        <th:block th:if="${page.equals('home')}">
+                                            <input type="text" class="add-new-task-input" th:name="${card.getId()}">
+                                            <button class="add-new-task-button">Add new Task</button>
+                                        </th:block>
+                                        </p>
+                                    </th:block>
+                                    <div class="label-container">
+                                        <div class="label-pill-container">
+                                            <th:block th:each="label:${card.getLabel()}">
+                                                <!--                                                <a th:href="'/label/'+${label.getId()}">-->
+                                                <div class="label-pill" th:text="${label.getName()}"
+                                                     th:name="${label.getId()}"> test label
+                                                </div>
+                                                <!--                                                </a>-->
                                             </th:block>
                                         </div>
-
-
-                                    </div>
-
-                                    <div class="time-last-modification">
-                                        <span th:text="${card.getDateLastUpdated().getDayOfMonth()}"></span>
-                                        <span th:text="${card.getDateLastUpdated().getMonth().getDisplayName(1,'en')}"></span>,
-                                        <span th:text="${card.getDateLastUpdated().getYear()}"></span>
-
-                                    </div>
-                                    <div class="d-flex flex-row " style="height:50px" th:value="${page}">
                                         <th:block th:if="${page.equals('home')}">
-                                            <button class="flex-grow-1 btn p-2 text-center add-color-button"
-                                                    th:value="${card.id}">
-                                                <i class="fa-solid fa-brush"></i>
-                                            </button>
-                                            <button class="flex-grow-1 btn  p-2 text-center add-image-button"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#addImageModal" th:value="${card.id}">
-                                                <i class="fa-solid fa-image"></i>
-                                            </button>
-                                            <button class="flex-grow-1 btn btn-warning rounded-0 p-2 text-white text-center archive-note-button"
-                                                    th:value="${card.id}">
-                                                <i class="fa-solid fa-box"></i>
-                                            </button>
-                                            <button class="flex-grow-3 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
-                                                    th:value="${card.id}">
-                                                <i class="fa-solid fa-trash"></i>
+                                            <button class="btn add-label-button" th:data-id="${card.id}">
+                                                <i class="fa-solid fa-plus"></i>
                                             </button>
                                         </th:block>
-                                        <th:block th:if="${page.equals('archive') || page.equals('trash')}">
-                                            <button class="btn w-100 rounded-0 p-2 text-white text-center restore-note-button"
-                                                    th:value="${card.id}">
-                                                <i class="fa-solid fa-arrow-rotate-left"></i>
-                                            </button>
-                                            <button class="btn btn-danger flex-grow-1 rounded-0 p-2 text-white text-center delete-permanent-note-button"
-                                                    th:value="${card.id}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </th:block>
-
                                     </div>
 
-                                    <div class="position-absolute top-0 end-0 me-1  ">
-                                        <button class="btn pin mt-0 me-0"
-                                                th:classappend="${card.getIsPinned() ? 'isPinned' : ''}">
-                                            <i class="fa-solid fa-map-pin"></i>
-                                            <!--                                    <i class="fa-light fa-map-pin"></i>-->
+
+                                </div>
+
+                                <div class="time-last-modification">
+                                    <span th:text="${card.getDateLastUpdated().getDayOfMonth()}"></span>
+                                    <span th:text="${card.getDateLastUpdated().getMonth().getDisplayName(1,'en')}"></span>,
+                                    <span th:text="${card.getDateLastUpdated().getYear()}"></span>
+
+                                </div>
+                                <div class="d-flex flex-row " style="height:50px" th:value="${page}">
+                                    <th:block th:if="${page.equals('home')}">
+                                        <button class="flex-grow-1 btn p-2 text-center add-color-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-brush"></i>
+                                        </button>
+                                        <button class="flex-grow-1 btn  p-2 text-center add-image-button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#addImageModal" th:value="${card.id}">
+                                            <i class="fa-solid fa-image"></i>
+                                        </button>
+                                        <button class="flex-grow-1 btn btn-warning rounded-0 p-2 text-white text-center archive-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-box"></i>
+                                        </button>
+                                        <button class="flex-grow-3 btn btn-danger rounded-0 p-2 text-white text-center delete-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:if="${page.equals('archive') || page.equals('trash')}">
+                                        <button class="btn w-100 rounded-0 p-2 text-white text-center restore-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-arrow-rotate-left"></i>
+                                        </button>
+                                        <button class="btn btn-danger flex-grow-1 rounded-0 p-2 text-white text-center delete-permanent-note-button"
+                                                th:value="${card.id}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </th:block>
+
+                                </div>
+
+                                <div class="position-absolute top-0 end-0 me-1  ">
+                                    <button class="btn pin mt-0 me-0"
+                                            th:classappend="${card.getIsPinned() ? 'isPinned' : ''}">
+                                        <i class="fa-solid fa-map-pin"></i>
+                                        <!--                                    <i class="fa-light fa-map-pin"></i>-->
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="notification-info">
+                            <th:block th:if="${page.equals('home')}">
+                                To start, add a new Note or Task card using the buttons above <br>
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </th:block>
+                            <th:block th:if="${page.equals('archive')}">
+                                Your archive is empty <br>
+                                <i class="fa-regular fa-face-smile"></i>
+                            </th:block>
+                            <th:block th:if="${page.equals('trash')}">
+                                Your trash folder is empty <br>
+                                <i class="fa-regular fa-face-smile"></i>
+                            </th:block>
+                        </div>
+                        <div class="modal fade" id="TasksModal" tabindex="-1" role="dialog"
+                             aria-labelledby="tasksModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+
+                                <div class="modal-content">
+                                    <form id="tasksForm">
+                                        <div class="modal-header">
+                                            <input class="form-control border-0 note_input" type="text"
+                                                   placeholder="Tasks"
+                                                   aria-label="Tasks"
+                                                   id="TaskTitle"
+                                                   name="taskTitle">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-4">
+
+                                            <div class="form-group mb-2">
+                                                <label for="newTaskInput">Add New Task:</label>
+                                                <div class="input-group mt-2">
+                                                    <input type="text" class="form-control tasks-input"
+                                                           id="newTaskInput"
+
+                                                           placeholder="Enter task name">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-save-changes" type="button"
+                                                                id="addTaskButton">Add Task
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save
+                                            changes
                                         </button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <!------------------->
+                        <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModal"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
 
-                            <div class="notification-info">
-                                <th:block th:if="${page.equals('home')}">
-                                    To start, add a new Note or Task card using the buttons above <br>
-                                    <i class="fa-solid fa-arrow-up"></i>
-                                </th:block>
-                                <th:block th:if="${page.equals('archive')}">
-                                    Your archive is empty <br>
-                                    <i class="fa-regular fa-face-smile"></i>
-                                </th:block>
-                                <th:block th:if="${page.equals('trash')}">
-                                    Your trash folder is empty <br>
-                                    <i class="fa-regular fa-face-smile"></i>
-                                </th:block>
-                            </div>
-                            <div class="modal fade" id="TasksModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="tasksModalLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                    <div class="modal-body">
 
-                                    <div class="modal-content">
-                                        <form id="tasksForm">
-                                            <div class="modal-header">
-                                                <input class="form-control border-0 note_input" type="text"
-                                                       placeholder="Tasks"
-                                                       aria-label="Tasks"
-                                                       id="TaskTitle"
-                                                       name="taskTitle">
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body p-4">
+                                        <form th:action="@{/uploadimage}" method="POST" id="imageForm"
+                                              class="dropzone"
+                                              enctype="multipart/form-data">
+                                            <input type="text" hidden name="cardId" id="addImageModalId">
 
-                                                <div class="form-group mb-2">
-                                                    <label for="newTaskInput">Add New Task:</label>
-                                                    <div class="input-group mt-2">
-                                                        <input type="text" class="form-control tasks-input"
-                                                               id="newTaskInput"
-
-                                                               placeholder="Enter task name">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-save-changes" type="button"
-                                                                    id="addTaskButton">Add Task
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
                                         </form>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
-                                            </button>
-                                            <button type="button" class="btn btn-save-changes" id="saveTasksButton">Save
-                                                changes
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!------------------->
-                            <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModal"
-                                 aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-
-                                        <div class="modal-body">
-
-                                            <form th:action="@{/uploadimage}" method="POST" id="imageForm"
-                                                  class="dropzone"
-                                                  enctype="multipart/form-data">
-                                                <input type="text" hidden name="cardId" id="addImageModalId">
-
-                                            </form>
-
-                                        </div>
 
                                     </div>
+
                                 </div>
                             </div>
-                            <!-- ---------------------------------------------- -->
-                            <div hidden>
-                                <div id="colorpopover-content">
-                                    <div class="d-flex flex-row justify-content-around">
-                                        <th:block th:each="color:${colors}">
-                                            <div class="color-circle"
-                                                 th:attr="data-color='rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+')',
+                        </div>
+                        <!-- ---------------------------------------------- -->
+                        <div hidden>
+                            <div id="colorpopover-content">
+                                <div class="d-flex flex-row justify-content-around">
+                                    <th:block th:each="color:${colors}">
+                                        <div class="color-circle"
+                                             th:attr="data-color='rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+')',
                                                data-light='rgb('+${color.brighter().getRed()}+','+${color.brighter().getGreen()}+','+${color.brighter().getBlue()}+')',
                                                 data-dark='rgba('+${color.darker().getRed()}+','+${color.darker().getGreen()}+','+${color.darker().getBlue()}+',0.1)'"
-                                                 th:style="'background-color:rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+');' "></div>
-                                        </th:block>
-                                    </div>
+                                             th:style="'background-color:rgb('+${color.getRed()}+','+${color.getGreen()}+','+${color.getBlue()}+');' "></div>
+                                    </th:block>
                                 </div>
                             </div>
-
-                            <!--                        <div hidden>-->
-                            <!--                            <div id="labeladder-popover">-->
-                            <!--                                <div class="container">-->
-                            <!--                                    <div><label><span>Add new label</span><input type="text"-->
-                            <!--                                                                                 class="newLabelInput w-100"-->
-                            <!--                                                                                 name="newLabel">-->
-                            <!--                                    </label>-->
-                            <!--                                    </div>-->
-                            <!--                                    <ul class="list-group list-group-flush">-->
-
-
-                            <!--                                        <th:block th:each="label : ${labels}">-->
-
-                            <!--                                            <li class="list-group-item">-->
-                            <!--                                                <label>-->
-                            <!--                                                    <input type="checkbox"-->
-                            <!--                                                           class="form-check-input labelCheckmark"-->
-                            <!--                                                           th:name="${label.getId()}"-->
-                            <!--                                                    >-->
-                            <!--                                                    <span th:text="${label.getName()}"></span>-->
-
-                            <!--                                                </label>-->
-                            <!--                                                <button class="btn remove-label-button" th:value="${label.getId()}">-->
-                            <!--                                                    <i class="fa-solid fa-trash"></i>-->
-                            <!--                                                </button>-->
-                            <!--                                            </li>-->
-                            <!--                                        </th:block>-->
-
-                            <!--                                    </ul>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
-
-
-                            <!--                    </div>-->
-                            <!--                </div>-->
-
-                            <!--            </div>-->
-
-
-                            <!--            ////////////////////////////////////////////////////////////////////////////////////-->
-
-
-                            <div hidden>
-                                <div id="labeladder-popover-card">
-                                    <div class="container">
-                                        <ul class="list-group list-group-flush">
-
-
-                                            <th:block th:each="label : ${labels}">
-
-                                                <li class="list-group-item">
-                                                    <label>
-                                                        <input type="checkbox"
-                                                               class="form-check-input labelCheckmark"
-                                                               th:name="${label.getId()}"
-                                                        >
-                                                        <span th:text="${label.getName()}"></span>
-                                                    </label>
-                                                </li>
-                                            </th:block>
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-
                         </div>
+
+                        <!--                        <div hidden>-->
+                        <!--                            <div id="labeladder-popover">-->
+                        <!--                                <div class="container">-->
+                        <!--                                    <div><label><span>Add new label</span><input type="text"-->
+                        <!--                                                                                 class="newLabelInput w-100"-->
+                        <!--                                                                                 name="newLabel">-->
+                        <!--                                    </label>-->
+                        <!--                                    </div>-->
+                        <!--                                    <ul class="list-group list-group-flush">-->
+
+
+                        <!--                                        <th:block th:each="label : ${labels}">-->
+
+                        <!--                                            <li class="list-group-item">-->
+                        <!--                                                <label>-->
+                        <!--                                                    <input type="checkbox"-->
+                        <!--                                                           class="form-check-input labelCheckmark"-->
+                        <!--                                                           th:name="${label.getId()}"-->
+                        <!--                                                    >-->
+                        <!--                                                    <span th:text="${label.getName()}"></span>-->
+
+                        <!--                                                </label>-->
+                        <!--                                                <button class="btn remove-label-button" th:value="${label.getId()}">-->
+                        <!--                                                    <i class="fa-solid fa-trash"></i>-->
+                        <!--                                                </button>-->
+                        <!--                                            </li>-->
+                        <!--                                        </th:block>-->
+
+                        <!--                                    </ul>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+
+                        <!--                    </div>-->
+                        <!--                </div>-->
+
+                        <!--            </div>-->
+
+
+                        <!--            ////////////////////////////////////////////////////////////////////////////////////-->
+
+
+                        <div hidden>
+                            <div id="labeladder-popover-card">
+                                <div class="container">
+                                    <ul class="list-group list-group-flush">
+
+
+                                        <th:block th:each="label : ${labels}">
+
+                                            <li class="list-group-item">
+                                                <label>
+                                                    <input type="checkbox"
+                                                           class="form-check-input labelCheckmark"
+                                                           th:name="${label.getId()}"
+                                                    >
+                                                    <span th:text="${label.getName()}"></span>
+                                                </label>
+                                            </li>
+                                        </th:block>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
 
                 </div>
 
