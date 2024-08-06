@@ -228,7 +228,7 @@ public class AjaxTaskController {
 
 
             JSONObject jo = new JSONObject(decodedData);
-
+            System.out.println(jo);
             Long id = jo.getLong("id");
             String text = jo.getString("text");
             String type = jo.getString("type");

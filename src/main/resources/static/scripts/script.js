@@ -11,6 +11,7 @@ const restoreButtons = document.querySelectorAll(".restore-note-button");
 const permaDeleteButtons = document.querySelectorAll(".delete-permanent-note-button");
 let notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
 const AIProcessingDiv = document.getElementsByClassName("ai-processing").item(0);
+const AIInfoDiv = document.getElementsByClassName("ai-info-button").item(0);
 
 
 const aiContainer = document.getElementById("aiDrag");
@@ -1820,8 +1821,9 @@ document.querySelectorAll(".aiMenu > .menu-item").forEach(element => {
 })
 
 $(AIProcessingDiv).fadeOut(0);
+$(AIInfoDiv).fadeOut(0);
 
-function acceptAI() {
+function generateAI() {
     if (!currentAICard) {
         return;
     }
@@ -1844,8 +1846,14 @@ function acceptAI() {
 
     const aiFunctionDiv = document.querySelector(".aiMenu > .menu-item.active");
 
-    if (aiFunctionDiv === undefined) {
+    if (aiFunctionDiv === null) {
+
         console.error("No function chosen");
+        $(AIInfoDiv).fadeIn(200);
+
+        setTimeout(() => {
+            $(AIInfoDiv).fadeOut(200);
+        }, 5000)
         return;
     }
 
@@ -1876,24 +1884,51 @@ function acceptAI() {
             console.log(dataP);
 
 
-            try{
+            try {
                 const typeResponse = dataP["type"];
                 const dataResponse = dataP["data"];
 
                 console.log(type);
                 console.log(typeResponse);
 
-                if(type === "note" && type === typeResponse){
+                if (type === "note" && type === typeResponse.toLowerCase()) {
                     console.log(currentAICard);
                     currentAICard.getElementsByClassName("card-text").item(0).innerText = dataResponse;
                 }
-            }
-            catch (e){
+
+                if (type === "task" && type === typeResponse.toLowerCase()) {
+                    console.log(dataResponse);
+                    const tasksFromCard = currentAICard.getElementsByClassName("task-li");
+                    console.log(tasksFromCard);
+                    if (dataResponse.length === tasksFromCard.length) {
+                        for (let i = 0; i < dataResponse.length; i++) {
+                            const taskCheckmark = tasksFromCard[i].getElementsByClassName("taskCheckmark").item(0);
+                            console.log(dataResponse[i]["finished"]);
+                            if (dataResponse[i]["finished"]) {
+                                taskCheckmark.checked = true;
+                            } else {
+                                taskCheckmark.checked = false;
+                            }
+
+                            const taskName = tasksFromCard[i].getElementsByClassName("card-task").item(0);
+
+                            taskName.innerText = dataResponse[i]["taskContent"];
+
+                            sendEdit(taskName.getAttribute("data-id"), dataResponse[i]["taskContent"], 'task');
+
+                        }
+
+
+                    }
+                    currentAICard.querySelectorAll(".taskCheckmark").forEach(elem => {
+                        changeCompletionOfTask(elem);
+                    })
+                }
+            } catch (e) {
                 console.error(e);
             }
 
             $(AIProcessingDiv).fadeOut(100);
-
 
 
         }, error: (jqXhr) => {
