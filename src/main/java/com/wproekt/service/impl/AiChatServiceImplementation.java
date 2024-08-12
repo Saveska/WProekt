@@ -113,7 +113,7 @@ public class AiChatServiceImplementation implements AiChatService {
         String dataCard = input.get("data").toString();
 
         systemText = """
-                    You are a helpful AI assistant for a task monitoring application. Your role is to transform 
+                    You are a helpful AI assistant for a task monitoring application. Your role is to transform
                     the provided card information based on specific instructions. Be concise and output only
                     the required data without additional comments.
                     
@@ -125,13 +125,18 @@ public class AiChatServiceImplementation implements AiChatService {
                     Card Data: '{data}',
                     
                     You must return the response in the following JSON format:
-                    {output}
+                    {output}.
+                    
+                    If the card output type is Task, you must have
+                    {taskType}
                    
                     
                 """;
         String contains = typeCard.equals("task") ? "tasks" : "text";
 
-
+        String taskType = """
+                {"type": Task], "data": [{"taskContent": "...", "finished": true/false}]}
+                """;
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText);
 
         Message message = systemPromptTemplate.createMessage(
@@ -140,7 +145,8 @@ public class AiChatServiceImplementation implements AiChatService {
                         "title", titleCard,
                         "type", typeCard,
                         "data", dataCard,
-                        "output", output));
+                        "output", output,
+                        "taskType", taskType));
 
         return message;
     }

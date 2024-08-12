@@ -1196,3 +1196,7 @@ textarea {
     font-size: 18px;
 
 }
+
+#aiOriginalCopy{
+    display: none;
+}
