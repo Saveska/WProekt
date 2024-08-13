@@ -28,6 +28,8 @@ let allDraggies = {};
 let allTaskContainers = [];
 let allTaskHelpers = [];
 
+let oldAiCard = null;
+
 let isCurrentlyDragging = false;
 
 const monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -140,6 +142,7 @@ function bindDraggie(gridItem) {
                 gridItem.style.transform = "translate(-50%,-50%)";
 
                 currentAICard = gridItem;
+                oldAiCard = gridItem.cloneNode(true);
                 // pckryInstances.forEach(function (pckry) {
                 //     pckry.reloadItems();
                 //     pckry.layout();
@@ -1917,13 +1920,87 @@ function generateAI() {
                             sendEdit(taskName.getAttribute("data-id"), dataResponse[i]["taskContent"], 'task');
 
                         }
-
-
                     }
                     currentAICard.querySelectorAll(".taskCheckmark").forEach(elem => {
                         changeCompletionOfTask(elem);
                     })
                 }
+
+                if (type === "task" && type !== typeResponse.toLowerCase()) {
+                    //todo: labelite
+                    let template = makeNoteCardAI(title, dataResponse, "nekoj id");
+                    let element = document.createElement("div");
+                    element.innerHTML = template;
+                    element = element.children.item(0);
+
+                    element.setAttribute("changedType", true);
+
+                    $aiCardPackery.packery('remove', currentAICard)
+
+                        .packery('shiftLayout');
+
+
+                    containers[1].removeChild(currentAICard);
+
+                    currentAICard.remove();
+
+                    currentAICard = element;
+
+                    $aiCardPackery.prepend(currentAICard)
+                        .packery("prepended", currentAICard);
+                    containers[1].prepend(currentAICard);
+
+                    currentAICard.classList.add("ai-rotating");
+                    currentAICard.style.position = "absolute";
+                    currentAICard.style.top = "50%";
+                    currentAICard.style.left = "50%";
+                    currentAICard.style.transform = "translate(-50%,-50%)";
+                }
+
+                if(type === "note" && type !== typeResponse.toLowerCase()){
+
+                    console.log(dataResponse);
+                    let template = makeTaskCardAI("nekoj id", title, dataResponse);
+
+                    let element = document.createElement("div");
+                    element.innerHTML = template;
+                    element = element.children.item(0);
+
+                    let deleteButtons = element.getElementsByClassName("delete-task-button");
+
+                    for(let i = 0; i < deleteButtons.length; i++){
+                        deleteButtons.item(i).addEventListener("click",()=>{
+
+                            $(deleteButtons.item(i).parentElement).fadeOut(300,()=>{
+                                $(deleteButtons.item(i).parentElement).remove();
+                            });
+                        })
+                    }
+
+                    element.setAttribute("changedType", true);
+
+                    $aiCardPackery.packery('remove', currentAICard)
+
+                        .packery('shiftLayout');
+
+
+                    containers[1].removeChild(currentAICard);
+
+                    currentAICard.remove();
+
+                    currentAICard = element;
+
+                    $aiCardPackery.prepend(currentAICard)
+                        .packery("prepended", currentAICard);
+                    containers[1].prepend(currentAICard);
+
+                    currentAICard.classList.add("ai-rotating");
+                    currentAICard.style.position = "absolute";
+                    currentAICard.style.top = "50%";
+                    currentAICard.style.left = "50%";
+                    currentAICard.style.transform = "translate(-50%,-50%)";
+                }
+
             } catch (e) {
                 console.error(e);
             }
@@ -1938,6 +2015,91 @@ function generateAI() {
 
     });
 }
+function makeNoteCardAI(title, text, id) {
+
+    let template = `<div class="col mb-3 ">
+    <div class="card appCard position-relative noteCard "
+         
+        data-id=${id}
+        original-c="rgb(185, 86, 185)"
+        original-brighter="rgb(255,122,255)"
+        original-background="rgba(129,60,129,0.1)"
+        style="width: 14rem;
+        --c:rgb(185, 86, 185);
+        --brighter:rgb(255,122,255);
+        --backgroundC:rgba(129,60,129,0.1)"
+         >
+
+        <div class="card-body">
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text" >
+                ${text}
+            </p>
+
+        </div>
+
+    
+</div>`;
+
+    return template;
+
+}
+
+function makeTaskCardAI(id, title, taskArray) {
+
+
+    let template = `<div class="col mb-3 " >
+        <div class="card appCard position-relative taskCard "
+             
+            data-id=${id}
+            original-c="rgb(185, 86, 185)"
+            original-brighter="rgb(255,122,255)"
+            original-background="rgba(129,60,129,0.1)"
+            style="width: 14rem;
+            --c:rgb(185, 86, 185);
+            --brighter:rgb(255,122,255);
+            --backgroundC:rgba(129,60,129,0.1)"
+             >
+            
+             <div class="card-body">
+                <h5 class="card-title">${title}</h5>
+                
+                    <p class="card-text">
+                    <form>
+                        <ul class="list-group list-group-flush taskListView">
+                        `
+    for (let i = 0; i < taskArray.length; i++) {
+        template += `<li class="list-group-item task-li " data-id="${i}">
+                <input type="checkbox" ${taskArray[i]["isCompleted"] ? "checked" : ""}
+                       class="form-check-input taskCheckmark"
+                       name="${i}"
+                >
+                    <label class="form-check-label card-task"
+
+                     
+                           data-id="${i}">
+                           ${taskArray[i]["taskContent"]}
+                    </label>
+                    <div class="delete-task-button" name="${i}">
+                        <i class="fa-solid fa-x"></i>
+                    </div>
+            </li>
+            
+`
+    }
+    template += `
+    </ul>
+            </form>
+        </p>
+    </div>
+    </div>
+    `
+
+
+
+    return template;
+}
+
 
 function gatherNoteData(card) {
     return {
@@ -1982,16 +2144,16 @@ function gatherTaskData(card) {
  */
 function cancelAI() {
     //todo: da se zacuvuva starata karticka pred ai promeni
-    if (!currentAICard) {
+    if (!oldAiCard) {
         return;
     }
 
-    currentAICard.style.cssText = null;
-    currentAICard.style.position = "absolute";
-    currentAICard.style.top = "0px";
-    currentAICard.style.left = "0px";
+    oldAiCard.style.cssText = null;
+    oldAiCard.style.position = "absolute";
+    oldAiCard.style.top = "0px";
+    oldAiCard.style.left = "0px";
 
-    let cloned = currentAICard.cloneNode(true);
+    let cloned = oldAiCard.cloneNode(true);
     bindDraggie(cloned);
 
     $grid.prepend(cloned).packery('prepended', cloned)
@@ -2007,7 +2169,20 @@ function cancelAI() {
 
 
     currentAICard = null;
+    oldAiCard = null;
 
     console.log("cancelled");
+}
+
+function acceptAI() {
+    console.log("accepted!");
+
+    console.log(currentAICard.getAttribute("changedType"));
+    if (currentAICard.getAttribute("changedType") === "true") {
+        console.log("cini");
+    } else {
+
+
+    }
 }
 
