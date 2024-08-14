@@ -1097,6 +1097,8 @@ textarea {
 
 .is-dragging {
     z-index: 10000;
+    border-radius: 20px;
+    background-color: rgb(37, 42, 46);
 }
 
 .ai-buttons {
@@ -1204,7 +1206,7 @@ textarea {
 
 
 .ai-rotating{
-    animation: ai-change-bounce 2s ease-in-out infinite;
+    animation: ai-change-bounce 8s ease-in-out infinite;
 
 }
 
@@ -1219,10 +1221,10 @@ textarea {
         transform: translate(-50%, -50%) scale(1);
     }
     40% {
-        transform: translate(-50%, -53%) scale(1.03);
+        transform: translate(-50%, -51%) scale(1.01);
     }
     60% {
-        transform: translate(-50%, -51%) scale(1.02);
+        transform: translate(-50%, -50.5%) scale(1.005);
     }
 }
 
