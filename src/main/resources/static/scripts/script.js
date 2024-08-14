@@ -1957,7 +1957,7 @@ function generateAI() {
                     currentAICard.style.transform = "translate(-50%,-50%)";
                 }
 
-                if(type === "note" && type !== typeResponse.toLowerCase()){
+                if (type === "note" && type !== typeResponse.toLowerCase()) {
 
                     console.log(dataResponse);
                     let template = makeTaskCardAI("nekoj id", title, dataResponse);
@@ -1968,12 +1968,23 @@ function generateAI() {
 
                     let deleteButtons = element.getElementsByClassName("delete-task-button");
 
-                    for(let i = 0; i < deleteButtons.length; i++){
-                        deleteButtons.item(i).addEventListener("click",()=>{
+                    for (let i = 0; i < deleteButtons.length; i++) {
+                        deleteButtons.item(i).addEventListener("click", () => {
 
-                            $(deleteButtons.item(i).parentElement).fadeOut(300,()=>{
-                                $(deleteButtons.item(i).parentElement).remove();
-                            });
+                            for (let j = 0; j < deleteButtons.length; j++) {
+
+
+                                if (parseInt(deleteButtons.item(j).getAttribute("data-id")) === i) {
+                                    $(deleteButtons.item(j).parentElement).fadeOut(300, () => {
+                                        $(deleteButtons.item(j).parentElement).remove();
+                                        $(aiContainer).animate({"height": currentAICard.getBoundingClientRect().height + 'px'}, 100);
+
+                                    });
+                                    break;
+                                }
+                            }
+
+
                         })
                     }
 
@@ -2007,6 +2018,8 @@ function generateAI() {
 
             $(AIProcessingDiv).fadeOut(100);
 
+            $(aiContainer).animate({"height": currentAICard.getBoundingClientRect().height + 'px'}, 100);
+
 
         }, error: (jqXhr) => {
             console.log(jqXhr);
@@ -2015,6 +2028,7 @@ function generateAI() {
 
     });
 }
+
 function makeNoteCardAI(title, text, id) {
 
     let template = `<div class="col mb-3 ">
@@ -2080,7 +2094,7 @@ function makeTaskCardAI(id, title, taskArray) {
                            data-id="${i}">
                            ${taskArray[i]["taskContent"]}
                     </label>
-                    <div class="delete-task-button" name="${i}">
+                    <div class="delete-task-button" data-id="${i}">
                         <i class="fa-solid fa-x"></i>
                     </div>
             </li>
@@ -2094,7 +2108,6 @@ function makeTaskCardAI(id, title, taskArray) {
     </div>
     </div>
     `
-
 
 
     return template;
@@ -2167,7 +2180,8 @@ function cancelAI() {
 
     $(aiContainerPlaceholder).fadeIn(200);
 
-
+    $(aiContainer).animate({"height": '300px'}, 100);
+    $(aiContainerPlaceholder).animate({"height": '300px'}, 100);
     currentAICard = null;
     oldAiCard = null;
 
