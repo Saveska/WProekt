@@ -836,6 +836,33 @@ function makeTaskCard(id, title, taskArray) {
     return template;
 }
 
+function createNoteAndShow(noteData) {
+    let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
+    let element = $($.parseHTML(template));
+    //TODO: fix so novite karticki
+
+    toBinButton(element.find('.delete-note-button')[0]);
+    toArchiveButton(element.find('.archive-note-button')[0]);
+    bindDraggie(element[0]);
+
+    addColorButtonListener(element[0].querySelector(".add-color-button"));
+    addLabelButtonListener(element[0].querySelector(".add-label-button"));
+
+    element[0].querySelectorAll(".card-title, .card-text").forEach(content => {
+        editContentEvent(content);
+    })
+
+
+    addPinEvent(element[0].querySelector(".pin"));
+
+    $grid.prepend(element[0]).packery('prepended', element[0]);
+
+
+
+    addNoCardNotification();
+    notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+}
+
 $('#saveNoteButton').click(() => {
 
     savingStatus.hidden = false;
@@ -858,35 +885,7 @@ $('#saveNoteButton').click(() => {
             //console.log(dataP)
             let noteData = dataP[0];
 
-            let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
-            let element = $($.parseHTML(template));
-            //TODO: fix so novite karticki
-
-            toBinButton(element.find('.delete-note-button')[0]);
-            toArchiveButton(element.find('.archive-note-button')[0]);
-            bindDraggie(element[0]);
-
-            addColorButtonListener(element[0].querySelector(".add-color-button"));
-            addLabelButtonListener(element[0].querySelector(".add-label-button"));
-
-            element[0].querySelectorAll(".card-title, .card-text").forEach(content => {
-                editContentEvent(content);
-            })
-
-
-            addPinEvent(element[0].querySelector(".pin"));
-
-            $grid.prepend(element[0]).packery('prepended', element[0]);
-
-
-            $('#saveNoteButton').html('Save changes').prop("disabled", false);
-
-            titleInputBox.val("");
-            textNoteInputBox.val("");
-
-            savingStatus.hidden = true;
-            addNoCardNotification();
-            notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+            createNoteAndShow(noteData);
 
 
         }, error: (jqXhr) => {
@@ -2228,29 +2227,57 @@ function acceptAI() {
 
     const typeCard = currentAICard.getElementsByClassName("noteCard").length === 1 ? "note" : "task";
 
+    const id = currentAICard.children.item(0).getAttribute("data-id");
+
     if (currentAICard.getAttribute("changedType") === "true") {
 
         console.log("cini");
 
+        let data = {};
+        const text = currentAICard.getElementsByClassName("card-text").item(0).innerText;
+
+        data["oldId"] = id;
+        data["text"] = text;
+
+        savingStatus.hidden = false;
+
+        $.ajax({
+            url: 'taskToNoteCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+                //console.log(dataP)
+                console.log(dataP);
+
+                createNoteAndShow(dataP[0]);
+
+                removeCardFromAIBar();
+
+                savingStatus.hidden = true;
+
+            }, error: (jqXhr) => {
+                //console.log(jqXhr);
+            }
+
+        })
+
+
     } else {
-        const id = currentAICard.children.item(0).getAttribute("data-id");
 
         if (typeCard === "note") {
             const text = currentAICard.getElementsByClassName("card-text").item(0).innerText;
             console.log(text);
             sendEdit(id, text, "text");
 
-            removeCardFromAIBar();
+            removeCardFromAIBarAndAdd();
+
 
         }
 
-        if(typeCard === "task"){
+        if (typeCard === "task") {
             const taskContainer = currentAICard.getElementsByClassName("taskListView").item(0);
 
-            if(taskContainer.getAttribute("changedtasks")){
+            if (taskContainer.getAttribute("changedtasks")) {
                 console.log("changed");
                 //TODO
-            }else{
+            } else {
                 console.log("not changed");
                 let data = {};
                 data["cardId"] = id;
@@ -2259,7 +2286,7 @@ function acceptAI() {
 
                 let taskArray = [];
 
-                for(let i = 0; i < tasks.length; i++){
+                for (let i = 0; i < tasks.length; i++) {
                     let taskDict = {};
                     const checkmark = tasks.item(i).getElementsByClassName("taskCheckmark").item(0);
                     const checked = !!checkmark.getAttribute("checked");
@@ -2276,18 +2303,22 @@ function acceptAI() {
                 data["tasks"] = taskArray;
 
                 savingStatus.hidden = false;
-                removeCardFromAIBar();
+                removeCardFromAIBarAndAdd();
                 $.ajax({
-                    url: 'editTasksFromCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+                    url: 'editTasksFromCard',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    success: (dataP) => {
                         //console.log(dataP)
                         savingStatus.hidden = true;
 
-                    }, error: (jqXhr) => {
+                    },
+                    error: (jqXhr) => {
                         //console.log(jqXhr);
                     }
 
                 })
-
 
 
             }
@@ -2299,11 +2330,11 @@ function acceptAI() {
     }
 }
 
-function updateSameNumberOfFunctions(){
+function updateSameNumberOfFunctions() {
 
 }
 
-function removeCardFromAIBar() {
+function removeCardFromAIBarAndAdd() {
     currentAICard.style.cssText = null;
     currentAICard.style.position = "absolute";
     currentAICard.style.top = "0px";
@@ -2329,4 +2360,20 @@ function removeCardFromAIBar() {
     oldAiCard = null;
 
 
+}
+
+function removeCardFromAIBar(){
+
+
+    $aiCardPackery.remove(currentAICard)
+        .packery("remove", currentAICard);
+    // container.removeChild(gridItem);
+    currentAICard.remove();
+
+    $(aiContainerPlaceholder).fadeIn(200);
+
+    $(aiContainer).animate({"height": '300px'}, 100);
+    $(aiContainerPlaceholder).animate({"height": '300px'}, 100);
+    currentAICard = null;
+    oldAiCard = null;
 }
