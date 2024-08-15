@@ -1876,6 +1876,7 @@ function generateAI() {
 
     console.log("accepted");
 
+
     $.ajax({
         url: 'ai',
         type: 'POST',
@@ -1917,9 +1918,28 @@ function generateAI() {
 
                             taskName.innerText = dataResponse[i]["taskContent"];
 
-                            sendEdit(taskName.getAttribute("data-id"), dataResponse[i]["taskContent"], 'task');
-
+                            // sendEdit(taskName.getAttribute("data-id"), dataResponse[i]["taskContent"], 'task');
                         }
+                    }
+                    if (dataResponse.length !== tasksFromCard.length) {
+                        const taskContainer = currentAICard.getElementsByClassName("taskListView").item(0);
+                        while (taskContainer.firstChild) {
+                            taskContainer.removeChild(taskContainer.firstChild);
+                        }
+
+                        for (let i = 0; i < dataResponse.length; i++) {
+
+                            let template = getTaskTemplate(i, dataResponse);
+
+                            let element = document.createElement(null);
+                            element.innerHTML = template;
+                            element = element.firstChild;
+
+                            console.log(element);
+
+                            taskContainer.appendChild(element);
+                        }
+
                     }
                     currentAICard.querySelectorAll(".taskCheckmark").forEach(elem => {
                         changeCompletionOfTask(elem);
@@ -1968,25 +1988,7 @@ function generateAI() {
 
                     let deleteButtons = element.getElementsByClassName("delete-task-button");
 
-                    for (let i = 0; i < deleteButtons.length; i++) {
-                        deleteButtons.item(i).addEventListener("click", () => {
-
-                            for (let j = 0; j < deleteButtons.length; j++) {
-
-
-                                if (parseInt(deleteButtons.item(j).getAttribute("data-id")) === i) {
-                                    $(deleteButtons.item(j).parentElement).fadeOut(300, () => {
-                                        $(deleteButtons.item(j).parentElement).remove();
-                                        $(aiContainer).animate({"height": currentAICard.getBoundingClientRect().height + 'px'}, 100);
-
-                                    });
-                                    break;
-                                }
-                            }
-
-
-                        })
-                    }
+                    initDeleteButtons(deleteButtons);
 
                     element.setAttribute("changedType", true);
 
@@ -2027,6 +2029,28 @@ function generateAI() {
         }
 
     });
+
+    function initDeleteButtons(deleteButtons) {
+        for (let i = 0; i < deleteButtons.length; i++) {
+            deleteButtons.item(i).addEventListener("click", () => {
+
+                for (let j = 0; j < deleteButtons.length; j++) {
+
+
+                    if (parseInt(deleteButtons.item(j).getAttribute("data-id")) === i) {
+                        $(deleteButtons.item(j).parentElement).fadeOut(300, () => {
+                            $(deleteButtons.item(j).parentElement).remove();
+                            $(aiContainer).animate({"height": currentAICard.getBoundingClientRect().height + 'px'}, 100);
+
+                        });
+                        break;
+                    }
+                }
+
+
+            })
+        }
+    }
 }
 
 function makeNoteCardAI(title, text, id) {
@@ -2059,6 +2083,26 @@ function makeNoteCardAI(title, text, id) {
 
 }
 
+function getTaskTemplate(i, taskArray) {
+    return `<li class="list-group-item task-li " data-id="${i}">
+                <input type="checkbox" ${taskArray[i]["isCompleted"] ? "checked" : ""}
+                       class="form-check-input taskCheckmark"
+                       name="${i}"
+                >
+                    <label class="form-check-label card-task"
+
+                     
+                           data-id="${i}">
+                           ${taskArray[i]["taskContent"]}
+                    </label>
+                    <div class="delete-task-button" data-id="${i}">
+                        <i class="fa-solid fa-x"></i>
+                    </div>
+            </li>
+            
+`;
+}
+
 function makeTaskCardAI(id, title, taskArray) {
 
 
@@ -2083,23 +2127,7 @@ function makeTaskCardAI(id, title, taskArray) {
                         <ul class="list-group list-group-flush taskListView">
                         `
     for (let i = 0; i < taskArray.length; i++) {
-        template += `<li class="list-group-item task-li " data-id="${i}">
-                <input type="checkbox" ${taskArray[i]["isCompleted"] ? "checked" : ""}
-                       class="form-check-input taskCheckmark"
-                       name="${i}"
-                >
-                    <label class="form-check-label card-task"
-
-                     
-                           data-id="${i}">
-                           ${taskArray[i]["taskContent"]}
-                    </label>
-                    <div class="delete-task-button" data-id="${i}">
-                        <i class="fa-solid fa-x"></i>
-                    </div>
-            </li>
-            
-`
+        template += getTaskTemplate(i, taskArray)
     }
     template += `
     </ul>
@@ -2188,15 +2216,58 @@ function cancelAI() {
     console.log("cancelled");
 }
 
+
 function acceptAI() {
     console.log("accepted!");
 
-    console.log(currentAICard.getAttribute("changedType"));
-    if (currentAICard.getAttribute("changedType") === "true") {
-        console.log("cini");
-    } else {
+    const typeCard = currentAICard.getElementsByClassName("noteCard").length === 1 ? "note" : "task";
 
+    if (currentAICard.getAttribute("changedType") === "true") {
+
+        console.log("cini");
+
+    } else {
+        const id = currentAICard.children.item(0).getAttribute("data-id");
+
+        if (typeCard === "note") {
+            const text = currentAICard.getElementsByClassName("card-text").item(0).innerText;
+            console.log(text);
+            sendEdit(id, text, "text");
+
+            removeCardFromAIBar();
+
+        }
+
+        // sendEdit(id,text, "text")
+        // sendEdit()
 
     }
 }
 
+function removeCardFromAIBar() {
+    currentAICard.style.cssText = null;
+    currentAICard.style.position = "absolute";
+    currentAICard.style.top = "0px";
+    currentAICard.style.left = "0px";
+
+    let cloned = currentAICard.cloneNode(true);
+    bindDraggie(cloned);
+
+    $grid.prepend(cloned).packery('prepended', cloned)
+
+        .packery('shiftLayout');
+
+    $aiCardPackery.remove(currentAICard)
+        .packery("remove", currentAICard);
+    // container.removeChild(gridItem);
+    currentAICard.remove();
+
+    $(aiContainerPlaceholder).fadeIn(200);
+
+    $(aiContainer).animate({"height": '300px'}, 100);
+    $(aiContainerPlaceholder).animate({"height": '300px'}, 100);
+    currentAICard = null;
+    oldAiCard = null;
+
+
+}
