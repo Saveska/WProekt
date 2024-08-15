@@ -90,9 +90,9 @@ public class AjaxTaskController {
 
             JSONObject jsonArray = jo.getJSONObject("allTasks");
             Iterator<String> stringIterator = jsonArray.keys();
-            while(stringIterator.hasNext()){
+            while (stringIterator.hasNext()) {
                 String key = stringIterator.next();
-                tasks.put(key,jsonArray.get(key));
+                tasks.put(key, jsonArray.get(key));
             }
 
 //            tasks = jsonArray.toMap();
@@ -187,7 +187,7 @@ public class AjaxTaskController {
 
         System.out.println("ovde sum!");
         ChatResponse response = chatModel.call(new Prompt("how are you?"));
-        
+
 
         System.out.println(response);
         try {
@@ -264,10 +264,49 @@ public class AjaxTaskController {
             String text = jo.getString("text");
 
 
-
             String cleanText = utilService.cleanHtml(text);
             Task task = taskService.addTask(cardId, cleanText);
             return List.of(cleanText, String.valueOf(cardId), String.valueOf(task.getId()));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @PostMapping("/editTasksFromCard")
+    @ResponseBody
+    public List<String> editTasksFromCard(Authentication authentication,
+                                          @RequestBody String requestData) {
+
+        User currentUser = userService.getUserFromAuth(authentication);
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
+
+            Long cardId = jo.getLong("cardId");
+            JSONArray taskArray = jo.getJSONArray("tasks");
+            List<Task> tasks = new ArrayList<>();
+            for (int i = 0; i < taskArray.length(); i++) {
+                JSONObject task = taskArray.getJSONObject(i);
+                boolean checked = task.getBoolean("checked");
+                long taskId = task.getLong("id");
+                String text = task.getString("text");
+
+                String cleanText = utilService.cleanHtml(text);
+
+                Task taskObj = taskService.editTask(taskId, cleanText);
+                taskService.setTaskBoolean(taskId, checked);
+                tasks.add(taskObj);
+            }
+
+
+            return List.of(tasks.toString());
 
         } catch (Exception e) {
 
@@ -327,7 +366,6 @@ public class AjaxTaskController {
 
             Long cardSource = jo.getLong("cardSource");
             Long cardTarget = jo.getLong("cardTarget");
-
 
 
             taskService.changeCardOfTask(taskId, siblingId, cardSource, cardTarget);
@@ -466,7 +504,7 @@ public class AjaxTaskController {
 
             JSONArray jsonArray = jo.getJSONArray("order");
             List<Object> arrayToSend = new ArrayList<>();
-            for(int i = 0; i < jsonArray.length(); i ++ ){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 arrayToSend.add(jsonArray.get(i));
             }
 
@@ -624,7 +662,7 @@ public class AjaxTaskController {
                     .map(elem -> {
                         System.out.println(elem.getResult().getOutput());
 
-                        if(elem.getResult().getOutput().getMetadata().get("finishReason").equals("")){
+                        if (elem.getResult().getOutput().getMetadata().get("finishReason").equals("")) {
                             return elem.getResult().getOutput().getContent();
                         }
                         System.out.println("test");
