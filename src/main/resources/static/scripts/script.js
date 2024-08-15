@@ -1939,16 +1939,21 @@ function generateAI() {
 
                             taskContainer.appendChild(element);
                         }
+                        let deleteButtons = taskContainer.getElementsByClassName("delete-task-button");
+
+                        initDeleteButtons(deleteButtons);
+
+                        taskContainer.setAttribute("changedTasks", true);
+
 
                     }
-                    currentAICard.querySelectorAll(".taskCheckmark").forEach(elem => {
-                        changeCompletionOfTask(elem);
-                    })
+
                 }
 
                 if (type === "task" && type !== typeResponse.toLowerCase()) {
                     //todo: labelite
-                    let template = makeNoteCardAI(title, dataResponse, "nekoj id");
+                    const oldId = currentAICard.children[0].getAttribute("data-id")
+                    let template = makeNoteCardAI(title, dataResponse, oldId);
                     let element = document.createElement("div");
                     element.innerHTML = template;
                     element = element.children.item(0);
@@ -1980,7 +1985,8 @@ function generateAI() {
                 if (type === "note" && type !== typeResponse.toLowerCase()) {
 
                     console.log(dataResponse);
-                    let template = makeTaskCardAI("nekoj id", title, dataResponse);
+                    const oldId = currentAICard.children[0].getAttribute("data-id")
+                    let template = makeTaskCardAI(oldId, title, dataResponse);
 
                     let element = document.createElement("div");
                     element.innerHTML = template;
@@ -2238,10 +2244,63 @@ function acceptAI() {
 
         }
 
+        if(typeCard === "task"){
+            const taskContainer = currentAICard.getElementsByClassName("taskListView").item(0);
+
+            if(taskContainer.getAttribute("changedtasks")){
+                console.log("changed");
+                //TODO
+            }else{
+                console.log("not changed");
+                let data = {};
+                data["cardId"] = id;
+
+                const tasks = taskContainer.getElementsByClassName("task-li");
+
+                let taskArray = [];
+
+                for(let i = 0; i < tasks.length; i++){
+                    let taskDict = {};
+                    const checkmark = tasks.item(i).getElementsByClassName("taskCheckmark").item(0);
+                    const checked = !!checkmark.getAttribute("checked");
+                    const taskId = checkmark.getAttribute("name");
+                    const taskText = tasks.item(i).querySelector("label").innerText;
+                    taskDict["id"] = taskId;
+                    taskDict["checked"] = checked;
+                    taskDict["text"] = taskText;
+
+                    taskArray.push(taskDict);
+                }
+
+                console.log(taskArray);
+                data["tasks"] = taskArray;
+
+                savingStatus.hidden = false;
+                removeCardFromAIBar();
+                $.ajax({
+                    url: 'editTasksFromCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+                        //console.log(dataP)
+                        savingStatus.hidden = true;
+
+                    }, error: (jqXhr) => {
+                        //console.log(jqXhr);
+                    }
+
+                })
+
+
+
+            }
+        }
+
         // sendEdit(id,text, "text")
         // sendEdit()
 
     }
+}
+
+function updateSameNumberOfFunctions(){
+
 }
 
 function removeCardFromAIBar() {
