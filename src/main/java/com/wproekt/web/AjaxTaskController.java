@@ -315,6 +315,40 @@ public class AjaxTaskController {
         return new ArrayList<>();
     }
 
+    @PostMapping("/taskToNoteCard")
+    @ResponseBody
+    public List<Card> taskToNoteCard(Authentication authentication,
+                                       @RequestBody String requestData) {
+
+        User currentUser = userService.getUserFromAuth(authentication);
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
+            Long id = jo.getLong("oldId");
+            String text = jo.getString("text");
+            //TODO: prefrli gi podatocite (label i boja ?)
+
+            Card oldCard = cardService.getCardById(id);
+            String title = oldCard.getTitle();
+
+            Card newCard = userService.addNoteCard(currentUser.getUsername(), title, text );
+            newCard.setColor(oldCard.getColor());
+//            cardService.deletePermanently(id);
+
+
+            return List.of(newCard);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     @PostMapping("/removeTaskFromCard")
     @ResponseBody
     public Boolean RemoveTaskFromCard(Authentication authentication,
