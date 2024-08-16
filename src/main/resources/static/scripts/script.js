@@ -2236,32 +2236,81 @@ function acceptAI() {
     if (currentAICard.getAttribute("changedType") === "true") {
 
         console.log("cini");
+        if(typeCard === "task"){
+            let data = {};
 
-        let data = {};
-        const text = currentAICard.getElementsByClassName("card-text").item(0).innerText;
 
-        data["oldId"] = id;
-        data["text"] = text;
 
-        savingStatus.hidden = false;
+            data["oldId"] = id;
+            console.log(currentAICard);
 
-        $.ajax({
-            url: 'taskToNoteCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
-                //console.log(dataP)
-                console.log(dataP);
+            const tasks = currentAICard.getElementsByClassName("task-li");
 
-                createNoteAndShow(dataP[0]);
+            let taskArray = [];
 
-                removeCardFromAIBar();
+            for (let i = 0; i < tasks.length; i++) {
+                let taskDict = {};
+                const checkmark = tasks.item(i).getElementsByClassName("taskCheckmark").item(0);
+                const checked = !!checkmark.getAttribute("checked");
+                const taskId = checkmark.getAttribute("name");
+                const taskText = tasks.item(i).querySelector("label").innerText;
+                taskDict["id"] = taskId;
+                taskDict["checked"] = checked;
+                taskDict["text"] = taskText;
 
-                savingStatus.hidden = true;
-
-            }, error: (jqXhr) => {
-                //console.log(jqXhr);
+                taskArray.push(taskDict);
             }
 
-        })
+            console.log(taskArray);
+            data["tasks"] = taskArray;
 
+
+            savingStatus.hidden = false;
+
+            $.ajax({
+                url: 'noteToTaskCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+                    //console.log(dataP)
+                    console.log(dataP);
+
+                    createTaskCardAndShow(dataP);
+
+                    removeCardFromAIBar();
+
+                    savingStatus.hidden = true;
+
+                }, error: (jqXhr) => {
+                    //console.log(jqXhr);
+                }
+
+            })
+
+        }
+        if(typeCard === "note"){
+            let data = {};
+            const text = currentAICard.getElementsByClassName("card-text").item(0).innerText;
+
+            data["oldId"] = id;
+            data["text"] = text;
+
+            savingStatus.hidden = false;
+
+            $.ajax({
+                url: 'taskToNoteCard', type: 'POST', dataType: 'json', data: JSON.stringify(data), success: (dataP) => {
+                    //console.log(dataP)
+                    console.log(dataP);
+
+                    createNoteAndShow(dataP[0]);
+
+                    removeCardFromAIBar();
+
+                    savingStatus.hidden = true;
+
+                }, error: (jqXhr) => {
+                    //console.log(jqXhr);
+                }
+
+            })
+        }
 
     } else {
 
