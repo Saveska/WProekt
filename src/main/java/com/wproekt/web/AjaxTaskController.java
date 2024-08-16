@@ -409,6 +409,68 @@ public class AjaxTaskController {
         }
         return new ArrayList<>();
     }
+    @PostMapping("/noteToTaskCard")
+    @ResponseBody
+    public List<TaskCard> noteToTaskCard(Authentication authentication,
+                                     @RequestBody String requestData) {
+
+        User currentUser = userService.getUserFromAuth(authentication);
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
+            Long oldId = jo.getLong("oldId");
+
+            //TODO: prefrli gi podatocite (label i boja ?)
+
+            JSONArray JsonTasks = jo.getJSONArray("tasks");
+
+            Card oldCard = cardService.getCardById(oldId);
+
+//            List<Task> oldTasks = card.getTasks();
+
+            //TODO: mozebi treba da se popraj
+
+            TaskCard newCard = userService.addTaskCard(currentUser.getUsername(),oldCard.getTitle());
+
+
+            for (int i = 0; i < JsonTasks.length(); i++) {
+                JSONObject obj = JsonTasks.getJSONObject(i);
+
+
+                boolean checked = obj.getBoolean("checked");
+                String text = obj.getString("text");
+
+                String cleanText = utilService.cleanHtml(text);
+
+                Task newTask = taskService.addTask(newCard.getId(), cleanText);
+                taskService.setTaskBoolean(newTask.getId(), checked);
+
+
+            }
+            newCard.setColor(oldCard.getColor());
+            newCard.setLabel(oldCard.getLabel());
+            newCard.setImageLink(oldCard.getImageLink());
+
+
+//            cardService.deletePermanently(oldId);
+            cardService.saveCard(newCard);
+
+
+//            cardService.deletePermanently(id); TODO:
+
+
+            return List.of(newCard);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
 
     @PostMapping("/removeTaskFromCard")
     @ResponseBody
