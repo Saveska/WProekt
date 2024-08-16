@@ -38,4 +38,6 @@ public interface CardService {
 
     boolean deletePermanently( Long cardId);
 
+    Card saveCard (Card card);
+
 }
