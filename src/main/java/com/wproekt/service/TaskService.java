@@ -20,5 +20,6 @@ public interface TaskService {
     void deleteTask(Long taskId, Long cardId);
 
     void changeCardOfTask(Long taskId, Long siblingId, Long cardSource, Long cardTarget);
+    void deleteTasksInBatch(Long cardId);
 
 }

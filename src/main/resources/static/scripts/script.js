@@ -649,6 +649,51 @@ $('#addTaskButton').click(function () {
 
 });
 
+function createTaskCardAndShow(dataP) {
+    let tCardObj = dataP[0];
+
+    let cardId = tCardObj['id'];
+    let title = tCardObj['title'];
+    let taskArray = tCardObj['tasks'];
+
+    let template = makeTaskCard(cardId, title, taskArray);
+
+    let element = $($.parseHTML(template));
+
+    toBinButton(element.find('.delete-note-button')[0]);
+    toArchiveButton(element.find('.archive-note-button')[0]);
+    bindDraggie(element[0]);
+
+    addColorButtonListener(element[0].querySelector(".add-color-button"));
+    addLabelButtonListener(element[0].querySelector(".add-label-button"));
+
+    hideTaskHelpers(element[0].querySelector(".helper-task-dropper"));
+
+    element[0].querySelectorAll(".card-title, .card-text, .card-task").forEach(content => {
+        editContentEvent(content);
+    })
+    //TODO: bug ko ce imas selektirano na inputo i ne se pojavuva posle
+    addTaskContainers(element[0].querySelector(".taskListView"));
+
+    element[0].querySelectorAll(".taskCheckmark").forEach(elem => {
+        changeCompletionOfTask(elem);
+    })
+    element[0].querySelectorAll(".delete-task-button").forEach(elem => {
+        addDeleteTaskEvent(elem);
+    })
+
+    taskInputEvent(element[0].querySelector(".add-new-task-input"));
+    addNewTaskButtonEvent(element[0].querySelector(".add-new-task-button"));
+
+    addPinEvent(element[0].querySelector(".pin"));
+
+    $grid.prepend(element[0]).packery('prepended', element[0]);
+
+    savingStatus.hidden = true;
+    addNoCardNotification();
+    notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+}
+
 // Save selected tasks when the user clicks the save button
 $('#saveTasksButton').click(function () {
     // let allTasks = $('#tasksForm input[type="checkbox"]').map(function () {
@@ -677,48 +722,7 @@ $('#saveTasksButton').click(function () {
 
         success: (dataP) => {
             //console.log(dataP)
-            let tCardObj = dataP[0];
-
-            let cardId = tCardObj['id'];
-            let title = tCardObj['title'];
-            let taskArray = tCardObj['tasks'];
-
-            let template = makeTaskCard(cardId, title, taskArray);
-
-            let element = $($.parseHTML(template));
-
-            toBinButton(element.find('.delete-note-button')[0]);
-            toArchiveButton(element.find('.archive-note-button')[0]);
-            bindDraggie(element[0]);
-
-            addColorButtonListener(element[0].querySelector(".add-color-button"));
-            addLabelButtonListener(element[0].querySelector(".add-label-button"));
-
-            hideTaskHelpers(element[0].querySelector(".helper-task-dropper"));
-
-            element[0].querySelectorAll(".card-title, .card-text, .card-task").forEach(content => {
-                editContentEvent(content);
-            })
-            //TODO: bug ko ce imas selektirano na inputo i ne se pojavuva posle
-            addTaskContainers(element[0].querySelector(".taskListView"));
-
-            element[0].querySelectorAll(".taskCheckmark").forEach(elem => {
-                changeCompletionOfTask(elem);
-            })
-            element[0].querySelectorAll(".delete-task-button").forEach(elem => {
-                addDeleteTaskEvent(elem);
-            })
-
-            taskInputEvent(element[0].querySelector(".add-new-task-input"));
-            addNewTaskButtonEvent(element[0].querySelector(".add-new-task-button"));
-
-            addPinEvent(element[0].querySelector(".pin"));
-
-            $grid.prepend(element[0]).packery('prepended', element[0]);
-
-            savingStatus.hidden = true;
-            addNoCardNotification();
-            notesAndTasks = document.querySelectorAll('.noteCard, .taskCard');
+            createTaskCardAndShow(dataP);
 
 
         }, error: (jqXhr) => {
@@ -896,7 +900,7 @@ $('#saveNoteButton').click(() => {
 })
 
 
-//todo:istoto za task
+
 document.querySelectorAll(".taskCheckmark").forEach(elem => {
     changeCompletionOfTask(elem);
 })
@@ -2274,33 +2278,57 @@ function acceptAI() {
         if (typeCard === "task") {
             const taskContainer = currentAICard.getElementsByClassName("taskListView").item(0);
 
+            let data = {};
+            data["cardId"] = id;
+
+            const tasks = taskContainer.getElementsByClassName("task-li");
+
+            let taskArray = [];
+
+            for (let i = 0; i < tasks.length; i++) {
+                let taskDict = {};
+                const checkmark = tasks.item(i).getElementsByClassName("taskCheckmark").item(0);
+                const checked = !!checkmark.getAttribute("checked");
+                const taskId = checkmark.getAttribute("name");
+                const taskText = tasks.item(i).querySelector("label").innerText;
+                taskDict["id"] = taskId;
+                taskDict["checked"] = checked;
+                taskDict["text"] = taskText;
+
+                taskArray.push(taskDict);
+            }
+
+            console.log(taskArray);
+            data["tasks"] = taskArray;
+
             if (taskContainer.getAttribute("changedtasks")) {
                 console.log("changed");
                 //TODO
+
+                savingStatus.hidden = false;
+                // removeCardFromAIBar();
+
+                $.ajax({
+                    url: 'changeAllTasksFromCard',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    success: (dataP) => {
+                        console.log(dataP)
+                        savingStatus.hidden = true;
+
+                        createTaskCardAndShow(dataP);
+                    },
+                    error: (jqXhr) => {
+                        //console.log(jqXhr);
+                    }
+
+                })
+
+
             } else {
                 console.log("not changed");
-                let data = {};
-                data["cardId"] = id;
 
-                const tasks = taskContainer.getElementsByClassName("task-li");
-
-                let taskArray = [];
-
-                for (let i = 0; i < tasks.length; i++) {
-                    let taskDict = {};
-                    const checkmark = tasks.item(i).getElementsByClassName("taskCheckmark").item(0);
-                    const checked = !!checkmark.getAttribute("checked");
-                    const taskId = checkmark.getAttribute("name");
-                    const taskText = tasks.item(i).querySelector("label").innerText;
-                    taskDict["id"] = taskId;
-                    taskDict["checked"] = checked;
-                    taskDict["text"] = taskText;
-
-                    taskArray.push(taskDict);
-                }
-
-                console.log(taskArray);
-                data["tasks"] = taskArray;
 
                 savingStatus.hidden = false;
                 removeCardFromAIBarAndAdd();

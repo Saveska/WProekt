@@ -251,4 +251,9 @@ public class CardServiceImplementation implements CardService {
 
         return true;
     }
+
+    @Override
+    public Card saveCard(Card card) {
+        return cardRepository.save(card);
+    }
 }

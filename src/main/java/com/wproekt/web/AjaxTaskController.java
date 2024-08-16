@@ -2,6 +2,8 @@ package com.wproekt.web;
 
 import com.wproekt.model.*;
 import com.wproekt.service.*;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -315,10 +317,66 @@ public class AjaxTaskController {
         return new ArrayList<>();
     }
 
+    @PostMapping("/changeAllTasksFromCard")
+    @ResponseBody
+    @Transactional
+    public List<TaskCard> changeAllTasksFromCard(Authentication authentication,
+                                             @RequestBody String requestData) {
+
+        User currentUser = userService.getUserFromAuth(authentication);
+        //TODO: da se proveri dali e od korisniko kartickata
+        try {
+            String decodedData = URLDecoder.decode(requestData, UTF_8);
+
+
+            JSONObject jo = new JSONObject(decodedData);
+            System.out.println(jo);
+
+            Long cardId = jo.getLong("cardId");
+            JSONArray JsonTasks = jo.getJSONArray("tasks");
+
+            Card card = cardService.getCardById(cardId);
+
+//            List<Task> oldTasks = card.getTasks();
+
+            //TODO: mozebi treba da se popraj
+
+            List<Task> newTasks = new ArrayList<>();
+            taskService.deleteTasksInBatch(cardId);
+
+            for (int i = 0; i < JsonTasks.length(); i++) {
+                JSONObject obj = JsonTasks.getJSONObject(i);
+
+
+                boolean checked = obj.getBoolean("checked");
+                String text = obj.getString("text");
+
+                String cleanText = utilService.cleanHtml(text);
+
+                Task newTask = taskService.addTask(cardId, cleanText);
+                taskService.setTaskBoolean(newTask.getId(), checked);
+                newTasks.add(newTask);
+
+
+            }
+
+            cardService.saveCard(card);
+
+
+            return List.of((TaskCard) Hibernate.unproxy(card));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+
     @PostMapping("/taskToNoteCard")
     @ResponseBody
     public List<Card> taskToNoteCard(Authentication authentication,
-                                       @RequestBody String requestData) {
+                                     @RequestBody String requestData) {
 
         User currentUser = userService.getUserFromAuth(authentication);
         //TODO: da se proveri dali e od korisniko kartickata
@@ -335,9 +393,12 @@ public class AjaxTaskController {
             Card oldCard = cardService.getCardById(id);
             String title = oldCard.getTitle();
 
-            Card newCard = userService.addNoteCard(currentUser.getUsername(), title, text );
+            Card newCard = userService.addNoteCard(currentUser.getUsername(), title, text);
             newCard.setColor(oldCard.getColor());
-//            cardService.deletePermanently(id);
+            newCard.setLabel(oldCard.getLabel());
+            newCard.setImageLink(oldCard.getImageLink());
+
+//            cardService.deletePermanently(id); TODO:
 
 
             return List.of(newCard);

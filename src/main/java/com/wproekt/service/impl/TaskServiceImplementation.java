@@ -108,4 +108,21 @@ public class TaskServiceImplementation implements TaskService {
         taskRepository.save(task);
 
     }
+
+    @Override
+    @Transactional
+    public void deleteTasksInBatch(Long cardId) {
+        TaskCard card = taskCardRepository.getReferenceById(cardId);
+        List<Task> tasks = card.getTasks();
+
+        if (tasks == null || tasks.isEmpty()) {
+            return;
+        }
+        tasks.forEach(task->{
+            taskCardRepository.deleteTask(task.getId());
+
+        });
+//        System.out.println("test?");
+//        taskRepository.deleteAllInBatch(tasks);
+    }
 }
