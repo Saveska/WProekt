@@ -395,8 +395,14 @@ public class AjaxTaskController {
 
             Card newCard = userService.addNoteCard(currentUser.getUsername(), title, text);
             newCard.setColor(oldCard.getColor());
-            newCard.setLabel(oldCard.getLabel());
             newCard.setImageLink(oldCard.getImageLink());
+
+            Set<Label> oldLabels = oldCard.getLabel();
+
+            oldLabels.forEach(oLabel->{
+                cardService.addLabel(currentUser.getUsername(), newCard.getId(), oLabel.getId());
+            });
+
 
 //            cardService.deletePermanently(id); TODO:
 
@@ -451,10 +457,16 @@ public class AjaxTaskController {
 
 
             }
+
+            System.out.println(oldCard.getLabel());
             newCard.setColor(oldCard.getColor());
-            newCard.setLabel(oldCard.getLabel());
             newCard.setImageLink(oldCard.getImageLink());
 
+            Set<Label> oldLabels = oldCard.getLabel();
+
+            oldLabels.forEach(oLabel->{
+                cardService.addLabel(currentUser.getUsername(), newCard.getId(), oLabel.getId());
+            });
 
 //            cardService.deletePermanently(oldId);
             cardService.saveCard(newCard);
