@@ -656,6 +656,9 @@ function createTaskCardAndShow(dataP) {
     let title = tCardObj['title'];
     let taskArray = tCardObj['tasks'];
 
+    const labels = tCardObj["label"];
+
+
     let template = makeTaskCard(cardId, title, taskArray);
 
     let element = $($.parseHTML(template));
@@ -687,7 +690,21 @@ function createTaskCardAndShow(dataP) {
 
     addPinEvent(element[0].querySelector(".pin"));
 
+    console.log(labels);
+    for(let i = 0; i < labels.length; i++){
+        let labelName = labels[i]["name"];
+        let labelId = labels[i]["id"];
+        let labelTemplate = $(getLabelPillHTML(labelId, labelName));
+
+        addFilterByLabelEvent(labelTemplate[0]);
+        //console.log(template);
+        labelTemplate.hide().appendTo(element[0].querySelector(".label-pill-container")).fadeIn("fast", () => {
+            $grid.packery("shiftLayout");
+        });
+
+    }
     $grid.prepend(element[0]).packery('prepended', element[0]);
+
 
     savingStatus.hidden = true;
     addNoCardNotification();
@@ -1829,8 +1846,18 @@ document.querySelectorAll(".aiMenu > .menu-item").forEach(element => {
 $(AIProcessingDiv).fadeOut(0);
 $(AIInfoDiv).fadeOut(0);
 
+function showInfo(info) {
+    AIInfoDiv.getElementsByTagName("span").item(0).innerText = info;
+    $(AIInfoDiv).fadeIn(200);
+
+    setTimeout(() => {
+        $(AIInfoDiv).fadeOut(200);
+    }, 5000)
+}
+
 function generateAI() {
     if (!currentAICard) {
+        showInfo("No card selected!");
         return;
     }
 
@@ -1855,11 +1882,7 @@ function generateAI() {
     if (aiFunctionDiv === null) {
 
         console.error("No function chosen");
-        $(AIInfoDiv).fadeIn(200);
-
-        setTimeout(() => {
-            $(AIInfoDiv).fadeOut(200);
-        }, 5000)
+        showInfo("No function chosen");
         return;
     }
 
@@ -2225,10 +2248,19 @@ function cancelAI() {
     console.log("cancelled");
 }
 
+let canAccept = true;
 
 function acceptAI() {
     console.log("accepted!");
-
+    if(!canAccept){
+        showInfo("Please wait...");
+        return;
+    }
+    if(!currentAICard){
+        showInfo("No card selected!");
+        return;
+    }
+    canAccept = false;
     const typeCard = currentAICard.getElementsByClassName("noteCard").length === 1 ? "note" : "task";
 
     const id = currentAICard.children.item(0).getAttribute("data-id");
@@ -2272,12 +2304,15 @@ function acceptAI() {
                     //console.log(dataP)
                     console.log(dataP);
 
+
                     createTaskCardAndShow(dataP);
+
+
 
                     removeCardFromAIBar();
 
                     savingStatus.hidden = true;
-
+                    canAccept = true;
                 }, error: (jqXhr) => {
                     //console.log(jqXhr);
                 }
@@ -2304,6 +2339,7 @@ function acceptAI() {
                     removeCardFromAIBar();
 
                     savingStatus.hidden = true;
+                    canAccept = true;
 
                 }, error: (jqXhr) => {
                     //console.log(jqXhr);
@@ -2320,6 +2356,7 @@ function acceptAI() {
             sendEdit(id, text, "text");
 
             removeCardFromAIBarAndAdd();
+            canAccept = true;
 
 
         }
@@ -2367,6 +2404,8 @@ function acceptAI() {
                         savingStatus.hidden = true;
 
                         createTaskCardAndShow(dataP);
+                        canAccept = true;
+
                     },
                     error: (jqXhr) => {
                         //console.log(jqXhr);
@@ -2389,6 +2428,7 @@ function acceptAI() {
                     success: (dataP) => {
                         //console.log(dataP)
                         savingStatus.hidden = true;
+                        canAccept = true;
 
                     },
                     error: (jqXhr) => {

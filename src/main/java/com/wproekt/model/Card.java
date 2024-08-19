@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ abstract public class Card {
     private Integer position;
 
     @ManyToMany
-    private Set<Label> label;
+    private Set<Label> label = new HashSet<>();
 
     public Card() {
         this.position = 0;
