@@ -859,6 +859,7 @@ function makeTaskCard(id, title, taskArray) {
 
 function createNoteAndShow(noteData) {
     let template = makeNote(noteData['title'], noteData['text'], noteData['id']);
+    const labels = noteData["label"];
     let element = $($.parseHTML(template));
     //TODO: fix so novite karticki
 
@@ -875,6 +876,21 @@ function createNoteAndShow(noteData) {
 
 
     addPinEvent(element[0].querySelector(".pin"));
+
+
+    console.log(labels);
+    for(let i = 0; i < labels.length; i++){
+        let labelName = labels[i]["name"];
+        let labelId = labels[i]["id"];
+        let labelTemplate = $(getLabelPillHTML(labelId, labelName));
+
+        addFilterByLabelEvent(labelTemplate[0]);
+        //console.log(template);
+        labelTemplate.hide().appendTo(element[0].querySelector(".label-pill-container")).fadeIn("fast", () => {
+            $grid.packery("shiftLayout");
+        });
+
+    }
 
     $grid.prepend(element[0]).packery('prepended', element[0]);
 
