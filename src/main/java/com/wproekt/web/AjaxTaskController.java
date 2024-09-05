@@ -404,7 +404,7 @@ public class AjaxTaskController {
             });
 
 
-//            cardService.deletePermanently(id); TODO:
+            cardService.deletePermanently(id); //TODO:
 
 
             return List.of(newCard);
@@ -472,7 +472,7 @@ public class AjaxTaskController {
             cardService.saveCard(newCard);
 
 
-//            cardService.deletePermanently(id); TODO:
+            cardService.deletePermanently(oldCard.getId());
 
 
             return List.of(newCard);
