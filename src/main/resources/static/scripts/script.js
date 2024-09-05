@@ -691,7 +691,7 @@ function createTaskCardAndShow(dataP) {
     addPinEvent(element[0].querySelector(".pin"));
 
     console.log(labels);
-    for(let i = 0; i < labels.length; i++){
+    for (let i = 0; i < labels.length; i++) {
         let labelName = labels[i]["name"];
         let labelId = labels[i]["id"];
         let labelTemplate = $(getLabelPillHTML(labelId, labelName));
@@ -879,7 +879,7 @@ function createNoteAndShow(noteData) {
 
 
     console.log(labels);
-    for(let i = 0; i < labels.length; i++){
+    for (let i = 0; i < labels.length; i++) {
         let labelName = labels[i]["name"];
         let labelId = labels[i]["id"];
         let labelTemplate = $(getLabelPillHTML(labelId, labelName));
@@ -893,7 +893,6 @@ function createNoteAndShow(noteData) {
     }
 
     $grid.prepend(element[0]).packery('prepended', element[0]);
-
 
 
     addNoCardNotification();
@@ -911,7 +910,7 @@ $('#saveNoteButton').click(() => {
 
 
     //console.log(titleInputBox.val());
-
+    console.log(document.getElementById("saveNoteButton").innerHTML);
     $('#saveNoteButton').html(`<div class="spinner-border spinner-border-sm" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>`).prop("disabled", true);
@@ -923,7 +922,11 @@ $('#saveNoteButton').click(() => {
             let noteData = dataP[0];
 
             createNoteAndShow(noteData);
+            savingStatus.hidden = true;
 
+            $('#saveNoteButton').html(`Save changes`).prop("disabled", false);
+            textNoteInputBox.val("");
+            titleInputBox.val("");
 
         }, error: (jqXhr) => {
             //console.log(jqXhr);
@@ -931,7 +934,6 @@ $('#saveNoteButton').click(() => {
 
     })
 })
-
 
 
 document.querySelectorAll(".taskCheckmark").forEach(elem => {
@@ -2268,11 +2270,11 @@ let canAccept = true;
 
 function acceptAI() {
     console.log("accepted!");
-    if(!canAccept){
+    if (!canAccept) {
         showInfo("Please wait...");
         return;
     }
-    if(!currentAICard){
+    if (!currentAICard) {
         showInfo("No card selected!");
         return;
     }
@@ -2284,9 +2286,8 @@ function acceptAI() {
     if (currentAICard.getAttribute("changedType") === "true") {
 
         console.log("cini");
-        if(typeCard === "task"){
+        if (typeCard === "task") {
             let data = {};
-
 
 
             data["oldId"] = id;
@@ -2324,7 +2325,6 @@ function acceptAI() {
                     createTaskCardAndShow(dataP);
 
 
-
                     removeCardFromAIBar();
 
                     savingStatus.hidden = true;
@@ -2336,7 +2336,7 @@ function acceptAI() {
             })
 
         }
-        if(typeCard === "note"){
+        if (typeCard === "note") {
             let data = {};
             const text = currentAICard.getElementsByClassName("card-text").item(0).innerText;
 
@@ -2495,7 +2495,7 @@ function removeCardFromAIBarAndAdd() {
 
 }
 
-function removeCardFromAIBar(){
+function removeCardFromAIBar() {
 
 
     $aiCardPackery.remove(currentAICard)

@@ -1153,7 +1153,13 @@ textarea {
 }
 
 .ai-cancel {
-    background-color: red;
+    background-color: #cf1e1e;
+}
+.ai-cancel:hover{
+    background-color: #ff3e3e;
+}
+.ai-cancel:focus, .ai-cancel:active{
+    background-color: #ff6666 !important;
 }
 
 .ai-info-button {
@@ -1179,11 +1185,25 @@ textarea {
 .ai-generate {
     background-color: purple;
 }
+.ai-generate:hover{
+    background-color: #991f99;
+}
+
+.ai-generate:focus, .ai-generate:active{
+    background-color: #cc52cc !important;
+
+}
 
 .ai-accept {
     background-color: forestgreen;
     width: 80%;
     margin: 20px 0px 10px 0px;
+}
+.ai-accept:hover{
+    background-color: #36b336;
+}
+.ai-accept:focus, .ai-accept:active{
+    background-color: #47b347 !important;
 }
 
 .ai-accept-wrapper {
